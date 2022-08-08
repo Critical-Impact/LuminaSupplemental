@@ -1,0 +1,3 @@
+[submodule "src/GarlandTools"]
+	path = src/GarlandTools
+	url = https://github.com/ufx/GarlandTools

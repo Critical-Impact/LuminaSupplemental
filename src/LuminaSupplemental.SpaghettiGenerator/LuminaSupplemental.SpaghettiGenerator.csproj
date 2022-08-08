@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Content Include="../GarlandTools/Supplemental/FFXIV Data - Items.tsv" CopyToOutputDirectory="Always" />
+      <Content Include="../GarlandTools/Supplemental/FFXIV Data - Duties.json" CopyToOutputDirectory="Always" />
+      <PackageReference Include="CSVFile" Version="3.1.0" />
+      <PackageReference Include="Lumina" Version="3.8.0" />
+      <PackageReference Include="Lumina.Excel" Version="6.1.1" />
+      <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="class.tmpl">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <Target Name="CopyGenerated" AfterTargets="Build">
+        <Message Text="Copying generated code" Importance="High" />
+        <Exec Command="xcopy &quot;$(TargetDir)output\*.cs&quot; &quot;$(SolutionDir)LuminaSupplemental.Excel\Generated&quot; /Y" />
+        <Message Text="Copied build files" Importance="High" />
+    </Target>
+
+</Project>
