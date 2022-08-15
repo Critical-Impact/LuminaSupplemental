@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net6.0-windows</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
@@ -20,9 +20,13 @@
       </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\LuminaSupplemental.Excel\LuminaSupplemental.Excel.csproj" />
+    </ItemGroup>
+
     <Target Name="CopyGenerated" AfterTargets="Build">
         <Message Text="Copying generated code" Importance="High" />
-        <Exec Command="xcopy &quot;$(TargetDir)output\*.cs&quot; &quot;$(SolutionDir)LuminaSupplemental.Excel\Generated&quot; /Y" />
+        <Exec Command="xcopy '$(TargetDir)output\*.cs' '$(SolutionDir)LuminaSupplemental.Excel\Generated' /Y /c /q || cmd /c exit /b 0" />
         <Message Text="Copied build files" Importance="High" />
     </Target>
 

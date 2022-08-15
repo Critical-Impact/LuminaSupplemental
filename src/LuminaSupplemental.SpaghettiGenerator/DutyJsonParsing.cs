@@ -1,11 +1,12 @@
 using System;
 using System.Globalization;
+using LuminaSupplemental.Excel.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace LuminaSupplemental.SpaghettiGenerator
 {
-    public partial class DutyJson
+    public class DutyJson
     {
         [JsonProperty("category")]
         public Category Category { get; set; }
@@ -33,7 +34,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
         public Fight[] Fights { get; set; }
     }
 
-    public partial class ChestElement
+    public class ChestElement
     {
         [JsonProperty("name")]
         public ChestName Name { get; set; }
@@ -48,7 +49,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
         public string[] Items { get; set; }
     }
 
-    public partial class Coords
+    public class Coords
     {
         [JsonProperty("x")]
         public string X { get; set; }
@@ -57,7 +58,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
         public string Y { get; set; }
     }
 
-    public partial class Fight
+    public class Fight
     {
         [JsonProperty("chest")]
         public ChestEnum Chest { get; set; }
@@ -75,7 +76,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
         public Token[] Token { get; set; }
     }
 
-    public partial class Boss
+    public class Boss
     {
         [JsonProperty("url")]
         public string Url { get; set; }
@@ -84,7 +85,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
         public string Name { get; set; }
     }
 
-    public partial class Drop
+    public class Drop
     {
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -96,7 +97,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
         public Condition[] Condition { get; set; }
     }
 
-    public partial class Token
+    public class Token
     {
         [JsonProperty("name")]
         public TokenName Name { get; set; }
@@ -106,7 +107,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
         public long Amount { get; set; }
     }
 
-    public partial class Treasure
+    public class Treasure
     {
         [JsonProperty("name")]
         public ChestName Name { get; set; }
@@ -119,7 +120,6 @@ namespace LuminaSupplemental.SpaghettiGenerator
 
     public enum ChestName { TreasureCoffer, TreasureCoffer1, TreasureCoffer2, TreasureCoffer3, TreasureCoffer4, TreasureCoffer5, TreasureCoffer6, TreasureCoffer7, TreasureCoffer8 };
 
-    public enum ChestEnum { Gold, Silver };
 
     public enum Condition { DropsAtAFixedRate, MustFirstCompleteTheQuestTripleTriadTrial, ThisItemCanOnlyBeObtainedOncePerWeek };
 

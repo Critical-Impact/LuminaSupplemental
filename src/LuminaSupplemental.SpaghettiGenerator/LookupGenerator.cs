@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Numerics;
 using System.Text;
 using CSVFile;
 using Lumina;
 using Lumina.Excel.GeneratedSheets;
+using LuminaSupplemental.Excel.Model;
 using LuminaSupplemental.SpaghettiGenerator.CodeGen;
 using Newtonsoft.Json;
 
@@ -15,18 +18,26 @@ namespace LuminaSupplemental.SpaghettiGenerator
         public GameData GameData;
         public string _sheetTemplate;
         private Dictionary< string, Item > _itemsByString;
-
+        private Dictionary< string, ContentFinderCondition > _dutiesByString;
+        
 
         public LookupGenerator(string path, string tmplPath = null)
         {
             GameData = new GameData( path );
             _sheetTemplate = File.ReadAllText( tmplPath ?? "class.tmpl" );
             var itemSheet = GameData.GetExcelSheet<Item>()!;
+            var dutySheet = GameData.GetExcelSheet<ContentFinderCondition>()!;
 
             _itemsByString = new Dictionary<string, Item>();
             foreach (var item in itemSheet)
             {
-                _itemsByString.TryAdd(item.Name.ToString(), item);
+                _itemsByString.TryAdd(item.Name.ToString().ToParseable(), item);
+            }
+
+            _dutiesByString = new Dictionary<string, ContentFinderCondition>();
+            foreach (var item in dutySheet)
+            {
+                _dutiesByString.TryAdd(item.Name.ToString().ToParseable(), item);
             }
         }
         
@@ -50,23 +61,100 @@ namespace LuminaSupplemental.SpaghettiGenerator
              * Dungeon Boss Drop(Drop + Currency(amount))
              * 
              */
+            Dictionary< uint, HashSet<uint> > dungeonChestItems = new();
+            Dictionary< uint, HashSet<uint> > reverseDungeonChestItems = new();
+            Dictionary< uint, DungeonChestItem > actualDungeonChestItems = new();
+            uint dungeonChestItemCount = 1;
+            
             var dutyText = File.ReadAllText( @"FFXIV Data - Duties.json" );
             JsonConverter[] converters = {new CategoryConverter(), new ConditionConverter(), new VersionConverter(), new ChestEnumConverter(), new ChestNameConverter(), new IlvlEnumConverter(), new IlvlUnionConverter(), new TokenNameConverter()};
             var duties = JsonConvert.DeserializeObject<DutyJson[]>(dutyText, converters)!;
             foreach( var duty in duties )
             {
-                foreach( var chest in duty.Chests )
+                var dutyName = duty.Name.ToParseable();
+                if( _dutiesByString.ContainsKey( dutyName ) )
                 {
-                    foreach( var item in chest.Items )
+                    var actualDuty = _dutiesByString[ dutyName ];
+                    if( duty.Chests != null )
                     {
-                        var actualItem = _itemsByString.ContainsKey(item) ? _itemsByString[item] : null;
+                        foreach( var chest in duty.Chests )
+                        {
+                            foreach( var item in chest.Items )
+                            {
+                                var itemName = item.ToParseable();
+                                var actualItem = _itemsByString.ContainsKey( itemName ) ? _itemsByString[ itemName ] : null;
+                                if( actualItem != null )
+                                {
+                                    var xCoord = float.Parse( chest.Coords.X );
+                                    var yCoord = float.Parse( chest.Coords.Y );
+                                    DungeonChestItem chestItem = new DungeonChestItem( actualItem.RowId, actualDuty.RowId, new Vector2( xCoord, yCoord ) );
+                                    actualDungeonChestItems.Add( dungeonChestItemCount, chestItem );
+                                    if( !dungeonChestItems.ContainsKey( actualItem.RowId ) )
+                                    {
+                                        dungeonChestItems.Add(actualItem.RowId, new HashSet< uint >());
+                                    }
 
+                                    if( !dungeonChestItems[ actualItem.RowId ].Contains( dungeonChestItemCount ) )
+                                    {
+                                        dungeonChestItems[ actualItem.RowId ].Add( dungeonChestItemCount );
+                                    }
+                                    
+                                    if( !reverseDungeonChestItems.ContainsKey( dungeonChestItemCount ) )
+                                    {
+                                        reverseDungeonChestItems.Add(dungeonChestItemCount, new HashSet< uint >());
+                                    }
+
+                                    if( !reverseDungeonChestItems[ dungeonChestItemCount ].Contains(  actualItem.RowId ) )
+                                    {
+                                        reverseDungeonChestItems[ dungeonChestItemCount ].Add(  actualItem.RowId );
+                                    }
+                                    dungeonChestItemCount++;
+                                }
+                            }
+                        }
                     }
+
+                    var a = "";
                 }
-                var a = "";
+                else
+                {
+                    Console.WriteLine("Could not find duty " + duty.Name);
+                }
+
             }
 
-            return "";
+            var tmpl = _sheetTemplate;
+            tmpl = tmpl.Replace( "%%LOOKUP_NAME%%", className );
+            var generators = new List< BaseShitGenerator >();
+            generators.Add( new DictionaryHashSetGenerator( "ItemToDungeonChests", dungeonChestItems ) );
+            generators.Add( new DictionaryHashSetGenerator( "DungeonChestToItems", reverseDungeonChestItems ) );
+            generators.Add( new DictionaryDungeonChestItemGenerator( "DungeonChests", actualDungeonChestItems ) );
+
+            var fieldsSb = new StringBuilder();
+            var readsSb = new StringBuilder();
+            var structsSb = new StringBuilder();
+            var usingsSb = new StringBuilder();
+            
+            // run the generators
+            foreach( var generator in generators )
+            {
+                generator.WriteFields( fieldsSb );
+                // fieldsSb.AppendLine();
+                generator.WriteReaders( readsSb );
+                // readsSb.AppendLine();
+                generator.WriteStructs( structsSb );
+            }
+
+            usingsSb.Append( "using System.Numerics;" );
+            usingsSb.AppendLine();
+            usingsSb.Append( "using LuminaSupplemental.Excel.Model;" );
+            usingsSb.AppendLine();
+
+            tmpl = tmpl.Replace( "%%STRUCT_DEFS%%", FixIndent( structsSb, 2 ) );
+            tmpl = tmpl.Replace( "%%DATA_MEMBERS%%", FixIndent( fieldsSb, 2 ) );
+            tmpl = tmpl.Replace( "%%USING%%", FixIndent( usingsSb, 0 ));
+
+            return tmpl;
         }
 
         public string ProcessItemsTSV(string className)
@@ -103,12 +191,14 @@ namespace LuminaSupplemental.SpaghettiGenerator
 
                 void MapItems(string s, List<string> list, Dictionary<uint, HashSet<uint>> dictionary, Dictionary<uint, HashSet<uint>> reverseDictionary)
                 {
+                    s = s.ToParseable();
                     var outputItem = _itemsByString.ContainsKey(s) ? _itemsByString[s] : null;
                     if (outputItem != null)
                     {
                         foreach (var source in list)
                         {
-                            var sourceItem = _itemsByString.ContainsKey(source) ? _itemsByString[source] : null;
+                            var sourceName = source.ToParseable();
+                            var sourceItem = _itemsByString.ContainsKey(sourceName) ? _itemsByString[sourceName] : null;
                             if (sourceItem != null)
                             {
                                 if (!dictionary.ContainsKey(outputItem.RowId))
@@ -187,6 +277,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
 
             tmpl = tmpl.Replace( "%%STRUCT_DEFS%%", FixIndent( structsSb, 2 ) );
             tmpl = tmpl.Replace( "%%DATA_MEMBERS%%", FixIndent( fieldsSb, 2 ) );
+            tmpl = tmpl.Replace( "%%USING%%", "" );
 
             return tmpl;
         }
