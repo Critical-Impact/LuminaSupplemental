@@ -123,7 +123,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
 
     public enum Condition { DropsAtAFixedRate, MustFirstCompleteTheQuestTripleTriadTrial, ThisItemCanOnlyBeObtainedOncePerWeek };
 
-    public enum TokenName { AllaganTomestoneOfAphorism, AllaganTomestoneOfAstronomy, AllaganTomestoneOfPoetics };
+    public enum TokenName { AllaganTomestoneOfAphorism, AllaganTomestoneOfAstronomy, AllaganTomestoneOfPoetics, AllaganTomestoneofCausality };
 
     public enum IlvlEnum { Empty };
 
@@ -425,6 +425,8 @@ namespace LuminaSupplemental.SpaghettiGenerator
                     return TokenName.AllaganTomestoneOfAstronomy;
                 case "Allagan Tomestone of Poetics":
                     return TokenName.AllaganTomestoneOfPoetics;
+                case "Allagan Tomestone of Causality":
+                    return TokenName.AllaganTomestoneofCausality;
             }
             throw new Exception("Cannot unmarshal type TokenName");
         }

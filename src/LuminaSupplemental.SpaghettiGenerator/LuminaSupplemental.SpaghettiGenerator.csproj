@@ -9,8 +9,8 @@
       <Content Include="../GarlandTools/Supplemental/FFXIV Data - Items.tsv" CopyToOutputDirectory="Always" />
       <Content Include="../GarlandTools/Supplemental/FFXIV Data - Duties.json" CopyToOutputDirectory="Always" />
       <PackageReference Include="CSVFile" Version="3.1.0" />
-      <PackageReference Include="Lumina" Version="3.8.0" />
-      <PackageReference Include="Lumina.Excel" Version="6.1.1" />
+      <PackageReference Include="Lumina" Version="3.10.0" />
+      <PackageReference Include="Lumina.Excel" Version="6.2.1" />
       <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     </ItemGroup>
 
@@ -26,7 +26,7 @@
 
     <Target Name="CopyGenerated" AfterTargets="Build">
         <Message Text="Copying generated code" Importance="High" />
-        <Exec Command="xcopy '$(TargetDir)output\*.cs' '$(SolutionDir)LuminaSupplemental.Excel\Generated' /Y /c /q || cmd /c exit /b 0" />
+        <Exec Command="xcopy &quot;$(TargetDir)output\*.cs&quot; &quot;$(SolutionDir)LuminaSupplemental.Excel\Generated\&quot; /Y /c /q || cmd /c exit /b 0" />
         <Message Text="Copied build files" Importance="High" />
     </Target>
 
