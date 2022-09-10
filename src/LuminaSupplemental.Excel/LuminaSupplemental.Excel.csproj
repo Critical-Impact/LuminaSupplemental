@@ -31,4 +31,9 @@
       <Folder Include="Generated" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Lumina" Version="3.10.0" />
+      <PackageReference Include="Lumina.Excel" Version="6.2.1" />
+    </ItemGroup>
+
 </Project>
