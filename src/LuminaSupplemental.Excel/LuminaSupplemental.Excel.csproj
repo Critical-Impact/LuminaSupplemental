@@ -31,9 +31,21 @@
       <Folder Include="Generated" />
     </ItemGroup>
 
+    <PropertyGroup>
+        <DalamudLibPath>$(AppData)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
+    </PropertyGroup>
+
+
     <ItemGroup>
-      <PackageReference Include="Lumina" Version="3.10.0" />
-      <PackageReference Include="Lumina.Excel" Version="6.2.1" />
+        <Reference Include="Lumina">
+            <HintPath>$(DalamudLibPath)Lumina.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="Lumina.Excel">
+            <HintPath>$(DalamudLibPath)Lumina.Excel.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
     </ItemGroup>
+
 
 </Project>

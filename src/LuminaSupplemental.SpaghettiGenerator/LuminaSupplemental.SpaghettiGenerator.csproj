@@ -5,13 +5,30 @@
         <TargetFramework>net6.0-windows</TargetFramework>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <DalamudLibPath>$(AppData)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
+    </PropertyGroup>
+
+
     <ItemGroup>
       <Content Include="../GarlandTools/Supplemental/FFXIV Data - Items.tsv" CopyToOutputDirectory="Always" />
       <Content Include="../GarlandTools/Supplemental/FFXIV Data - Duties.json" CopyToOutputDirectory="Always" />
       <PackageReference Include="CSVFile" Version="3.1.0" />
-      <PackageReference Include="Lumina" Version="3.10.0" />
-      <PackageReference Include="Lumina.Excel" Version="6.2.1" />
-      <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="Newtonsoft.Json">
+            <HintPath>$(DalamudLibPath)Newtonsoft.Json.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="Lumina">
+            <HintPath>$(DalamudLibPath)Lumina.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="Lumina.Excel">
+            <HintPath>$(DalamudLibPath)Lumina.Excel.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
     </ItemGroup>
 
     <ItemGroup>
