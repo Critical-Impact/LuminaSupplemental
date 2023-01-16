@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net6.0-windows</TargetFrameworks>
+        <TargetFrameworks>net7.0-windows</TargetFrameworks>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Authors>Critical-Impact</Authors>
         <PackageProjectUrl>https://github.com/Critical-Impact/LuminaSupplemental</PackageProjectUrl>
@@ -45,6 +45,11 @@
             <HintPath>$(DalamudLibPath)Lumina.Excel.dll</HintPath>
             <Private>False</Private>
         </Reference>
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <PackageReference Include="XivCommon" Version="7.0.0-alpha.1" />
     </ItemGroup>
 
 
