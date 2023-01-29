@@ -14,6 +14,9 @@
       <Content Include="../GarlandTools/Supplemental/FFXIV Data - Items.tsv" CopyToOutputDirectory="Always" />
       <Content Include="../GarlandTools/Supplemental/FFXIV Data - Duties.json" CopyToOutputDirectory="Always" />
       <PackageReference Include="CSVFile" Version="3.1.0" />
+      <PackageReference Include="System.Data.SQLite" Version="1.0.117" />
+      <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.117" />
+      <PackageReference Include="System.Data.SQLite.Linq" Version="1.0.117" />
     </ItemGroup>
 
     <ItemGroup>
@@ -35,10 +38,17 @@
       <None Update="class.tmpl">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="sqlite3.dll">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\LuminaSupplemental.Excel\LuminaSupplemental.Excel.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="DB" />
     </ItemGroup>
 
     <Target Name="CopyGenerated" AfterTargets="Build">

@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Lumina;
 
 namespace LuminaSupplemental.SpaghettiGenerator
 {
@@ -7,7 +8,12 @@ namespace LuminaSupplemental.SpaghettiGenerator
     {
         static void Main( string[] args )
         {
-            var sg = new LookupGenerator( args[ 0 ] );
+            Service.GameData = new GameData( args[ 0 ], new LuminaOptions(){ PanicOnSheetChecksumMismatch = false} );
+
+            var sg = new LookupGenerator();
+            var libraConnection = new SQLite.SQLiteConnection(args[ 1 ], SQLite.SQLiteOpenFlags.ReadOnly);
+            Service.DatabaseBuilder = new DatabaseBuilder(libraConnection);
+            Service.DatabaseBuilder.Build();
 
             Directory.CreateDirectory( "output" );
 
@@ -18,6 +24,11 @@ namespace LuminaSupplemental.SpaghettiGenerator
 
             name = "DutySupplement";
             code = sg.ProcessDutiesJson( name );
+            path = $"./output/{name}.cs";
+            File.WriteAllText( path, code );
+
+            name = "MobSupplement";
+            code = sg.ProcessMobData( name );
             path = $"./output/{name}.cs";
             File.WriteAllText( path, code );
         }

@@ -15,18 +15,16 @@ namespace LuminaSupplemental.SpaghettiGenerator
 {
     public class LookupGenerator
     {
-        public GameData GameData;
         public string _sheetTemplate;
         private Dictionary< string, Item > _itemsByString;
         private Dictionary< string, ContentFinderCondition > _dutiesByString;
         
 
-        public LookupGenerator(string path, string tmplPath = null)
+        public LookupGenerator(string tmplPath = null)
         {
-            GameData = new GameData( path );
             _sheetTemplate = File.ReadAllText( tmplPath ?? "class.tmpl" );
-            var itemSheet = GameData.GetExcelSheet<Item>()!;
-            var dutySheet = GameData.GetExcelSheet<ContentFinderCondition>()!;
+            var itemSheet = Service.GameData.GetExcelSheet<Item>()!;
+            var dutySheet = Service.GameData.GetExcelSheet<ContentFinderCondition>()!;
 
             _itemsByString = new Dictionary<string, Item>();
             foreach (var item in itemSheet)
@@ -260,6 +258,53 @@ namespace LuminaSupplemental.SpaghettiGenerator
             generators.Add( new DictionaryHashSetGenerator( "ReverseReduceItems", reverseReduceItems ) );
             generators.Add( new DictionaryHashSetGenerator( "ReverseLootItems", reverseLootItems ) );
             generators.Add( new DictionaryHashSetGenerator( "ReverseGardeningItems", reverseGardeningItems ) );
+
+            var fieldsSb = new StringBuilder();
+            var readsSb = new StringBuilder();
+            var structsSb = new StringBuilder();
+            
+            // run the generators
+            foreach( var generator in generators )
+            {
+                generator.WriteFields( fieldsSb );
+                // fieldsSb.AppendLine();
+                generator.WriteReaders( readsSb );
+                // readsSb.AppendLine();
+                generator.WriteStructs( structsSb );
+            }
+
+            tmpl = tmpl.Replace( "%%STRUCT_DEFS%%", FixIndent( structsSb, 2 ) );
+            tmpl = tmpl.Replace( "%%DATA_MEMBERS%%", FixIndent( fieldsSb, 2 ) );
+            tmpl = tmpl.Replace( "%%USING%%", "" );
+
+            return tmpl;
+        }
+
+        public string ProcessMobData(string className)
+        {
+            var itemDrops = Service.DatabaseBuilder.ItemDropsByMobId;
+            var placeNamesByMobId = Service.DatabaseBuilder.PlaceNamesByMobId;
+            var mobDrops = new Dictionary< uint, HashSet< uint > >();
+            foreach( var itemDrop in itemDrops )
+            {
+                foreach( var itemId in itemDrop.Value )
+                {
+                    if( !mobDrops.TryGetValue( itemId, out var mobIds ) )
+                    {
+                        mobIds = new HashSet< uint >();
+                        mobDrops[ itemId ] = mobIds;
+                    }
+
+                    mobIds.Add( itemDrop.Key );
+                }
+            }
+
+            var tmpl = _sheetTemplate;
+            tmpl = tmpl.Replace( "%%LOOKUP_NAME%%", className );
+            var generators = new List< BaseShitGenerator >();
+            generators.Add( new DictionaryHashSetGenerator( "ItemDropsByBNpcNameId", itemDrops ) );
+            generators.Add( new DictionaryHashSetGenerator( "MobDropsByItemId", mobDrops ) );
+            generators.Add( new DictionaryHashSetGenerator( "PlaceNamesByMobId", placeNamesByMobId ) );
 
             var fieldsSb = new StringBuilder();
             var readsSb = new StringBuilder();
