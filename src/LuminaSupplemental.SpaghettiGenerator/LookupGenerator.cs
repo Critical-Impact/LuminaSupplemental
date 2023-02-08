@@ -6,6 +6,7 @@ using System.Numerics;
 using System.Text;
 using CSVFile;
 using Lumina;
+using Lumina.Excel;
 using Lumina.Excel.GeneratedSheets;
 using LuminaSupplemental.Excel.Model;
 using LuminaSupplemental.SpaghettiGenerator.CodeGen;
@@ -18,16 +19,17 @@ namespace LuminaSupplemental.SpaghettiGenerator
         public string _sheetTemplate;
         private Dictionary< string, Item > _itemsByString;
         private Dictionary< string, ContentFinderCondition > _dutiesByString;
+        private ExcelSheet<Item> _itemSheet;
         
 
         public LookupGenerator(string tmplPath = null)
         {
             _sheetTemplate = File.ReadAllText( tmplPath ?? "class.tmpl" );
-            var itemSheet = Service.GameData.GetExcelSheet<Item>()!;
+            _itemSheet = Service.GameData.GetExcelSheet<Item>()!;
             var dutySheet = Service.GameData.GetExcelSheet<ContentFinderCondition>()!;
 
             _itemsByString = new Dictionary<string, Item>();
-            foreach (var item in itemSheet)
+            foreach (var item in _itemSheet)
             {
                 _itemsByString.TryAdd(item.Name.ToString().ToParseable(), item);
             }
@@ -155,6 +157,258 @@ namespace LuminaSupplemental.SpaghettiGenerator
             return tmpl;
         }
 
+        public void ParseExtraItemSets(Dictionary<uint, HashSet<uint>> itemSets, Dictionary<uint, HashSet<uint>> reverseItemSets)
+        {
+            var cofferNames = new Dictionary<string[], string>
+            {
+                {new []{"Crystarium", "Coffer"}, "Augmented Crystarium"},
+                {new []{"Abyssos", "Coffer"}, "Abyssos"},
+                {new []{"Alexandrian", "Coffer"}, "Alexandrian"},
+                {new []{"Allagan", "Coffer"}, "Allagan"},
+                {new []{"High Allagan", "Coffer"}, "High Allagan"},
+                {new []{"Asphodelos", "Coffer"}, "Asphodelos"},
+                {new []{"Bluefeather", "Coffer"}, "Bluefeather"},
+                {new []{"Byakko", "Coffer"}, "Byakko"},
+            };
+            foreach( var cofferName in cofferNames )
+            {
+                var coffers = _itemSheet.Where( c =>
+                {
+                    return c.Name.ToString().StartsWith( cofferName.Key[ 0 ] ) && cofferName.Key.Skip( 1 ).All( d => c.Name.ToString().Contains( d ) );
+                } ).ToList();
+                foreach( var coffer in coffers )
+                {
+                    Console.WriteLine( "Found coffer: " + coffer.Name.ToString() );
+                    //Weapon, Gear, Accessories
+                    if( coffer.Name.ToString().Contains( "Weapon" ) )
+                    {
+                        var items = _itemSheet.Where( c =>
+                            c.Name.ToString().Contains( cofferName.Value ) &&
+                            ( ( c.EquipSlotCategory.Value?.MainHand ?? 0 ) == 1 || ( c.EquipSlotCategory.Value?.OffHand ?? 0 ) == 1 ) );
+                        reverseItemSets.TryAdd(coffer.RowId, new HashSet< uint >() );
+                        foreach( var item in items )
+                        {
+                            Console.WriteLine( "Found weapon in coffer: " + item.Name.ToString() );
+                            reverseItemSets[ coffer.RowId ].Add( item.RowId );
+                            itemSets.TryAdd( item.RowId, new HashSet< uint >() );
+                            itemSets[ item.RowId ].Add( coffer.RowId );
+                        }
+                    }
+
+                    if( coffer.Name.ToString().Contains( "Gear" ) )
+                    {
+                        var armourTypes = new string[]
+                        {
+                            "Striking",
+                            "Maiming",
+                            "Fending",
+                            "Aiming",
+                            "Scouting",
+                            "Healing",
+                            "Casting",
+                            "Slaying"
+                        };
+                        foreach( var armourType in armourTypes )
+                        {
+                            if( coffer.Name.ToString().Contains( armourType ) )
+                            {
+                                var items = _itemSheet.Where( c =>
+                                    c.Name.ToString().Contains( cofferName.Value ) && c.Name.ToString().Contains( armourType ) && 
+                                    ( 
+                                        ( c.EquipSlotCategory.Value?.Body ?? 0 ) == 1 || 
+                                        ( c.EquipSlotCategory.Value?.Feet ?? 0 ) == 1  || 
+                                        ( c.EquipSlotCategory.Value?.Head ?? 0 ) == 1  || 
+                                        ( c.EquipSlotCategory.Value?.Gloves ?? 0 ) == 1  || 
+                                        ( c.EquipSlotCategory.Value?.Legs ?? 0 ) == 1 
+                                    ));
+                                reverseItemSets.TryAdd( coffer.RowId, new HashSet< uint >() );
+                                foreach( var item in items )
+                                {
+                                    Console.WriteLine( "Found armor in coffer: " + item.Name.ToString() );
+                                    reverseItemSets[ coffer.RowId ].Add( item.RowId );
+                                    itemSets.TryAdd( item.RowId, new HashSet< uint >() );
+                                    itemSets[ item.RowId ].Add( coffer.RowId );
+                                }
+                            }
+                        }
+                    }
+
+                    if( coffer.Name.ToString().Contains( "Head Gear" ) )
+                    {
+                        var items = _itemSheet.Where( c =>
+                            c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
+                            ( c.EquipSlotCategory.Value?.Head ?? 0 ) == 1);
+                        reverseItemSets.TryAdd( coffer.RowId, new HashSet< uint >() );
+                        foreach( var item in items )
+                        {
+                            Console.WriteLine( "Found head armor in coffer: " + item.Name.ToString() );
+                            reverseItemSets[ coffer.RowId ].Add( item.RowId );
+                            itemSets.TryAdd( item.RowId, new HashSet< uint >() );
+                            itemSets[ item.RowId ].Add( coffer.RowId );
+                        }
+                    }
+
+                    if( coffer.Name.ToString().Contains( "Chest Gear" ) )
+                    {
+                        var items = _itemSheet.Where( c =>
+                            c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
+                            ( c.EquipSlotCategory.Value?.Body ?? 0 ) == 1);
+                        reverseItemSets.TryAdd( coffer.RowId, new HashSet< uint >() );
+                        foreach( var item in items )
+                        {
+                            Console.WriteLine( "Found chest armor in coffer: " + item.Name.ToString() );
+                            reverseItemSets[ coffer.RowId ].Add( item.RowId );
+                            itemSets.TryAdd( item.RowId, new HashSet< uint >() );
+                            itemSets[ item.RowId ].Add( coffer.RowId );
+                        }
+                    }
+
+                    if( coffer.Name.ToString().Contains( "Hand Gear" ) )
+                    {
+                        var items = _itemSheet.Where( c =>
+                            c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
+                            ( c.EquipSlotCategory.Value?.Gloves ?? 0 ) == 1);
+                        reverseItemSets.TryAdd( coffer.RowId, new HashSet< uint >() );
+                        foreach( var item in items )
+                        {
+                            Console.WriteLine( "Found hand armor in coffer: " + item.Name.ToString() );
+                            reverseItemSets[ coffer.RowId ].Add( item.RowId );
+                            itemSets.TryAdd( item.RowId, new HashSet< uint >() );
+                            itemSets[ item.RowId ].Add( coffer.RowId );
+                        }
+                    }
+
+                    if( coffer.Name.ToString().Contains( "Leg Gear" ) )
+                    {
+                        var items = _itemSheet.Where( c =>
+                            c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
+                            ( c.EquipSlotCategory.Value?.Legs ?? 0 ) == 1);
+                        reverseItemSets.TryAdd( coffer.RowId, new HashSet< uint >() );
+                        foreach( var item in items )
+                        {
+                            Console.WriteLine( "Found leg armor in coffer: " + item.Name.ToString() );
+                            reverseItemSets[ coffer.RowId ].Add( item.RowId );
+                            itemSets.TryAdd( item.RowId, new HashSet< uint >() );
+                            itemSets[ item.RowId ].Add( coffer.RowId );
+                        }
+                    }
+
+                    if( coffer.Name.ToString().Contains( "Foot Gear" ) )
+                    {
+                        var items = _itemSheet.Where( c =>
+                            c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
+                            ( c.EquipSlotCategory.Value?.Feet ?? 0 ) == 1);
+                        reverseItemSets.TryAdd( coffer.RowId, new HashSet< uint >() );
+                        foreach( var item in items )
+                        {
+                            Console.WriteLine( "Found foot armor in coffer: " + item.Name.ToString() );
+                            reverseItemSets[ coffer.RowId ].Add( item.RowId );
+                            itemSets.TryAdd( item.RowId, new HashSet< uint >() );
+                            itemSets[ item.RowId ].Add( coffer.RowId );
+                        }
+                    }
+
+                    if( coffer.Name.ToString().Contains( "Earring Coffer" ) )
+                    {
+                        var items = _itemSheet.Where( c =>
+                            c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
+                            ( c.EquipSlotCategory.Value?.Ears ?? 0 ) == 1);
+                        reverseItemSets.TryAdd( coffer.RowId, new HashSet< uint >() );
+                        foreach( var item in items )
+                        {
+                            Console.WriteLine( "Found earring in coffer: " + item.Name.ToString() );
+                            reverseItemSets[ coffer.RowId ].Add( item.RowId );
+                            itemSets.TryAdd( item.RowId, new HashSet< uint >() );
+                            itemSets[ item.RowId ].Add( coffer.RowId );
+                        }
+                    }
+
+                    if( coffer.Name.ToString().Contains( "Necklace Coffer" ) )
+                    {
+                        var items = _itemSheet.Where( c =>
+                            c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
+                            ( c.EquipSlotCategory.Value?.Neck ?? 0 ) == 1);
+                        reverseItemSets.TryAdd( coffer.RowId, new HashSet< uint >() );
+                        foreach( var item in items )
+                        {
+                            Console.WriteLine( "Found necklace in coffer: " + item.Name.ToString() );
+                            reverseItemSets[ coffer.RowId ].Add( item.RowId );
+                            itemSets.TryAdd( item.RowId, new HashSet< uint >() );
+                            itemSets[ item.RowId ].Add( coffer.RowId );
+                        }
+                    }
+
+                    if( coffer.Name.ToString().Contains( "Bracelet Coffer" ) )
+                    {
+                        var items = _itemSheet.Where( c =>
+                            c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
+                            ( c.EquipSlotCategory.Value?.Wrists ?? 0 ) == 1);
+                        reverseItemSets.TryAdd( coffer.RowId, new HashSet< uint >() );
+                        foreach( var item in items )
+                        {
+                            Console.WriteLine( "Found bracelet in coffer: " + item.Name.ToString() );
+                            reverseItemSets[ coffer.RowId ].Add( item.RowId );
+                            itemSets.TryAdd( item.RowId, new HashSet< uint >() );
+                            itemSets[ item.RowId ].Add( coffer.RowId );
+                        }
+                    }
+
+                    if( coffer.Name.ToString().Contains( "Ring Coffer" ) )
+                    {
+                        var items = _itemSheet.Where( c =>
+                            c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
+                            ( c.EquipSlotCategory.Value?.FingerL ?? 0 ) == 1);
+                        reverseItemSets.TryAdd( coffer.RowId, new HashSet< uint >() );
+                        foreach( var item in items )
+                        {
+                            Console.WriteLine( "Found ring in coffer: " + item.Name.ToString() );
+                            reverseItemSets[ coffer.RowId ].Add( item.RowId );
+                            itemSets.TryAdd( item.RowId, new HashSet< uint >() );
+                            itemSets[ item.RowId ].Add( coffer.RowId );
+                        }
+                    }
+
+                    if( coffer.Name.ToString().Contains( "Accessories" ) )
+                    {
+                        var armourTypes = new string[]
+                        {
+                            "Striking",
+                            "Maiming",
+                            "Fending",
+                            "Aiming",
+                            "Scouting",
+                            "Healing",
+                            "Casting",
+                            "Slaying"
+                        };
+                        foreach( var armourType in armourTypes )
+                        {
+                            if( coffer.Name.ToString().Contains( armourType ) )
+                            {
+                                var items = _itemSheet.Where( c => c.Name.ToString().Contains( cofferName.Value ) && c.Name.ToString().Contains( armourType ) && 
+                               ( 
+                                   ( c.EquipSlotCategory.Value?.Ears ?? 0 ) == 1 || 
+                                   ( c.EquipSlotCategory.Value?.Neck ?? 0 ) == 1  || 
+                                   ( c.EquipSlotCategory.Value?.FingerL ?? 0 ) == 1  || 
+                                   ( c.EquipSlotCategory.Value?.FingerR ?? 0 ) == 1  || 
+                                   ( c.EquipSlotCategory.Value?.Wrists ?? 0 ) == 1 
+                               ));
+                                reverseItemSets.TryAdd( coffer.RowId, new HashSet< uint >() );
+                                foreach( var item in items )
+                                {
+                                    Console.WriteLine( "Found armor in coffer: " + item.Name.ToString() );
+                                    reverseItemSets[ coffer.RowId ].Add( item.RowId );
+                                    itemSets.TryAdd( item.RowId, new HashSet< uint >() );
+                                    itemSets[ item.RowId ].Add( coffer.RowId );
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+
         public string ProcessItemsTSV(string className)
         {
             var reader = CSVFile.CSVReader.FromFile(@"FFXIV Data - Items.tsv", CSVSettings.TSV);
@@ -221,7 +475,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
                             }
                             else
                             {
-                                Console.WriteLine("Could not find a match for input item: " + s);
+                                Console.WriteLine("Could not find a match for input item: " + s + " and source " + sourceName);
                             }
                         }
                     }
@@ -247,6 +501,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
                         break;
                 }
             }
+            ParseExtraItemSets(lootItems, reverseLootItems);
             var tmpl = _sheetTemplate;
             tmpl = tmpl.Replace( "%%LOOKUP_NAME%%", className );
             var generators = new List< BaseShitGenerator >();

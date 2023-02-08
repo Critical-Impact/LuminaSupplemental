@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -21,6 +22,27 @@ public static class StringExtensions
 
     public static string ToParseable( this string input )
     {
-        return input.Replace( "pair of ", "" ).Replace( "suit of ", "" ).ToLower().RemoveWhitespace().RemoveSpecialCharacters();
+        if( input.Contains( "(IL" ) )
+        {
+            var startIndex = input.IndexOf( "(IL" );
+            input = input.Remove( startIndex );
+        }
+
+        var replacements = new Dictionary< string, string >()
+        {
+            { "High Mythril", "Dwarven Mythril"},
+            {"Armor", "Attire"},
+            {"Garb","Attire"},
+            {"pair of ", ""},
+            {"suit of ", ""},
+            {"Level 110 Weapon Coffer", "Level 50 Weapon Coffer"},
+            {"Level 90 Weapon Coffer", "Level 50 Weapon Coffer"},
+            {"Level 70 Weapon Coffer", "Level 50 Weapon Coffer"},
+        };
+        foreach( var replacement in replacements )
+        {
+            input = input.Replace( replacement.Key, replacement.Value );
+        }
+        return input.ToLower().RemoveWhitespace().RemoveSpecialCharacters();
     }
 }
