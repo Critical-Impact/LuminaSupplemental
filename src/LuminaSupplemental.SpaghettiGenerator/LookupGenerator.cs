@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
 using CSVFile;
+using CsvHelper;
+using CsvHelper.Configuration;
 using Lumina;
 using Lumina.Excel;
 using Lumina.Excel.GeneratedSheets;
@@ -19,13 +22,16 @@ namespace LuminaSupplemental.SpaghettiGenerator
         public string _sheetTemplate;
         private Dictionary< string, Item > _itemsByString;
         private Dictionary< string, ContentFinderCondition > _dutiesByString;
+        private Dictionary< string, BNpcName > _bNpcsByName;
         private ExcelSheet<Item> _itemSheet;
+        private ExcelSheet<BNpcName> _bnpcNameSheet;
         
 
         public LookupGenerator(string tmplPath = null)
         {
             _sheetTemplate = File.ReadAllText( tmplPath ?? "class.tmpl" );
             _itemSheet = Service.GameData.GetExcelSheet<Item>()!;
+            _bnpcNameSheet = Service.GameData.GetExcelSheet<BNpcName>()!;
             var dutySheet = Service.GameData.GetExcelSheet<ContentFinderCondition>()!;
 
             _itemsByString = new Dictionary<string, Item>();
@@ -38,6 +44,12 @@ namespace LuminaSupplemental.SpaghettiGenerator
             foreach (var item in dutySheet)
             {
                 _dutiesByString.TryAdd(item.Name.ToString().ToParseable(), item);
+            }
+
+            _bNpcsByName = new Dictionary<string, BNpcName>();
+            foreach (var bNpcName in _bnpcNameSheet)
+            {
+                _bNpcsByName.TryAdd(bNpcName.Singular.ToString().ToParseable(), bNpcName);
             }
         }
         
@@ -65,6 +77,10 @@ namespace LuminaSupplemental.SpaghettiGenerator
             Dictionary< uint, HashSet<uint> > reverseDungeonChestItems = new();
             Dictionary< uint, DungeonChestItem > actualDungeonChestItems = new();
             uint dungeonChestItemCount = 1;
+            List< DungeonBoss > dungeonBosses = new List< DungeonBoss >();
+            List< DungeonBossChest > dungeonBossChests = new List< DungeonBossChest >();
+            var dungeonBossCount = 1u;
+            var dungeonBossChestCount = 1u;
             
             var dutyText = File.ReadAllText( @"FFXIV Data - Duties.json" );
             JsonConverter[] converters = {new CategoryConverter(), new ConditionConverter(), new VersionConverter(), new ChestEnumConverter(), new ChestNameConverter(), new IlvlEnumConverter(), new IlvlUnionConverter(), new TokenNameConverter()};
@@ -75,6 +91,50 @@ namespace LuminaSupplemental.SpaghettiGenerator
                 if( _dutiesByString.ContainsKey( dutyName ) )
                 {
                     var actualDuty = _dutiesByString[ dutyName ];
+                    if( duty.Fights != null )
+                    {
+                        for( var index = 0; index < duty.Fights.Length; index++ )
+                        {
+                            var fight = duty.Fights[ index ];
+                            foreach( var boss in fight.Boss )
+                            {
+                                var bossName = boss.Name.ToParseable();
+                                if( _bNpcsByName.ContainsKey( bossName ) )
+                                {
+                                    var bnpc = _bNpcsByName[ bossName ];
+                                    dungeonBosses.Add( new DungeonBoss(dungeonBossCount, bnpc.RowId, (uint)index, actualDuty.RowId ) );
+                                    dungeonBossCount++;
+                                }
+                                else
+                                {
+                                    Console.WriteLine( "Could not parse boss with name: " + boss.Name );
+                                }
+                            }
+
+                            if( fight.Treasures != null )
+                            {
+                                foreach( var treasure in fight.Treasures )
+                                {
+                                    var chestNo = (uint)treasure.Name;
+                                    foreach( var item in treasure.Items )
+                                    {
+                                        var itemName = item.ToParseable();
+                                        var actualItem = _itemsByString.ContainsKey( itemName ) ? _itemsByString[ itemName ] : null;
+                                        if( actualItem != null )
+                                        {
+                                            dungeonBossChests.Add( new DungeonBossChest(dungeonBossChestCount, (uint)index, actualItem.RowId, actualDuty.RowId, 1, chestNo ) );
+                                            dungeonBossChestCount++;
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine( "Could not find item with name " + item + " in duty " + duty.Name );
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     if( duty.Chests != null )
                     {
                         foreach( var chest in duty.Chests )
@@ -122,7 +182,32 @@ namespace LuminaSupplemental.SpaghettiGenerator
                 }
 
             }
+            
+            using var fileStream = new FileStream( $"./output/DungeonBoss.csv", FileMode.Create );
+            CsvWriter writer = new CsvWriter( new StreamWriter( fileStream ), CultureInfo.CurrentCulture );
+            writer.WriteHeader<DungeonBoss>();
+            writer.NextRecord();
+            foreach( var dungeonBoss in dungeonBosses )
+            {
+                writer.WriteRecord<DungeonBoss>( dungeonBoss );
+                writer.NextRecord();
+            }
+            writer.Flush();
+            fileStream.Close();
 
+            using var fileStream2 = new FileStream( $"./output/DungeonBossChests.csv", FileMode.Create );
+            CsvWriter writer2 = new CsvWriter( new StreamWriter( fileStream2 ), CultureInfo.CurrentCulture );
+            writer2.WriteHeader<DungeonBossChest>();
+            writer2.NextRecord();
+            foreach( var dungeonBossChest in dungeonBossChests )
+            {
+                writer2.WriteRecord<DungeonBossChest>( dungeonBossChest );
+                writer2.NextRecord();
+            }
+            writer2.Flush();
+            fileStream2.Close();
+
+            
             var tmpl = _sheetTemplate;
             tmpl = tmpl.Replace( "%%LOOKUP_NAME%%", className );
             var generators = new List< BaseShitGenerator >();

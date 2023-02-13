@@ -27,10 +27,6 @@
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
 
-    <ItemGroup>
-      <Folder Include="Generated" />
-    </ItemGroup>
-
     <PropertyGroup>
         <DalamudLibPath>$(AppData)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
     </PropertyGroup>
@@ -39,17 +35,27 @@
     <ItemGroup>
         <Reference Include="Lumina">
             <HintPath>$(DalamudLibPath)Lumina.dll</HintPath>
-            <Private>False</Private>
+            <Private>True</Private>
         </Reference>
         <Reference Include="Lumina.Excel">
             <HintPath>$(DalamudLibPath)Lumina.Excel.dll</HintPath>
-            <Private>False</Private>
+            <Private>True</Private>
         </Reference>
     </ItemGroup>
 
 
     <ItemGroup>
+      <PackageReference Include="CSVFile" Version="3.1.0" />
+      <PackageReference Include="CsvHelper" Version="30.0.1" />
       <PackageReference Include="XivCommon" Version="7.0.0-alpha.1" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <None Remove="Generated\DungeonBossChest.csv" />
+      <EmbeddedResource Include="Generated\DungeonBossChest.csv" />
+      <None Remove="Generated\DungeonBoss.csv" />
+      <EmbeddedResource Include="Generated\DungeonBoss.csv" />
     </ItemGroup>
 
 
