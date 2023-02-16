@@ -35,11 +35,11 @@
     <ItemGroup>
         <Reference Include="Lumina">
             <HintPath>$(DalamudLibPath)Lumina.dll</HintPath>
-            <Private>True</Private>
+            <Private>False</Private>
         </Reference>
         <Reference Include="Lumina.Excel">
             <HintPath>$(DalamudLibPath)Lumina.Excel.dll</HintPath>
-            <Private>True</Private>
+            <Private>False</Private>
         </Reference>
     </ItemGroup>
 
