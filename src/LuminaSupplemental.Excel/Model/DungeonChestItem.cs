@@ -1,18 +1,26 @@
 using System.Numerics;
+using CsvHelper.Configuration.Attributes;
 
 namespace LuminaSupplemental.Excel.Model
 {
-    public struct DungeonChestItem
+    public struct DungeonChestItem : ICsv
     {
-        public uint ItemId;
-        public uint ContentFinderConditionId;
-        public Vector2 Coordinates;
+        [Name("RowId")] public uint RowId { get; set; }
+        [Name("ItemId")] public uint ItemId { get; set; }
+        [Name("ChestId")] public uint ChestId { get; set; }
 
-        public DungeonChestItem( uint itemId, uint contentFinderConditionId, Vector2 coordinates)
+        public DungeonChestItem( uint rowId, uint itemId, uint chestId)
         {
+            RowId = rowId;
             ItemId = itemId;
-            ContentFinderConditionId = contentFinderConditionId;
-            Coordinates = coordinates;
+            ChestId = chestId;
+        }
+
+        public void FromCsv( string[] lineData )
+        {
+            RowId = uint.Parse( lineData[ 0 ] );
+            ItemId = uint.Parse( lineData[ 1 ] );
+            ChestId = uint.Parse( lineData[ 2 ] );
         }
     }
 }

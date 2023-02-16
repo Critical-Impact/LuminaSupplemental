@@ -52,9 +52,13 @@
 
     <ItemGroup>
       <None Remove="Generated\DungeonBossChest.csv" />
-      <EmbeddedResource Include="Generated\DungeonBossChest.csv" />
       <None Remove="Generated\DungeonBoss.csv" />
-      <EmbeddedResource Include="Generated\DungeonBoss.csv" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <Content Include="Generated\DungeonBoss.csv" />
+      <Content Include="Generated\DungeonBossChest.csv" />
     </ItemGroup>
 
 

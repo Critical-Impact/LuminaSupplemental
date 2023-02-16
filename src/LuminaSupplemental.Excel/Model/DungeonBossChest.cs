@@ -10,18 +10,12 @@ namespace LuminaSupplemental.Excel.Model
 {
     public struct DungeonBossChest : ICsv
     {
-        [Name("RowId")]
-        public uint RowId { get; set; }
-        [Name("ItemId")]
-        public uint ItemId { get; set; }
-        [Name("ContentFinderConditionId")]
-        public uint ContentFinderConditionId { get; set; }
-        [Name("Quantity")]
-        public uint Quantity { get; set; }
-        [Name("FightNo")]
-        public uint FightNo { get; set; }
-        [Name("CofferNo")]
-        public uint CofferNo { get; set; }
+        [Name("RowId")] public uint RowId { get; set; }
+        [Name("ItemId")] public uint ItemId { get; set; }
+        [Name("ContentFinderConditionId")] public uint ContentFinderConditionId { get; set; }
+        [Name("Quantity")] public uint Quantity { get; set; }
+        [Name("FightNo")] public uint FightNo { get; set; }
+        [Name("CofferNo")] public uint CofferNo { get; set; }
 
         public DungeonBossChest(uint rowId, uint fightNo, uint itemId, uint contentFinderConditionId, uint quantity, uint cofferNo )
         {

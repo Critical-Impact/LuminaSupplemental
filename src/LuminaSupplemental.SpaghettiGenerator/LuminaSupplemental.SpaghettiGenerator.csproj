@@ -23,22 +23,19 @@
     <ItemGroup>
         <Reference Include="Newtonsoft.Json">
             <HintPath>$(DalamudLibPath)Newtonsoft.Json.dll</HintPath>
-            <Private>False</Private>
+            <Private>True</Private>
         </Reference>
         <Reference Include="Lumina">
             <HintPath>$(DalamudLibPath)Lumina.dll</HintPath>
-            <Private>False</Private>
+            <Private>True</Private>
         </Reference>
         <Reference Include="Lumina.Excel">
             <HintPath>$(DalamudLibPath)Lumina.Excel.dll</HintPath>
-            <Private>False</Private>
+            <Private>True</Private>
         </Reference>
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="class.tmpl">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
       <None Update="sqlite3.dll">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
@@ -53,8 +50,8 @@
     </ItemGroup>
 
     <Target Name="CopyGenerated" AfterTargets="Build">
-        <Message Text="Copying generated code" Importance="High" />
-        <Exec Command="xcopy &quot;$(TargetDir)output\*.cs&quot; &quot;$(SolutionDir)LuminaSupplemental.Excel\Generated\&quot; /Y /c /q || cmd /c exit /b 0" />
+        <Message Text="Copying generated csvs" Importance="High" />
+        <Exec Command="xcopy &quot;$(TargetDir)output\*.csv&quot; &quot;$(SolutionDir)LuminaSupplemental.Excel\Generated\&quot; /Y /c /q || cmd /c exit /b 0" />
         <Message Text="Copied build files" Importance="High" />
     </Target>
 

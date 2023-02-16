@@ -27,7 +27,7 @@ public static class CsvLoader
                 success = true;
                 return items;
             }
-            catch( Exception e )
+            catch( Exception )
             {
                 success = false;
                 return new List< T >();
@@ -60,7 +60,7 @@ public static class CsvLoader
                 return items;
             }
         }
-        catch( Exception e )
+        catch( Exception )
         {
             success = false;
             return new List< T >();
@@ -84,7 +84,7 @@ public static class CsvLoader
             fileStream.Close();
             return true;
         }
-        catch( Exception e )
+        catch( Exception )
         {
             return false;
         }
