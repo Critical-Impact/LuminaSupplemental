@@ -49,16 +49,25 @@
       <PackageReference Include="CsvHelper" Version="30.0.1" />
     </ItemGroup>
 
-
     <ItemGroup>
       <None Remove="Generated\DungeonBossChest.csv" />
       <None Remove="Generated\DungeonBoss.csv" />
-    </ItemGroup>
-
-
-    <ItemGroup>
       <Content Include="Generated\DungeonBoss.csv" />
       <Content Include="Generated\DungeonBossChest.csv" />
+      <None Remove="Generated\AirshipDrop.csv" />
+      <Content Include="Generated\AirshipDrop.csv" />
+      <None Remove="Generated\DungeonChest.csv" />
+      <Content Include="Generated\DungeonChest.csv" />
+      <None Remove="Generated\DungeonChestItem.csv" />
+      <Content Include="Generated\DungeonChestItem.csv" />
+      <None Remove="Generated\DungeonDrop.csv" />
+      <Content Include="Generated\DungeonDrop.csv" />
+      <None Remove="Generated\ItemSupplement.csv" />
+      <Content Include="Generated\ItemSupplement.csv" />
+      <None Remove="Generated\MobDrop.csv" />
+      <Content Include="Generated\MobDrop.csv" />
+      <None Remove="Generated\SubmarineDrop.csv" />
+      <Content Include="Generated\SubmarineDrop.csv" />
     </ItemGroup>
 
 
