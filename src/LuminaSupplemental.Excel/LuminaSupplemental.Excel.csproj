@@ -52,22 +52,22 @@
     <ItemGroup>
       <None Remove="Generated\DungeonBossChest.csv" />
       <None Remove="Generated\DungeonBoss.csv" />
-      <Content Include="Generated\DungeonBoss.csv" />
-      <Content Include="Generated\DungeonBossChest.csv" />
+      <EmbeddedResource Include="Generated\DungeonBoss.csv" />
+      <EmbeddedResource Include="Generated\DungeonBossChest.csv" />
       <None Remove="Generated\AirshipDrop.csv" />
-      <Content Include="Generated\AirshipDrop.csv" />
+      <EmbeddedResource Include="Generated\AirshipDrop.csv" />
       <None Remove="Generated\DungeonChest.csv" />
-      <Content Include="Generated\DungeonChest.csv" />
+      <EmbeddedResource Include="Generated\DungeonChest.csv" />
       <None Remove="Generated\DungeonChestItem.csv" />
-      <Content Include="Generated\DungeonChestItem.csv" />
+      <EmbeddedResource Include="Generated\DungeonChestItem.csv" />
       <None Remove="Generated\DungeonDrop.csv" />
-      <Content Include="Generated\DungeonDrop.csv" />
+      <EmbeddedResource Include="Generated\DungeonDrop.csv" />
       <None Remove="Generated\ItemSupplement.csv" />
-      <Content Include="Generated\ItemSupplement.csv" />
+      <EmbeddedResource Include="Generated\ItemSupplement.csv" />
       <None Remove="Generated\MobDrop.csv" />
-      <Content Include="Generated\MobDrop.csv" />
+      <EmbeddedResource Include="Generated\MobDrop.csv" />
       <None Remove="Generated\SubmarineDrop.csv" />
-      <Content Include="Generated\SubmarineDrop.csv" />
+      <EmbeddedResource Include="Generated\SubmarineDrop.csv" />
     </ItemGroup>
 
 
