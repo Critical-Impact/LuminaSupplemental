@@ -27,5 +27,15 @@ namespace LuminaSupplemental.Excel.Model
             ItemId = uint.Parse( lineData[ 1 ] );
             BNpcNameId = uint.Parse( lineData[ 2 ] );
         }
+
+        public string[] ToCsv()
+        {
+            return Array.Empty<string>();
+        }
+
+        public bool IncludeInCsv()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

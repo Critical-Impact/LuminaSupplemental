@@ -77,7 +77,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
             return indent + sb.ToString().Replace( "\n", $"\n{indent}");
         }
 
-        public void ProcessDutiesJson( List< DungeonChest > dungeonChests, List< DungeonChestItem > dungeonChestItems, List< DungeonBoss > dungeonBosses, List< DungeonBossChest > dungeonBossChests )
+        public void ProcessDutiesJson( List< DungeonChest > dungeonChests, List< DungeonChestItem > dungeonChestItems, List< DungeonBoss > dungeonBosses, List< DungeonBossChest > dungeonBossChests, List<DungeonBossDrop> dungeonBossDrops )
         {
             var dungeonBossCount = 1u;
             var dungeonBossChestCount = 1u;
@@ -108,6 +108,23 @@ namespace LuminaSupplemental.SpaghettiGenerator
                                 else
                                 {
                                     Console.WriteLine( "Could not parse boss with name: " + boss.Name );
+                                }
+                            }
+
+                            if( fight.Drops != null )
+                            {
+                                foreach( var drop in fight.Drops )
+                                {
+                                    var itemName = drop.Name.ToParseable();
+                                    var actualItem = _itemsByString.ContainsKey( itemName ) ? _itemsByString[ itemName ] : null;
+                                    if( actualItem != null )
+                                    {
+                                        dungeonBossDrops.Add( new DungeonBossDrop((uint)(dungeonBossDrops.Count + 1), actualDuty.RowId, (uint)index, actualItem.RowId, 1 ) );
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine( "Could not find item with name " + itemName + " in duty " + duty.Name );
+                                    }
                                 }
                             }
 
@@ -380,11 +397,12 @@ namespace LuminaSupplemental.SpaghettiGenerator
             var dungeonChestItems = new List< DungeonChestItem >();
             var dungeonBosses = new List< DungeonBoss >();
             var dungeonBossChests = new List< DungeonBossChest >();
+            var dungeonBossDrops = new List< DungeonBossDrop >();
             
             ProcessItemsTSV(itemSupplements, submarineDrops, airshipDrops, dungeonDrops);
             ParseExtraItemSets(itemSupplements);
             ProcessMobDrops( mobDrops );
-            ProcessDutiesJson( dungeonChests, dungeonChestItems, dungeonBosses, dungeonBossChests );
+            ProcessDutiesJson( dungeonChests, dungeonChestItems, dungeonBosses, dungeonBossChests, dungeonBossDrops );
 
             WriteFile( itemSupplements, $"./output/ItemSupplement.csv" );
             WriteFile( airshipDrops, $"./output/AirshipDrop.csv" );
@@ -395,6 +413,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
             WriteFile( dungeonChestItems, $"./output/DungeonChestItem.csv" );
             WriteFile( dungeonBosses, $"./output/DungeonBoss.csv" );
             WriteFile( dungeonBossChests, $"./output/DungeonBossChest.csv" );
+            WriteFile( dungeonBossDrops, $"./output/DungeonBossDrop.csv" );
         }
 
         public void WriteFile< T >( List< T > items, string outputPath )

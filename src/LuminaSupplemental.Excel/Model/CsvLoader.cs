@@ -36,6 +36,15 @@ public static class CsvLoader
     }
     public const string DungeonBossResourceName = "LuminaSupplemental.Excel.Generated.DungeonBoss.csv";
     public const string DungeonBossChestResourceName = "LuminaSupplemental.Excel.Generated.DungeonBossChest.csv";
+    public const string DungeonBossDropResourceName = "LuminaSupplemental.Excel.Generated.DungeonBossDrop.csv";
+    public const string DungeonChestItemResourceName = "LuminaSupplemental.Excel.Generated.DungeonChestItem.csv";
+    public const string DungeonChestResourceName = "LuminaSupplemental.Excel.Generated.DungeonChest.csv";
+    public const string DungeonDropItemResourceName = "LuminaSupplemental.Excel.Generated.DungeonDrop.csv";
+    public const string ItemSupplementResourceName = "LuminaSupplemental.Excel.Generated.ItemSupplement.csv";
+    public const string MobDropResourceName = "LuminaSupplemental.Excel.Generated.MobDrop.csv";
+    public const string SubmarineDropResourceName = "LuminaSupplemental.Excel.Generated.SubmarineDrop.csv";
+    public const string AirshipDropResourceName = "LuminaSupplemental.Excel.Generated.AirshipDrop.csv";
+    public const string MobSpawnResourceName = "LuminaSupplemental.Excel.Generated.MobSpawn.csv";
 
     public static List< T > LoadResource<T>(string resourceName, out bool success) where T : ICsv, new()
     {
@@ -67,7 +76,7 @@ public static class CsvLoader
         }
     }
     
-    public static bool ToCsv<T>( List<DungeonBossChest> bosses, string filePath ) where T : ICsv, new()
+    public static bool ToCsv<T>( List<T> items, string filePath ) where T : ICsv, new()
     {
         try
         {
@@ -75,7 +84,7 @@ public static class CsvLoader
             CsvWriter writer = new CsvWriter( new StreamWriter( fileStream ), CultureInfo.CurrentCulture );
             writer.WriteHeader<T>();
             writer.NextRecord();
-            foreach( var item in bosses )
+            foreach( var item in items )
             {
                 writer.WriteRecord( item );
                 writer.NextRecord();
@@ -83,6 +92,28 @@ public static class CsvLoader
             writer.Flush();
             fileStream.Close();
             return true;
+        }
+        catch( Exception )
+        {
+            return false;
+        }
+    }
+    public static bool ToCsvRaw<T>( List<T> items, string filePath ) where T : ICsv, new()
+    {
+        try
+        {
+            using( StreamWriter writer = new StreamWriter( filePath ) )
+            {
+                var csvWriter = new CSVFile.CSVWriter( writer );
+                foreach( var line in items )
+                {
+                    if( line.IncludeInCsv() )
+                    {
+                        csvWriter.WriteLine( line.ToCsv() );
+                    }
+                }
+                return true;
+            }
         }
         catch( Exception )
         {

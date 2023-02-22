@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 using CsvHelper.Configuration.Attributes;
 
@@ -21,6 +22,16 @@ namespace LuminaSupplemental.Excel.Model
             RowId = uint.Parse( lineData[ 0 ] );
             ItemId = uint.Parse( lineData[ 1 ] );
             ChestId = uint.Parse( lineData[ 2 ] );
+        }
+
+        public string[] ToCsv()
+        {
+            return Array.Empty<string>();
+        }
+
+        public bool IncludeInCsv()
+        {
+            throw new NotImplementedException();
         }
     }
 }

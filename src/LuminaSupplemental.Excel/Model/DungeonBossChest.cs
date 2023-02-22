@@ -36,5 +36,15 @@ namespace LuminaSupplemental.Excel.Model
             FightNo = uint.Parse( lineData[ 4 ] );
             CofferNo = uint.Parse( lineData[ 5 ] );
         }
+
+        public string[] ToCsv()
+        {
+            return Array.Empty<string>();
+        }
+
+        public bool IncludeInCsv()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

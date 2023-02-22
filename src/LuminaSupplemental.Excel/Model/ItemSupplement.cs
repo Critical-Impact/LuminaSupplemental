@@ -34,5 +34,15 @@ namespace LuminaSupplemental.Excel.Model
                 ItemSupplementSource = itemSupplementSource;
             }
         }
+
+        public string[] ToCsv()
+        {
+            return Array.Empty<string>();
+        }
+
+        public bool IncludeInCsv()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

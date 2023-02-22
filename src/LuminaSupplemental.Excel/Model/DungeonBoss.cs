@@ -37,5 +37,15 @@ namespace LuminaSupplemental.Excel.Model
             ContentFinderConditionId = uint.Parse( lineData[ 2 ] );
             FightNo = uint.Parse( lineData[ 3 ] );
         }
+
+        public string[] ToCsv()
+        {
+            return Array.Empty<string>();
+        }
+
+        public bool IncludeInCsv()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

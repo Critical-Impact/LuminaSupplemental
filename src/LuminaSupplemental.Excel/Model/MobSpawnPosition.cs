@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace LuminaSupplemental.Excel.Model;
 
-public class MobSpawnPosition
+public class MobSpawnPosition : ICsv
 {
     public uint BNpcBaseId;
     public uint BNpcNameId;
@@ -60,5 +60,10 @@ public class MobSpawnPosition
             Subtype.ToString()
         };
         return data.ToArray();
+    }
+
+    public bool IncludeInCsv()
+    {
+        throw new NotImplementedException();
     }
 }

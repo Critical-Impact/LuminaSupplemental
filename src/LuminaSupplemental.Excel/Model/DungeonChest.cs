@@ -30,7 +30,7 @@ namespace LuminaSupplemental.Excel.Model
         {
             RowId = uint.Parse( lineData[ 0 ] );
             ChestNo = byte.Parse( lineData[ 1 ] );
-            ContentFinderConditionId = byte.Parse( lineData[ 2 ] );
+            ContentFinderConditionId = uint.Parse( lineData[ 2 ] );
             var positionData = lineData[ 3 ].Split( ";" ).Select( float.Parse ).ToList();
             Position = new Vector2( positionData[ 0 ], positionData[ 1 ] );
         }
@@ -45,6 +45,11 @@ namespace LuminaSupplemental.Excel.Model
                 Position.X + ";" + Position.Y
             };
             return data.ToArray();
+        }
+
+        public bool IncludeInCsv()
+        {
+            throw new NotImplementedException();
         }
     }
 }
