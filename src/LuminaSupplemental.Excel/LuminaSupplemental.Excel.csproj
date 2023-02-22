@@ -70,6 +70,8 @@
       <EmbeddedResource Include="Generated\SubmarineDrop.csv" />
       <None Remove="Generated\DungeonBossDrop.csv" />
       <EmbeddedResource Include="Generated\DungeonBossDrop.csv" />
+      <None Remove="Generated\MobSpawn.csv" />
+      <EmbeddedResource Include="Generated\MobSpawn.csv" />
     </ItemGroup>
 
     <ItemGroup>
