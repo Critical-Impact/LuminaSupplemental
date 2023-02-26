@@ -2,6 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Lumina;
+using Lumina.Data;
+using Lumina.Excel;
+using Lumina.Excel.GeneratedSheets;
 
 namespace LuminaSupplemental.Excel.Model;
 
@@ -12,6 +16,10 @@ public class MobSpawnPosition : ICsv
     public uint TerritoryTypeId;
     public Vector3 Position;
     public byte Subtype;
+
+    public LazyRow< BNpcBase > BNpcBase;
+    public LazyRow< BNpcName > BNpcName;
+    public LazyRow< TerritoryType > TerritoryType;
 
     public MobSpawnPosition(uint bNpcBaseId, uint bNpcNameId, uint territoryTypeId, Vector3 position, byte subtype)
     {
@@ -64,6 +72,13 @@ public class MobSpawnPosition : ICsv
 
     public bool IncludeInCsv()
     {
-        throw new NotImplementedException();
+        return false;
+    }
+
+    public virtual void PopulateData( GameData gameData, Language language )
+    {
+        BNpcBase = new LazyRow< BNpcBase >( gameData, BNpcBaseId, language );
+        BNpcName = new LazyRow< BNpcName >( gameData, BNpcNameId, language );
+        TerritoryType = new LazyRow< TerritoryType >( gameData, TerritoryTypeId, language );
     }
 }

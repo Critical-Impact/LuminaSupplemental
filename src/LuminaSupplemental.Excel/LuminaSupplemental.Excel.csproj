@@ -78,5 +78,19 @@
       <None Remove="Generated\MobSpawns.csv" />
     </ItemGroup>
 
+    <ItemGroup>
+      <EmbeddedResource Include="Generated\AirshipDrop.csv" />
+      <EmbeddedResource Include="Generated\DungeonBoss.csv" />
+      <EmbeddedResource Include="Generated\DungeonBossChest.csv" />
+      <EmbeddedResource Include="Generated\DungeonBossDrop.csv" />
+      <EmbeddedResource Include="Generated\DungeonChest.csv" />
+      <EmbeddedResource Include="Generated\DungeonChestItem.csv" />
+      <EmbeddedResource Include="Generated\DungeonDrop.csv" />
+      <EmbeddedResource Include="Generated\ItemSupplement.csv" />
+      <EmbeddedResource Include="Generated\MobDrop.csv" />
+      <EmbeddedResource Include="Generated\MobSpawn.csv" />
+      <EmbeddedResource Include="Generated\SubmarineDrop.csv" />
+    </ItemGroup>
+
 
 </Project>

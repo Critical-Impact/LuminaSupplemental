@@ -1,20 +1,31 @@
 using System;
 using System.Numerics;
 using CsvHelper.Configuration.Attributes;
+using Lumina;
+using Lumina.Data;
+using Lumina.Excel;
+using Lumina.Excel.GeneratedSheets;
 
 namespace LuminaSupplemental.Excel.Model
 {
-    public struct DungeonChestItem : ICsv
+    public class DungeonChestItem : ICsv
     {
         [Name("RowId")] public uint RowId { get; set; }
         [Name("ItemId")] public uint ItemId { get; set; }
         [Name("ChestId")] public uint ChestId { get; set; }
+        
+        public LazyRow< Item > Item;
 
         public DungeonChestItem( uint rowId, uint itemId, uint chestId)
         {
             RowId = rowId;
             ItemId = itemId;
             ChestId = chestId;
+        }
+
+        public DungeonChestItem()
+        {
+            
         }
 
         public void FromCsv( string[] lineData )
@@ -31,7 +42,12 @@ namespace LuminaSupplemental.Excel.Model
 
         public bool IncludeInCsv()
         {
-            throw new NotImplementedException();
+            return false;
+        }
+
+        public virtual void PopulateData( GameData gameData, Language language )
+        {
+            Item = new LazyRow< Item >( gameData, ItemId, language );
         }
     }
 }

@@ -5,14 +5,22 @@ using System.IO;
 using System.Reflection;
 using CsvHelper;
 using CsvHelper.Configuration.Attributes;
+using Lumina;
+using Lumina.Data;
+using Lumina.Excel;
+using Lumina.Excel.GeneratedSheets;
 
 namespace LuminaSupplemental.Excel.Model
 {
-    public struct VentureDrop : ICsv
+    public class VentureDrop : ICsv
     {
         [Name("RowId")] public uint RowId { get; set; }
         [Name("ItemId")] public uint ItemId { get; set; }
         [Name("RetainerTaskRandomId")] public uint RetainerTaskRandomId { get; set; }
+        
+        public LazyRow< Item > Item;
+        
+        public LazyRow< RetainerTaskRandom > RetainerTaskRandom;
 
         public VentureDrop(uint rowId, uint itemId, uint retainerTaskRandomId )
         {
@@ -35,7 +43,13 @@ namespace LuminaSupplemental.Excel.Model
 
         public bool IncludeInCsv()
         {
-            throw new NotImplementedException();
+            return false;
+        }
+
+        public virtual void PopulateData( GameData gameData, Language language )
+        {
+            RetainerTaskRandom = new LazyRow< RetainerTaskRandom >( gameData, RetainerTaskRandomId, language );
+            Item = new LazyRow< Item >( gameData, ItemId, language );
         }
     }
 }

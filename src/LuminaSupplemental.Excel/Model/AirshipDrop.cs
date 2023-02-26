@@ -5,20 +5,33 @@ using System.IO;
 using System.Reflection;
 using CsvHelper;
 using CsvHelper.Configuration.Attributes;
+using Lumina;
+using Lumina.Data;
+using Lumina.Excel;
+using Lumina.Excel.GeneratedSheets;
 
 namespace LuminaSupplemental.Excel.Model
 {
-    public struct AirshipDrop : ICsv
+    public class AirshipDrop : ICsv
     {
         [Name("RowId")] public uint RowId { get; set; }
         [Name("ItemId")] public uint ItemId { get; set; }
         [Name("AirshipExplorationPointId")] public uint AirshipExplorationPointId { get; set; }
 
+        public LazyRow< AirshipExplorationPoint > AirshipExplorationPoint;
+        
+        public LazyRow< Item > Item;
+        
         public AirshipDrop(uint rowId, uint itemId, uint airshipExplorationPointId )
         {
             RowId = rowId;
             ItemId = itemId;
             AirshipExplorationPointId = airshipExplorationPointId;
+        }
+
+        public AirshipDrop()
+        {
+            
         }
 
         public void FromCsv(string[] lineData)
@@ -35,7 +48,13 @@ namespace LuminaSupplemental.Excel.Model
 
         public bool IncludeInCsv()
         {
-            throw new NotImplementedException();
+            return false;
+        }
+
+        public virtual void PopulateData( GameData gameData, Language language )
+        {
+            AirshipExplorationPoint = new LazyRow< AirshipExplorationPoint >( gameData, AirshipExplorationPointId, language );
+            Item = new LazyRow< Item >( gameData, ItemId, language );
         }
     }
 }

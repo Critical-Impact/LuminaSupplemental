@@ -4,12 +4,14 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using CsvHelper;
+using Lumina;
+using Lumina.Data;
 
 namespace LuminaSupplemental.Excel.Model;
 
 public static class CsvLoader
 {
-    public static List< T > LoadCsv<T>(string filePath, out bool success) where T : ICsv, new()
+    public static List< T > LoadCsv<T>(string filePath, out bool success, GameData? gameData = null, Language? language = null) where T : ICsv, new()
     {
         using var fileStream = new FileStream( filePath, FileMode.Open );
         using( StreamReader reader = new StreamReader( fileStream ) )
@@ -22,6 +24,10 @@ public static class CsvLoader
                 {
                     T item = new T();
                     item.FromCsv( line );
+                    if( gameData != null && language != null )
+                    {
+                        item.PopulateData( gameData, language.Value );
+                    }
                     items.Add( item );
                 }
                 success = true;
@@ -46,7 +52,7 @@ public static class CsvLoader
     public const string AirshipDropResourceName = "LuminaSupplemental.Excel.Generated.AirshipDrop.csv";
     public const string MobSpawnResourceName = "LuminaSupplemental.Excel.Generated.MobSpawn.csv";
 
-    public static List< T > LoadResource<T>(string resourceName, out bool success) where T : ICsv, new()
+    public static List< T > LoadResource<T>(string resourceName, out bool success, GameData? gameData = null, Language? language = null) where T : ICsv, new()
     {
         try
         {
@@ -62,6 +68,10 @@ public static class CsvLoader
                 {
                     T item = new T();
                     item.FromCsv( line );
+                    if( gameData != null && language != null )
+                    {
+                        item.PopulateData( gameData, language.Value );
+                    }
                     items.Add( item );
                 }
 

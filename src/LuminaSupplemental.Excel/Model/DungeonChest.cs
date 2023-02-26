@@ -7,16 +7,22 @@ using System.Numerics;
 using System.Reflection;
 using CsvHelper;
 using CsvHelper.Configuration.Attributes;
+using Lumina;
+using Lumina.Data;
+using Lumina.Excel;
+using Lumina.Excel.GeneratedSheets;
 using LuminaSupplemental.Excel.Converters;
 
 namespace LuminaSupplemental.Excel.Model
 {
-    public struct DungeonChest : ICsv
+    public class DungeonChest : ICsv
     {
         [Name("RowId")] public uint RowId { get; set; }
         [Name("ChestNo")] public byte ChestNo { get; set; }
         [Name("ContentFinderConditionId")] public uint ContentFinderConditionId { get; set; }
         [Name("Position"), TypeConverter(typeof(Vector2Converter))] public Vector2 Position { get; set; }
+        
+        public LazyRow< ContentFinderCondition > ContentFinderCondition;
 
         public DungeonChest(uint rowId, byte chestNo,uint contentFinderConditionId, Vector2 position )
         {
@@ -24,6 +30,11 @@ namespace LuminaSupplemental.Excel.Model
             ChestNo = chestNo;
             ContentFinderConditionId = contentFinderConditionId;
             Position = position;
+        }
+
+        public DungeonChest()
+        {
+            
         }
 
         public void FromCsv(string[] lineData)
@@ -49,7 +60,12 @@ namespace LuminaSupplemental.Excel.Model
 
         public bool IncludeInCsv()
         {
-            throw new NotImplementedException();
+            return false;
+        }
+
+        public virtual void PopulateData( GameData gameData, Language language )
+        {
+            ContentFinderCondition = new LazyRow< ContentFinderCondition >( gameData, ContentFinderConditionId, language );
         }
     }
 }
