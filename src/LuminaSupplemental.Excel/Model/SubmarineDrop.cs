@@ -1,5 +1,9 @@
 using System;
-using System.Numerics;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Reflection;
+using CsvHelper;
 using CsvHelper.Configuration.Attributes;
 using Lumina;
 using Lumina.Data;
@@ -8,31 +12,33 @@ using Lumina.Excel.GeneratedSheets;
 
 namespace LuminaSupplemental.Excel.Model
 {
-    public class DungeonChestItem : ICsv
+    public class SubmarineDrop : ICsv
     {
         [Name("RowId")] public uint RowId { get; set; }
         [Name("ItemId")] public uint ItemId { get; set; }
-        [Name("ChestId")] public uint ChestId { get; set; }
+        [Name("SubmarineExplorationId")] public uint SubmarineExplorationId { get; set; }
+        
+        public LazyRow< SubmarineExploration > SubmarineExploration;
         
         public LazyRow< Item > Item;
 
-        public DungeonChestItem( uint rowId, uint itemId, uint chestId)
+        public SubmarineDrop(uint rowId, uint itemId, uint submarineExplorationId )
         {
             RowId = rowId;
             ItemId = itemId;
-            ChestId = chestId;
+            SubmarineExplorationId = submarineExplorationId;
         }
 
-        public DungeonChestItem()
+        public SubmarineDrop()
         {
             
         }
 
-        public void FromCsv( string[] lineData )
+        public void FromCsv(string[] lineData)
         {
             RowId = uint.Parse( lineData[ 0 ] );
             ItemId = uint.Parse( lineData[ 1 ] );
-            ChestId = uint.Parse( lineData[ 2 ] );
+            SubmarineExplorationId = uint.Parse( lineData[ 2 ] );
         }
 
         public string[] ToCsv()
@@ -47,6 +53,7 @@ namespace LuminaSupplemental.Excel.Model
 
         public virtual void PopulateData( GameData gameData, Language language )
         {
+            SubmarineExploration = new LazyRow< SubmarineExploration >( gameData, SubmarineExplorationId, language );
             Item = new LazyRow< Item >( gameData, ItemId, language );
         }
     }

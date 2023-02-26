@@ -1,15 +1,18 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
 using CsvHelper;
+using Lumina;
+using Lumina.Data;
 
 namespace LuminaSupplemental.Excel.Model;
 
 public static class CsvLoader
 {
-    public static List< T > LoadCsv<T>(string filePath, out bool success) where T : ICsv, new()
+    public static List< T > LoadCsv<T>(string filePath, out bool success, GameData? gameData = null, Language? language = null) where T : ICsv, new()
     {
         using var fileStream = new FileStream( filePath, FileMode.Open );
         using( StreamReader reader = new StreamReader( fileStream ) )
@@ -22,12 +25,16 @@ public static class CsvLoader
                 {
                     T item = new T();
                     item.FromCsv( line );
+                    if( gameData != null && language != null )
+                    {
+                        item.PopulateData( gameData, language.Value );
+                    }
                     items.Add( item );
                 }
                 success = true;
                 return items;
             }
-            catch( Exception e )
+            catch( Exception )
             {
                 success = false;
                 return new List< T >();
@@ -36,38 +43,59 @@ public static class CsvLoader
     }
     public const string DungeonBossResourceName = "LuminaSupplemental.Excel.Generated.DungeonBoss.csv";
     public const string DungeonBossChestResourceName = "LuminaSupplemental.Excel.Generated.DungeonBossChest.csv";
+    public const string DungeonBossDropResourceName = "LuminaSupplemental.Excel.Generated.DungeonBossDrop.csv";
+    public const string DungeonChestItemResourceName = "LuminaSupplemental.Excel.Generated.DungeonChestItem.csv";
+    public const string DungeonChestResourceName = "LuminaSupplemental.Excel.Generated.DungeonChest.csv";
+    public const string DungeonDropItemResourceName = "LuminaSupplemental.Excel.Generated.DungeonDrop.csv";
+    public const string ItemSupplementResourceName = "LuminaSupplemental.Excel.Generated.ItemSupplement.csv";
+    public const string MobDropResourceName = "LuminaSupplemental.Excel.Generated.MobDrop.csv";
+    public const string SubmarineDropResourceName = "LuminaSupplemental.Excel.Generated.SubmarineDrop.csv";
+    public const string AirshipDropResourceName = "LuminaSupplemental.Excel.Generated.AirshipDrop.csv";
+    public const string MobSpawnResourceName = "LuminaSupplemental.Excel.Generated.MobSpawn.csv";
 
-    public static List< T > LoadResource<T>(string resourceName, out bool success) where T : ICsv, new()
+    public static List< T > LoadResource<T>(string resourceName, out bool success, GameData? gameData = null, Language? language = null) where T : ICsv, new()
     {
         try
         {
             var assembly = Assembly.GetExecutingAssembly();
-            using( Stream stream = assembly.GetManifestResourceStream( resourceName ) )
-            using( StreamReader reader = new StreamReader( stream ) )
+            using( Stream? stream = assembly.GetManifestResourceStream( resourceName ) )
             {
-
-
-                var csvReader = CSVFile.CSVReader.FromString( reader.ReadToEnd() );
-                var items = new List< T >();
-                foreach( var line in csvReader.Lines() )
+                if( stream == null )
                 {
-                    T item = new T();
-                    item.FromCsv( line );
-                    items.Add( item );
+                    success = false;
+                    return new List< T >();
                 }
+                using( StreamReader reader = new StreamReader( stream ) )
+                {
 
-                success = true;
-                return items;
+
+                    var csvReader = CSVFile.CSVReader.FromString( reader.ReadToEnd() );
+                    var items = new List< T >();
+                    foreach( var line in csvReader.Lines() )
+                    {
+                        T item = new T();
+                        item.FromCsv( line );
+                        if( gameData != null && language != null )
+                        {
+                            item.PopulateData( gameData, language.Value );
+                        }
+
+                        items.Add( item );
+                    }
+
+                    success = true;
+                    return items;
+                }
             }
         }
-        catch( Exception e )
+        catch( Exception )
         {
             success = false;
             return new List< T >();
         }
     }
     
-    public static bool ToCsv<T>( List<DungeonBossChest> bosses, string filePath ) where T : ICsv, new()
+    public static bool ToCsv<T>( List<T> items, string filePath ) where T : ICsv, new()
     {
         try
         {
@@ -75,7 +103,7 @@ public static class CsvLoader
             CsvWriter writer = new CsvWriter( new StreamWriter( fileStream ), CultureInfo.CurrentCulture );
             writer.WriteHeader<T>();
             writer.NextRecord();
-            foreach( var item in bosses )
+            foreach( var item in items )
             {
                 writer.WriteRecord( item );
                 writer.NextRecord();
@@ -84,7 +112,29 @@ public static class CsvLoader
             fileStream.Close();
             return true;
         }
-        catch( Exception e )
+        catch( Exception )
+        {
+            return false;
+        }
+    }
+    public static bool ToCsvRaw<T>( List<T> items, string filePath ) where T : ICsv, new()
+    {
+        try
+        {
+            using( StreamWriter writer = new StreamWriter( filePath ) )
+            {
+                var csvWriter = new CSVFile.CSVWriter( writer );
+                foreach( var line in items )
+                {
+                    if( line.IncludeInCsv() )
+                    {
+                        csvWriter.WriteLine( line.ToCsv() );
+                    }
+                }
+                return true;
+            }
+        }
+        catch( Exception )
         {
             return false;
         }

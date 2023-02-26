@@ -49,12 +49,18 @@
       <PackageReference Include="CsvHelper" Version="30.0.1" />
     </ItemGroup>
 
-
     <ItemGroup>
-      <None Remove="Generated\DungeonBossChest.csv" />
-      <EmbeddedResource Include="Generated\DungeonBossChest.csv" />
-      <None Remove="Generated\DungeonBoss.csv" />
+      <EmbeddedResource Include="Generated\AirshipDrop.csv" />
       <EmbeddedResource Include="Generated\DungeonBoss.csv" />
+      <EmbeddedResource Include="Generated\DungeonBossChest.csv" />
+      <EmbeddedResource Include="Generated\DungeonBossDrop.csv" />
+      <EmbeddedResource Include="Generated\DungeonChest.csv" />
+      <EmbeddedResource Include="Generated\DungeonChestItem.csv" />
+      <EmbeddedResource Include="Generated\DungeonDrop.csv" />
+      <EmbeddedResource Include="Generated\ItemSupplement.csv" />
+      <EmbeddedResource Include="Generated\MobDrop.csv" />
+      <EmbeddedResource Include="Generated\MobSpawn.csv" />
+      <EmbeddedResource Include="Generated\SubmarineDrop.csv" />
     </ItemGroup>
 
 

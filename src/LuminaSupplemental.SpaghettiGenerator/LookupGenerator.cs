@@ -7,31 +7,32 @@ using System.Numerics;
 using System.Text;
 using CSVFile;
 using CsvHelper;
-using CsvHelper.Configuration;
-using Lumina;
 using Lumina.Excel;
 using Lumina.Excel.GeneratedSheets;
 using LuminaSupplemental.Excel.Model;
-using LuminaSupplemental.SpaghettiGenerator.CodeGen;
 using Newtonsoft.Json;
 
 namespace LuminaSupplemental.SpaghettiGenerator
 {
     public class LookupGenerator
     {
-        public string _sheetTemplate;
         private Dictionary< string, Item > _itemsByString;
         private Dictionary< string, ContentFinderCondition > _dutiesByString;
         private Dictionary< string, BNpcName > _bNpcsByName;
+        private Dictionary< string, SubmarineExploration > _submarinesByName;
+        private Dictionary< string, AirshipExplorationPoint > _airshipsByName;
         private ExcelSheet<Item> _itemSheet;
         private ExcelSheet<BNpcName> _bnpcNameSheet;
-        
+        private readonly ExcelSheet<SubmarineExploration> _submarineSheet;
+        private readonly ExcelSheet<AirshipExplorationPoint> _airshipSheet;
+
 
         public LookupGenerator(string tmplPath = null)
         {
-            _sheetTemplate = File.ReadAllText( tmplPath ?? "class.tmpl" );
             _itemSheet = Service.GameData.GetExcelSheet<Item>()!;
             _bnpcNameSheet = Service.GameData.GetExcelSheet<BNpcName>()!;
+            _submarineSheet = Service.GameData.GetExcelSheet<SubmarineExploration>()!;
+            _airshipSheet = Service.GameData.GetExcelSheet<AirshipExplorationPoint>()!;
             var dutySheet = Service.GameData.GetExcelSheet<ContentFinderCondition>()!;
 
             _itemsByString = new Dictionary<string, Item>();
@@ -51,12 +52,24 @@ namespace LuminaSupplemental.SpaghettiGenerator
             {
                 _bNpcsByName.TryAdd(bNpcName.Singular.ToString().ToParseable(), bNpcName);
             }
+
+            _airshipsByName = new Dictionary<string, AirshipExplorationPoint>();
+            foreach (var airship in _airshipSheet)
+            {
+                _airshipsByName.TryAdd(airship.NameShort.ToString().ToParseable(), airship);
+            }
+
+            _submarinesByName = new Dictionary<string, SubmarineExploration>();
+            foreach (var submarine in _submarineSheet)
+            {
+                _submarinesByName.TryAdd(submarine.Destination.ToString().ToParseable(), submarine);
+            }
         }
         
         public string FixIndent( StringBuilder sb, int level )
         {
             var indent = "";
-            for( int i = 0; i < level * 4; i++ )
+            for( var i = 0; i < level * 4; i++ )
             {
                 indent += " ";
             }
@@ -64,21 +77,8 @@ namespace LuminaSupplemental.SpaghettiGenerator
             return indent + sb.ToString().Replace( "\n", $"\n{indent}");
         }
 
-        public string ProcessDutiesJson( string className )
+        public void ProcessDutiesJson( List< DungeonChest > dungeonChests, List< DungeonChestItem > dungeonChestItems, List< DungeonBoss > dungeonBosses, List< DungeonBossChest > dungeonBossChests, List<DungeonBossDrop> dungeonBossDrops )
         {
-            /*
-             * To Process:
-             * Dungeon Treasure Coffers
-             * Dungeon Boss Treasure Coffers
-             * Dungeon Boss Drop(Drop + Currency(amount))
-             * 
-             */
-            Dictionary< uint, HashSet<uint> > dungeonChestItems = new();
-            Dictionary< uint, HashSet<uint> > reverseDungeonChestItems = new();
-            Dictionary< uint, DungeonChestItem > actualDungeonChestItems = new();
-            uint dungeonChestItemCount = 1;
-            List< DungeonBoss > dungeonBosses = new List< DungeonBoss >();
-            List< DungeonBossChest > dungeonBossChests = new List< DungeonBossChest >();
             var dungeonBossCount = 1u;
             var dungeonBossChestCount = 1u;
             
@@ -111,6 +111,23 @@ namespace LuminaSupplemental.SpaghettiGenerator
                                 }
                             }
 
+                            if( fight.Drops != null )
+                            {
+                                foreach( var drop in fight.Drops )
+                                {
+                                    var itemName = drop.Name.ToParseable();
+                                    var actualItem = _itemsByString.ContainsKey( itemName ) ? _itemsByString[ itemName ] : null;
+                                    if( actualItem != null )
+                                    {
+                                        dungeonBossDrops.Add( new DungeonBossDrop((uint)(dungeonBossDrops.Count + 1), actualDuty.RowId, (uint)index, actualItem.RowId, 1 ) );
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine( "Could not find item with name " + itemName + " in duty " + duty.Name );
+                                    }
+                                }
+                            }
+
                             if( fight.Treasures != null )
                             {
                                 foreach( var treasure in fight.Treasures )
@@ -137,112 +154,35 @@ namespace LuminaSupplemental.SpaghettiGenerator
 
                     if( duty.Chests != null )
                     {
-                        foreach( var chest in duty.Chests )
+                        for( var index = 0; index < duty.Chests.Length; index++ )
                         {
+                            var chest = duty.Chests[ index ];
+                            var xCoord = float.Parse( chest.Coords.X );
+                            var yCoord = float.Parse( chest.Coords.Y );
+                            var dungeonChest = new DungeonChest( (uint)(dungeonChests.Count + 1), (byte)(index + 1), actualDuty.RowId, new Vector2( xCoord, yCoord ) );
+                            dungeonChests.Add( dungeonChest );
                             foreach( var item in chest.Items )
                             {
                                 var itemName = item.ToParseable();
                                 var actualItem = _itemsByString.ContainsKey( itemName ) ? _itemsByString[ itemName ] : null;
                                 if( actualItem != null )
                                 {
-                                    var xCoord = float.Parse( chest.Coords.X );
-                                    var yCoord = float.Parse( chest.Coords.Y );
-                                    DungeonChestItem chestItem = new DungeonChestItem( actualItem.RowId, actualDuty.RowId, new Vector2( xCoord, yCoord ) );
-                                    actualDungeonChestItems.Add( dungeonChestItemCount, chestItem );
-                                    if( !dungeonChestItems.ContainsKey( actualItem.RowId ) )
-                                    {
-                                        dungeonChestItems.Add(actualItem.RowId, new HashSet< uint >());
-                                    }
 
-                                    if( !dungeonChestItems[ actualItem.RowId ].Contains( dungeonChestItemCount ) )
-                                    {
-                                        dungeonChestItems[ actualItem.RowId ].Add( dungeonChestItemCount );
-                                    }
-                                    
-                                    if( !reverseDungeonChestItems.ContainsKey( dungeonChestItemCount ) )
-                                    {
-                                        reverseDungeonChestItems.Add(dungeonChestItemCount, new HashSet< uint >());
-                                    }
-
-                                    if( !reverseDungeonChestItems[ dungeonChestItemCount ].Contains(  actualItem.RowId ) )
-                                    {
-                                        reverseDungeonChestItems[ dungeonChestItemCount ].Add(  actualItem.RowId );
-                                    }
-                                    dungeonChestItemCount++;
+                                    var chestItem = new DungeonChestItem( (uint)(dungeonChestItems.Count + 1), actualItem.RowId, dungeonChest.RowId );
+                                    dungeonChestItems.Add( chestItem );
                                 }
                             }
                         }
                     }
-
-                    var a = "";
                 }
                 else
                 {
                     Console.WriteLine("Could not find duty " + duty.Name);
                 }
-
             }
-            
-            using var fileStream = new FileStream( $"./output/DungeonBoss.csv", FileMode.Create );
-            CsvWriter writer = new CsvWriter( new StreamWriter( fileStream ), CultureInfo.CurrentCulture );
-            writer.WriteHeader<DungeonBoss>();
-            writer.NextRecord();
-            foreach( var dungeonBoss in dungeonBosses )
-            {
-                writer.WriteRecord<DungeonBoss>( dungeonBoss );
-                writer.NextRecord();
-            }
-            writer.Flush();
-            fileStream.Close();
-
-            using var fileStream2 = new FileStream( $"./output/DungeonBossChests.csv", FileMode.Create );
-            CsvWriter writer2 = new CsvWriter( new StreamWriter( fileStream2 ), CultureInfo.CurrentCulture );
-            writer2.WriteHeader<DungeonBossChest>();
-            writer2.NextRecord();
-            foreach( var dungeonBossChest in dungeonBossChests )
-            {
-                writer2.WriteRecord<DungeonBossChest>( dungeonBossChest );
-                writer2.NextRecord();
-            }
-            writer2.Flush();
-            fileStream2.Close();
-
-            
-            var tmpl = _sheetTemplate;
-            tmpl = tmpl.Replace( "%%LOOKUP_NAME%%", className );
-            var generators = new List< BaseShitGenerator >();
-            generators.Add( new DictionaryHashSetGenerator( "ItemToDungeonChests", dungeonChestItems ) );
-            generators.Add( new DictionaryHashSetGenerator( "DungeonChestToItems", reverseDungeonChestItems ) );
-            generators.Add( new DictionaryDungeonChestItemGenerator( "DungeonChests", actualDungeonChestItems ) );
-
-            var fieldsSb = new StringBuilder();
-            var readsSb = new StringBuilder();
-            var structsSb = new StringBuilder();
-            var usingsSb = new StringBuilder();
-            
-            // run the generators
-            foreach( var generator in generators )
-            {
-                generator.WriteFields( fieldsSb );
-                // fieldsSb.AppendLine();
-                generator.WriteReaders( readsSb );
-                // readsSb.AppendLine();
-                generator.WriteStructs( structsSb );
-            }
-
-            usingsSb.Append( "using System.Numerics;" );
-            usingsSb.AppendLine();
-            usingsSb.Append( "using LuminaSupplemental.Excel.Model;" );
-            usingsSb.AppendLine();
-
-            tmpl = tmpl.Replace( "%%STRUCT_DEFS%%", FixIndent( structsSb, 2 ) );
-            tmpl = tmpl.Replace( "%%DATA_MEMBERS%%", FixIndent( fieldsSb, 2 ) );
-            tmpl = tmpl.Replace( "%%USING%%", FixIndent( usingsSb, 0 ));
-
-            return tmpl;
         }
 
-        public void ParseExtraItemSets(Dictionary<uint, HashSet<uint>> itemSets, Dictionary<uint, HashSet<uint>> reverseItemSets)
+        public void ParseExtraItemSets(List<ItemSupplement> itemSupplements)
         {
             var cofferNames = new Dictionary<string[], string>
             {
@@ -263,20 +203,16 @@ namespace LuminaSupplemental.SpaghettiGenerator
                 } ).ToList();
                 foreach( var coffer in coffers )
                 {
-                    Console.WriteLine( "Found coffer: " + coffer.Name.ToString() );
                     //Weapon, Gear, Accessories
                     if( coffer.Name.ToString().Contains( "Weapon" ) )
                     {
                         var items = _itemSheet.Where( c =>
                             c.Name.ToString().Contains( cofferName.Value ) &&
                             ( ( c.EquipSlotCategory.Value?.MainHand ?? 0 ) == 1 || ( c.EquipSlotCategory.Value?.OffHand ?? 0 ) == 1 ) );
-                        reverseItemSets.TryAdd(coffer.RowId, new HashSet< uint >() );
                         foreach( var item in items )
                         {
-                            Console.WriteLine( "Found weapon in coffer: " + item.Name.ToString() );
-                            reverseItemSets[ coffer.RowId ].Add( item.RowId );
-                            itemSets.TryAdd( item.RowId, new HashSet< uint >() );
-                            itemSets[ item.RowId ].Add( coffer.RowId );
+                            
+                            itemSupplements.Add( new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot) );
                         }
                     }
 
@@ -306,13 +242,9 @@ namespace LuminaSupplemental.SpaghettiGenerator
                                         ( c.EquipSlotCategory.Value?.Gloves ?? 0 ) == 1  || 
                                         ( c.EquipSlotCategory.Value?.Legs ?? 0 ) == 1 
                                     ));
-                                reverseItemSets.TryAdd( coffer.RowId, new HashSet< uint >() );
                                 foreach( var item in items )
                                 {
-                                    Console.WriteLine( "Found armor in coffer: " + item.Name.ToString() );
-                                    reverseItemSets[ coffer.RowId ].Add( item.RowId );
-                                    itemSets.TryAdd( item.RowId, new HashSet< uint >() );
-                                    itemSets[ item.RowId ].Add( coffer.RowId );
+                                    itemSupplements.Add( new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot) );
                                 }
                             }
                         }
@@ -323,13 +255,9 @@ namespace LuminaSupplemental.SpaghettiGenerator
                         var items = _itemSheet.Where( c =>
                             c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
                             ( c.EquipSlotCategory.Value?.Head ?? 0 ) == 1);
-                        reverseItemSets.TryAdd( coffer.RowId, new HashSet< uint >() );
                         foreach( var item in items )
                         {
-                            Console.WriteLine( "Found head armor in coffer: " + item.Name.ToString() );
-                            reverseItemSets[ coffer.RowId ].Add( item.RowId );
-                            itemSets.TryAdd( item.RowId, new HashSet< uint >() );
-                            itemSets[ item.RowId ].Add( coffer.RowId );
+                            itemSupplements.Add( new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot) );
                         }
                     }
 
@@ -338,13 +266,9 @@ namespace LuminaSupplemental.SpaghettiGenerator
                         var items = _itemSheet.Where( c =>
                             c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
                             ( c.EquipSlotCategory.Value?.Body ?? 0 ) == 1);
-                        reverseItemSets.TryAdd( coffer.RowId, new HashSet< uint >() );
                         foreach( var item in items )
                         {
-                            Console.WriteLine( "Found chest armor in coffer: " + item.Name.ToString() );
-                            reverseItemSets[ coffer.RowId ].Add( item.RowId );
-                            itemSets.TryAdd( item.RowId, new HashSet< uint >() );
-                            itemSets[ item.RowId ].Add( coffer.RowId );
+                            itemSupplements.Add( new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot) );
                         }
                     }
 
@@ -353,13 +277,9 @@ namespace LuminaSupplemental.SpaghettiGenerator
                         var items = _itemSheet.Where( c =>
                             c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
                             ( c.EquipSlotCategory.Value?.Gloves ?? 0 ) == 1);
-                        reverseItemSets.TryAdd( coffer.RowId, new HashSet< uint >() );
                         foreach( var item in items )
                         {
-                            Console.WriteLine( "Found hand armor in coffer: " + item.Name.ToString() );
-                            reverseItemSets[ coffer.RowId ].Add( item.RowId );
-                            itemSets.TryAdd( item.RowId, new HashSet< uint >() );
-                            itemSets[ item.RowId ].Add( coffer.RowId );
+                            itemSupplements.Add( new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot) );
                         }
                     }
 
@@ -368,13 +288,9 @@ namespace LuminaSupplemental.SpaghettiGenerator
                         var items = _itemSheet.Where( c =>
                             c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
                             ( c.EquipSlotCategory.Value?.Legs ?? 0 ) == 1);
-                        reverseItemSets.TryAdd( coffer.RowId, new HashSet< uint >() );
                         foreach( var item in items )
                         {
-                            Console.WriteLine( "Found leg armor in coffer: " + item.Name.ToString() );
-                            reverseItemSets[ coffer.RowId ].Add( item.RowId );
-                            itemSets.TryAdd( item.RowId, new HashSet< uint >() );
-                            itemSets[ item.RowId ].Add( coffer.RowId );
+                            itemSupplements.Add( new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot) );
                         }
                     }
 
@@ -383,13 +299,9 @@ namespace LuminaSupplemental.SpaghettiGenerator
                         var items = _itemSheet.Where( c =>
                             c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
                             ( c.EquipSlotCategory.Value?.Feet ?? 0 ) == 1);
-                        reverseItemSets.TryAdd( coffer.RowId, new HashSet< uint >() );
                         foreach( var item in items )
                         {
-                            Console.WriteLine( "Found foot armor in coffer: " + item.Name.ToString() );
-                            reverseItemSets[ coffer.RowId ].Add( item.RowId );
-                            itemSets.TryAdd( item.RowId, new HashSet< uint >() );
-                            itemSets[ item.RowId ].Add( coffer.RowId );
+                            itemSupplements.Add( new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot) );
                         }
                     }
 
@@ -398,13 +310,9 @@ namespace LuminaSupplemental.SpaghettiGenerator
                         var items = _itemSheet.Where( c =>
                             c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
                             ( c.EquipSlotCategory.Value?.Ears ?? 0 ) == 1);
-                        reverseItemSets.TryAdd( coffer.RowId, new HashSet< uint >() );
                         foreach( var item in items )
                         {
-                            Console.WriteLine( "Found earring in coffer: " + item.Name.ToString() );
-                            reverseItemSets[ coffer.RowId ].Add( item.RowId );
-                            itemSets.TryAdd( item.RowId, new HashSet< uint >() );
-                            itemSets[ item.RowId ].Add( coffer.RowId );
+                            itemSupplements.Add( new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot) );
                         }
                     }
 
@@ -413,13 +321,9 @@ namespace LuminaSupplemental.SpaghettiGenerator
                         var items = _itemSheet.Where( c =>
                             c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
                             ( c.EquipSlotCategory.Value?.Neck ?? 0 ) == 1);
-                        reverseItemSets.TryAdd( coffer.RowId, new HashSet< uint >() );
                         foreach( var item in items )
                         {
-                            Console.WriteLine( "Found necklace in coffer: " + item.Name.ToString() );
-                            reverseItemSets[ coffer.RowId ].Add( item.RowId );
-                            itemSets.TryAdd( item.RowId, new HashSet< uint >() );
-                            itemSets[ item.RowId ].Add( coffer.RowId );
+                            itemSupplements.Add( new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot) );
                         }
                     }
 
@@ -428,13 +332,9 @@ namespace LuminaSupplemental.SpaghettiGenerator
                         var items = _itemSheet.Where( c =>
                             c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
                             ( c.EquipSlotCategory.Value?.Wrists ?? 0 ) == 1);
-                        reverseItemSets.TryAdd( coffer.RowId, new HashSet< uint >() );
                         foreach( var item in items )
                         {
-                            Console.WriteLine( "Found bracelet in coffer: " + item.Name.ToString() );
-                            reverseItemSets[ coffer.RowId ].Add( item.RowId );
-                            itemSets.TryAdd( item.RowId, new HashSet< uint >() );
-                            itemSets[ item.RowId ].Add( coffer.RowId );
+                            itemSupplements.Add( new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot) );
                         }
                     }
 
@@ -443,13 +343,9 @@ namespace LuminaSupplemental.SpaghettiGenerator
                         var items = _itemSheet.Where( c =>
                             c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
                             ( c.EquipSlotCategory.Value?.FingerL ?? 0 ) == 1);
-                        reverseItemSets.TryAdd( coffer.RowId, new HashSet< uint >() );
                         foreach( var item in items )
                         {
-                            Console.WriteLine( "Found ring in coffer: " + item.Name.ToString() );
-                            reverseItemSets[ coffer.RowId ].Add( item.RowId );
-                            itemSets.TryAdd( item.RowId, new HashSet< uint >() );
-                            itemSets[ item.RowId ].Add( coffer.RowId );
+                            itemSupplements.Add( new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot) );
                         }
                     }
 
@@ -478,13 +374,9 @@ namespace LuminaSupplemental.SpaghettiGenerator
                                    ( c.EquipSlotCategory.Value?.FingerR ?? 0 ) == 1  || 
                                    ( c.EquipSlotCategory.Value?.Wrists ?? 0 ) == 1 
                                ));
-                                reverseItemSets.TryAdd( coffer.RowId, new HashSet< uint >() );
                                 foreach( var item in items )
                                 {
-                                    Console.WriteLine( "Found armor in coffer: " + item.Name.ToString() );
-                                    reverseItemSets[ coffer.RowId ].Add( item.RowId );
-                                    itemSets.TryAdd( item.RowId, new HashSet< uint >() );
-                                    itemSets[ item.RowId ].Add( coffer.RowId );
+                                    itemSupplements.Add( new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot) );
                                 }
                             }
                         }
@@ -494,20 +386,54 @@ namespace LuminaSupplemental.SpaghettiGenerator
             }
         }
 
-        public string ProcessItemsTSV(string className)
+        public void Generate()
+        {
+            var itemSupplements = new List<ItemSupplement>();
+            var submarineDrops = new List<SubmarineDrop>();
+            var airshipDrops = new List<AirshipDrop>();
+            var dungeonDrops = new List<DungeonDrop>();
+            var mobDrops = new List< MobDrop >();
+            var dungeonChests = new List< DungeonChest >();
+            var dungeonChestItems = new List< DungeonChestItem >();
+            var dungeonBosses = new List< DungeonBoss >();
+            var dungeonBossChests = new List< DungeonBossChest >();
+            var dungeonBossDrops = new List< DungeonBossDrop >();
+            
+            ProcessItemsTSV(itemSupplements, submarineDrops, airshipDrops, dungeonDrops);
+            ParseExtraItemSets(itemSupplements);
+            ProcessMobDrops( mobDrops );
+            ProcessDutiesJson( dungeonChests, dungeonChestItems, dungeonBosses, dungeonBossChests, dungeonBossDrops );
+
+            WriteFile( itemSupplements, $"./output/ItemSupplement.csv" );
+            WriteFile( airshipDrops, $"./output/AirshipDrop.csv" );
+            WriteFile( submarineDrops, $"./output/SubmarineDrop.csv" );
+            WriteFile( dungeonDrops, $"./output/DungeonDrop.csv" );
+            WriteFile( mobDrops, $"./output/MobDrop.csv" );
+            WriteFile( dungeonChests, $"./output/DungeonChest.csv" );
+            WriteFile( dungeonChestItems, $"./output/DungeonChestItem.csv" );
+            WriteFile( dungeonBosses, $"./output/DungeonBoss.csv" );
+            WriteFile( dungeonBossChests, $"./output/DungeonBossChest.csv" );
+            WriteFile( dungeonBossDrops, $"./output/DungeonBossDrop.csv" );
+        }
+
+        public void WriteFile< T >( List< T > items, string outputPath )
+        {
+            using var fileStream5 = new FileStream( outputPath, FileMode.Create );
+            var writer5 = new CsvWriter( new StreamWriter( fileStream5 ), CultureInfo.CurrentCulture );
+            writer5.WriteHeader<T>();
+            writer5.NextRecord();
+            foreach( var item in items )
+            {
+                writer5.WriteRecord<T>( item );
+                writer5.NextRecord();
+            }
+            writer5.Flush();
+            fileStream5.Close();
+        }
+
+        private void ProcessItemsTSV( List< ItemSupplement > itemSupplements, List< SubmarineDrop > submarineDrops, List< AirshipDrop > airshipDrops, List< DungeonDrop > dungeonDrops )
         {
             var reader = CSVFile.CSVReader.FromFile(@"FFXIV Data - Items.tsv", CSVSettings.TSV);
-
-
-            var desynthItems = new Dictionary<uint, HashSet<uint>>();
-            var reduceItems = new Dictionary<uint, HashSet<uint>>();
-            var lootItems = new Dictionary<uint, HashSet<uint>>();
-            var gardeningItems = new Dictionary<uint, HashSet<uint>>();
-
-            var reverseDesynthItems = new Dictionary<uint, HashSet<uint>>();
-            var reverseReduceItems = new Dictionary<uint, HashSet<uint>>();
-            var reverseLootItems = new Dictionary<uint, HashSet<uint>>();
-            var reverseGardeningItems = new Dictionary<uint, HashSet<uint>>();
 
             foreach (var line in reader.Lines())
             {
@@ -518,7 +444,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
                     continue;
                 }
                 var sources = new List<string>();
-                for (int i = 2; i < 13; i++)
+                for (var i = 2; i < 13; i++)
                 {
                     if (line[i] != "")
                     {
@@ -526,145 +452,153 @@ namespace LuminaSupplemental.SpaghettiGenerator
                     }
                 }
 
-                void MapItems(string s, List<string> list, Dictionary<uint, HashSet<uint>> dictionary, Dictionary<uint, HashSet<uint>> reverseDictionary)
-                {
-                    s = s.ToParseable();
-                    var outputItem = _itemsByString.ContainsKey(s) ? _itemsByString[s] : null;
-                    if (outputItem != null)
-                    {
-                        foreach (var source in list)
-                        {
-                            var sourceName = source.ToParseable();
-                            var sourceItem = _itemsByString.ContainsKey(sourceName) ? _itemsByString[sourceName] : null;
-                            if (sourceItem != null)
-                            {
-                                if (!dictionary.ContainsKey(outputItem.RowId))
-                                {
-                                    dictionary.Add(outputItem.RowId, new HashSet<uint>());
-                                }
-
-                                if (!dictionary[outputItem.RowId].Contains(sourceItem.RowId))
-                                {
-                                    dictionary[outputItem.RowId].Add(sourceItem.RowId);
-                                }
-                                
-                                if (!reverseDictionary.ContainsKey(sourceItem.RowId))
-                                {
-                                    reverseDictionary.Add(sourceItem.RowId, new HashSet<uint>());
-                                }
-
-                                if (!reverseDictionary[sourceItem.RowId].Contains(outputItem.RowId))
-                                {
-                                    reverseDictionary[sourceItem.RowId].Add(outputItem.RowId);
-                                }
-                            }
-                            else
-                            {
-                                Console.WriteLine("Could not find a match for input item: " + s + " and source " + sourceName);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Could not find a match for output item: " + s);
-                    }
-                }
-
+                ItemSupplementSource? source; 
                 switch (method)
                 {
                     case "Desynth":
-                        MapItems(outputItemId, sources, desynthItems, reverseDesynthItems);
+                        source = ItemSupplementSource.Desynth;
+                        GenerateItemSupplement( source, outputItemId, sources, itemSupplements );
                         break;
                     case "Reduce":
-                        MapItems(outputItemId, sources, reduceItems, reverseReduceItems);
+                        source = ItemSupplementSource.Reduction;
+                        GenerateItemSupplement( source, outputItemId, sources, itemSupplements );
                         break;
                     case "Loot":
-                        MapItems(outputItemId, sources, lootItems, reverseLootItems);
+                        source = ItemSupplementSource.Loot;
+                        GenerateItemSupplement( source, outputItemId, sources, itemSupplements );
                         break;
                     case "Gardening":
-                        MapItems(outputItemId, sources, gardeningItems, reverseGardeningItems);
+                        source = ItemSupplementSource.Gardening;
+                        GenerateItemSupplement( source, outputItemId, sources, itemSupplements );
+                        break;
+                    case "Voyage":
+                        GenerateSubmarineDrops( outputItemId, sources, submarineDrops );
+                        GenerateAirshipDrops( outputItemId, sources, airshipDrops );
+                        break;
+                    case "Instance":
+                        GenerateDungeonDrops( outputItemId, sources, dungeonDrops );
                         break;
                 }
-            }
-            ParseExtraItemSets(lootItems, reverseLootItems);
-            var tmpl = _sheetTemplate;
-            tmpl = tmpl.Replace( "%%LOOKUP_NAME%%", className );
-            var generators = new List< BaseShitGenerator >();
-            generators.Add( new DictionaryHashSetGenerator( "DesynthItems", desynthItems ) );
-            generators.Add( new DictionaryHashSetGenerator( "ReduceItems", reduceItems ) );
-            generators.Add( new DictionaryHashSetGenerator( "LootItems", lootItems ) );
-            generators.Add( new DictionaryHashSetGenerator( "GardeningItems", gardeningItems ) );
-            generators.Add( new DictionaryHashSetGenerator( "ReverseDesynthItems", reverseDesynthItems ) );
-            generators.Add( new DictionaryHashSetGenerator( "ReverseReduceItems", reverseReduceItems ) );
-            generators.Add( new DictionaryHashSetGenerator( "ReverseLootItems", reverseLootItems ) );
-            generators.Add( new DictionaryHashSetGenerator( "ReverseGardeningItems", reverseGardeningItems ) );
 
-            var fieldsSb = new StringBuilder();
-            var readsSb = new StringBuilder();
-            var structsSb = new StringBuilder();
-            
-            // run the generators
-            foreach( var generator in generators )
+                
+            }
+        }
+        
+        private void GenerateSubmarineDrops( string outputItemId, List< string > sources, List< SubmarineDrop > submarineDrops )
+        {
+            outputItemId = outputItemId.ToParseable();
+            var outputItem = _itemsByString.ContainsKey( outputItemId ) ? _itemsByString[ outputItemId ] : null;
+            if( outputItem != null )
             {
-                generator.WriteFields( fieldsSb );
-                // fieldsSb.AppendLine();
-                generator.WriteReaders( readsSb );
-                // readsSb.AppendLine();
-                generator.WriteStructs( structsSb );
+                foreach( var sourceItem in sources )
+                {
+                    var sourceName = sourceItem.ToParseable();
+                    var submarineExploration = _submarinesByName.ContainsKey( sourceName ) ? _submarinesByName[ sourceName ] : null;
+                    if( submarineExploration != null )
+                    {
+                        submarineDrops.Add( new SubmarineDrop( (uint)submarineDrops.Count + 1, outputItem.RowId, submarineExploration.RowId ) );
+                    }
+                }
             }
-
-            tmpl = tmpl.Replace( "%%STRUCT_DEFS%%", FixIndent( structsSb, 2 ) );
-            tmpl = tmpl.Replace( "%%DATA_MEMBERS%%", FixIndent( fieldsSb, 2 ) );
-            tmpl = tmpl.Replace( "%%USING%%", "" );
-
-            return tmpl;
+            else
+            {
+                Console.WriteLine( "Could not find a match for output item: " + outputItemId );
+            }
+        }
+        
+        private void GenerateAirshipDrops( string outputItemId, List< string > sources, List< AirshipDrop > airshipDrops )
+        {
+            outputItemId = outputItemId.ToParseable();
+            var outputItem = _itemsByString.ContainsKey( outputItemId ) ? _itemsByString[ outputItemId ] : null;
+            if( outputItem != null )
+            {
+                foreach( var sourceItem in sources )
+                {
+                    var sourceName = sourceItem.ToParseable();
+                    var airshipExploration = _airshipsByName.ContainsKey( sourceName ) ? _airshipsByName[ sourceName ] : null;
+                    if( airshipExploration != null )
+                    {
+                        airshipDrops.Add( new AirshipDrop( (uint)airshipDrops.Count + 1, outputItem.RowId, airshipExploration.RowId ) );
+                    }
+                    else
+                    {
+                        Console.WriteLine( "Could not find a match for input item: " + outputItemId + " and airship zone " + sourceName );
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine( "Could not find a match for output item: " + outputItemId );
+            }
+        }
+        
+        private void GenerateDungeonDrops( string outputItemId, List< string > sources, List< DungeonDrop > dungeonDrops )
+        {
+            outputItemId = outputItemId.ToParseable();
+            var outputItem = _itemsByString.ContainsKey( outputItemId ) ? _itemsByString[ outputItemId ] : null;
+            if( outputItem != null )
+            {
+                foreach( var sourceItem in sources )
+                {
+                    var sourceName = sourceItem.ToParseable();
+                    var duty = _dutiesByString.ContainsKey( sourceName ) ? _dutiesByString[ sourceName ] : null;
+                    if( duty != null )
+                    {
+                        dungeonDrops.Add( new DungeonDrop( (uint)dungeonDrops.Count + 1, outputItem.RowId, duty.RowId ) );
+                    }
+                    else
+                    {
+                        Console.WriteLine( "Could not find a match for input item: " + outputItemId + " and duty " + sourceName );
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine( "Could not find a match for output item: " + outputItemId );
+            }
         }
 
-        public string ProcessMobData(string className)
+        private void GenerateItemSupplement( ItemSupplementSource? source, string outputItemId, List< string > sources, List< ItemSupplement > itemSupplements )
+        {
+            if( source == null )
+            {
+                return;
+            }
+
+            outputItemId = outputItemId.ToParseable();
+            var outputItem = _itemsByString.ContainsKey( outputItemId ) ? _itemsByString[ outputItemId ] : null;
+            if( outputItem != null )
+            {
+                foreach( var sourceItem in sources )
+                {
+                    var sourceName = sourceItem.ToParseable();
+                    var actualItem = _itemsByString.ContainsKey( sourceName ) ? _itemsByString[ sourceName ] : null;
+                    if( actualItem != null )
+                    {
+                        itemSupplements.Add( new ItemSupplement( (uint)itemSupplements.Count + 1, outputItem.RowId, actualItem.RowId, source.Value ) );
+                    }
+                    else
+                    {
+                        Console.WriteLine( "Could not find a match for input item: " + outputItemId + " and source " + sourceName );
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine( "Could not find a match for output item: " + outputItemId );
+            }
+        }
+
+        public void ProcessMobDrops(List<MobDrop> mobDrops)
         {
             var itemDrops = Service.DatabaseBuilder.ItemDropsByMobId;
-            var placeNamesByMobId = Service.DatabaseBuilder.PlaceNamesByMobId;
-            var mobDrops = new Dictionary< uint, HashSet< uint > >();
             foreach( var itemDrop in itemDrops )
             {
                 foreach( var itemId in itemDrop.Value )
                 {
-                    if( !mobDrops.TryGetValue( itemId, out var mobIds ) )
-                    {
-                        mobIds = new HashSet< uint >();
-                        mobDrops[ itemId ] = mobIds;
-                    }
-
-                    mobIds.Add( itemDrop.Key );
+                    mobDrops.Add( new MobDrop((uint)(mobDrops.Count + 1), itemId, itemDrop.Key ) );
                 }
             }
-
-            var tmpl = _sheetTemplate;
-            tmpl = tmpl.Replace( "%%LOOKUP_NAME%%", className );
-            var generators = new List< BaseShitGenerator >();
-            generators.Add( new DictionaryHashSetGenerator( "ItemDropsByBNpcNameId", itemDrops ) );
-            generators.Add( new DictionaryHashSetGenerator( "MobDropsByItemId", mobDrops ) );
-            generators.Add( new DictionaryHashSetGenerator( "PlaceNamesByMobId", placeNamesByMobId ) );
-
-            var fieldsSb = new StringBuilder();
-            var readsSb = new StringBuilder();
-            var structsSb = new StringBuilder();
-            
-            // run the generators
-            foreach( var generator in generators )
-            {
-                generator.WriteFields( fieldsSb );
-                // fieldsSb.AppendLine();
-                generator.WriteReaders( readsSb );
-                // readsSb.AppendLine();
-                generator.WriteStructs( structsSb );
-            }
-
-            tmpl = tmpl.Replace( "%%STRUCT_DEFS%%", FixIndent( structsSb, 2 ) );
-            tmpl = tmpl.Replace( "%%DATA_MEMBERS%%", FixIndent( fieldsSb, 2 ) );
-            tmpl = tmpl.Replace( "%%USING%%", "" );
-
-            return tmpl;
         }
     }
 }

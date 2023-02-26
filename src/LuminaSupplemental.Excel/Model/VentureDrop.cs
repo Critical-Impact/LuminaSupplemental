@@ -1,5 +1,9 @@
 using System;
-using System.Numerics;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Reflection;
+using CsvHelper;
 using CsvHelper.Configuration.Attributes;
 using Lumina;
 using Lumina.Data;
@@ -8,31 +12,28 @@ using Lumina.Excel.GeneratedSheets;
 
 namespace LuminaSupplemental.Excel.Model
 {
-    public class DungeonChestItem : ICsv
+    public class VentureDrop : ICsv
     {
         [Name("RowId")] public uint RowId { get; set; }
         [Name("ItemId")] public uint ItemId { get; set; }
-        [Name("ChestId")] public uint ChestId { get; set; }
+        [Name("RetainerTaskRandomId")] public uint RetainerTaskRandomId { get; set; }
         
         public LazyRow< Item > Item;
+        
+        public LazyRow< RetainerTaskRandom > RetainerTaskRandom;
 
-        public DungeonChestItem( uint rowId, uint itemId, uint chestId)
+        public VentureDrop(uint rowId, uint itemId, uint retainerTaskRandomId )
         {
             RowId = rowId;
             ItemId = itemId;
-            ChestId = chestId;
+            RetainerTaskRandomId = retainerTaskRandomId;
         }
 
-        public DungeonChestItem()
-        {
-            
-        }
-
-        public void FromCsv( string[] lineData )
+        public void FromCsv(string[] lineData)
         {
             RowId = uint.Parse( lineData[ 0 ] );
             ItemId = uint.Parse( lineData[ 1 ] );
-            ChestId = uint.Parse( lineData[ 2 ] );
+            RetainerTaskRandomId = uint.Parse( lineData[ 2 ] );
         }
 
         public string[] ToCsv()
@@ -47,6 +48,7 @@ namespace LuminaSupplemental.Excel.Model
 
         public virtual void PopulateData( GameData gameData, Language language )
         {
+            RetainerTaskRandom = new LazyRow< RetainerTaskRandom >( gameData, RetainerTaskRandomId, language );
             Item = new LazyRow< Item >( gameData, ItemId, language );
         }
     }

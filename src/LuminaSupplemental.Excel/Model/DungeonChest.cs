@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Numerics;
 using System.Reflection;
 using CsvHelper;
 using CsvHelper.Configuration.Attributes;
@@ -9,33 +11,28 @@ using Lumina;
 using Lumina.Data;
 using Lumina.Excel;
 using Lumina.Excel.GeneratedSheets;
+using LuminaSupplemental.Excel.Converters;
 
 namespace LuminaSupplemental.Excel.Model
 {
-    public class DungeonBossChest : ICsv
+    public class DungeonChest : ICsv
     {
         [Name("RowId")] public uint RowId { get; set; }
-        [Name("ItemId")] public uint ItemId { get; set; }
+        [Name("ChestNo")] public byte ChestNo { get; set; }
         [Name("ContentFinderConditionId")] public uint ContentFinderConditionId { get; set; }
-        [Name("Quantity")] public uint Quantity { get; set; }
-        [Name("FightNo")] public uint FightNo { get; set; }
-        [Name("CofferNo")] public uint CofferNo { get; set; }
-        
-        public LazyRow< Item > Item;
+        [Name("Position"), TypeConverter(typeof(Vector2Converter))] public Vector2 Position { get; set; }
         
         public LazyRow< ContentFinderCondition > ContentFinderCondition;
 
-        public DungeonBossChest(uint rowId, uint fightNo, uint itemId, uint contentFinderConditionId, uint quantity, uint cofferNo )
+        public DungeonChest(uint rowId, byte chestNo,uint contentFinderConditionId, Vector2 position )
         {
             RowId = rowId;
-            ItemId = itemId;
+            ChestNo = chestNo;
             ContentFinderConditionId = contentFinderConditionId;
-            Quantity = quantity;
-            FightNo = fightNo;
-            CofferNo = cofferNo;
+            Position = position;
         }
 
-        public DungeonBossChest()
+        public DungeonChest()
         {
             
         }
@@ -43,16 +40,22 @@ namespace LuminaSupplemental.Excel.Model
         public void FromCsv(string[] lineData)
         {
             RowId = uint.Parse( lineData[ 0 ] );
-            ItemId = uint.Parse( lineData[ 1 ] );
+            ChestNo = byte.Parse( lineData[ 1 ] );
             ContentFinderConditionId = uint.Parse( lineData[ 2 ] );
-            Quantity = uint.Parse( lineData[ 3 ] );
-            FightNo = uint.Parse( lineData[ 4 ] );
-            CofferNo = uint.Parse( lineData[ 5 ] );
+            var positionData = lineData[ 3 ].Split( ";" ).Select( float.Parse ).ToList();
+            Position = new Vector2( positionData[ 0 ], positionData[ 1 ] );
         }
 
         public string[] ToCsv()
         {
-            return Array.Empty<string>();
+            List<String> data = new List<string>()
+            {
+                RowId.ToString(),
+                ChestNo.ToString(),
+                ContentFinderConditionId.ToString(),
+                Position.X + ";" + Position.Y
+            };
+            return data.ToArray();
         }
 
         public bool IncludeInCsv()
@@ -62,7 +65,6 @@ namespace LuminaSupplemental.Excel.Model
 
         public virtual void PopulateData( GameData gameData, Language language )
         {
-            Item = new LazyRow< Item >( gameData, ItemId, language );
             ContentFinderCondition = new LazyRow< ContentFinderCondition >( gameData, ContentFinderConditionId, language );
         }
     }

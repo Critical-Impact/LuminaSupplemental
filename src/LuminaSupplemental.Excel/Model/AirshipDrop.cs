@@ -12,30 +12,24 @@ using Lumina.Excel.GeneratedSheets;
 
 namespace LuminaSupplemental.Excel.Model
 {
-    public class DungeonBossChest : ICsv
+    public class AirshipDrop : ICsv
     {
         [Name("RowId")] public uint RowId { get; set; }
         [Name("ItemId")] public uint ItemId { get; set; }
-        [Name("ContentFinderConditionId")] public uint ContentFinderConditionId { get; set; }
-        [Name("Quantity")] public uint Quantity { get; set; }
-        [Name("FightNo")] public uint FightNo { get; set; }
-        [Name("CofferNo")] public uint CofferNo { get; set; }
+        [Name("AirshipExplorationPointId")] public uint AirshipExplorationPointId { get; set; }
+
+        public LazyRow< AirshipExplorationPoint > AirshipExplorationPoint;
         
         public LazyRow< Item > Item;
         
-        public LazyRow< ContentFinderCondition > ContentFinderCondition;
-
-        public DungeonBossChest(uint rowId, uint fightNo, uint itemId, uint contentFinderConditionId, uint quantity, uint cofferNo )
+        public AirshipDrop(uint rowId, uint itemId, uint airshipExplorationPointId )
         {
             RowId = rowId;
             ItemId = itemId;
-            ContentFinderConditionId = contentFinderConditionId;
-            Quantity = quantity;
-            FightNo = fightNo;
-            CofferNo = cofferNo;
+            AirshipExplorationPointId = airshipExplorationPointId;
         }
 
-        public DungeonBossChest()
+        public AirshipDrop()
         {
             
         }
@@ -44,10 +38,7 @@ namespace LuminaSupplemental.Excel.Model
         {
             RowId = uint.Parse( lineData[ 0 ] );
             ItemId = uint.Parse( lineData[ 1 ] );
-            ContentFinderConditionId = uint.Parse( lineData[ 2 ] );
-            Quantity = uint.Parse( lineData[ 3 ] );
-            FightNo = uint.Parse( lineData[ 4 ] );
-            CofferNo = uint.Parse( lineData[ 5 ] );
+            AirshipExplorationPointId = uint.Parse( lineData[ 2 ] );
         }
 
         public string[] ToCsv()
@@ -62,8 +53,8 @@ namespace LuminaSupplemental.Excel.Model
 
         public virtual void PopulateData( GameData gameData, Language language )
         {
+            AirshipExplorationPoint = new LazyRow< AirshipExplorationPoint >( gameData, AirshipExplorationPointId, language );
             Item = new LazyRow< Item >( gameData, ItemId, language );
-            ContentFinderCondition = new LazyRow< ContentFinderCondition >( gameData, ContentFinderConditionId, language );
         }
     }
 }
