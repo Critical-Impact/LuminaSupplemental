@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -57,26 +58,34 @@ public static class CsvLoader
         try
         {
             var assembly = Assembly.GetExecutingAssembly();
-            using( Stream stream = assembly.GetManifestResourceStream( resourceName ) )
-            using( StreamReader reader = new StreamReader( stream ) )
+            using( Stream? stream = assembly.GetManifestResourceStream( resourceName ) )
             {
-
-
-                var csvReader = CSVFile.CSVReader.FromString( reader.ReadToEnd() );
-                var items = new List< T >();
-                foreach( var line in csvReader.Lines() )
+                if( stream == null )
                 {
-                    T item = new T();
-                    item.FromCsv( line );
-                    if( gameData != null && language != null )
-                    {
-                        item.PopulateData( gameData, language.Value );
-                    }
-                    items.Add( item );
+                    success = false;
+                    return new List< T >();
                 }
+                using( StreamReader reader = new StreamReader( stream ) )
+                {
 
-                success = true;
-                return items;
+
+                    var csvReader = CSVFile.CSVReader.FromString( reader.ReadToEnd() );
+                    var items = new List< T >();
+                    foreach( var line in csvReader.Lines() )
+                    {
+                        T item = new T();
+                        item.FromCsv( line );
+                        if( gameData != null && language != null )
+                        {
+                            item.PopulateData( gameData, language.Value );
+                        }
+
+                        items.Add( item );
+                    }
+
+                    success = true;
+                    return items;
+                }
             }
         }
         catch( Exception )
