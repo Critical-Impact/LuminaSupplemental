@@ -7,6 +7,7 @@ using System.Numerics;
 using System.Text;
 using CSVFile;
 using CsvHelper;
+using Garland.Data;
 using Lumina.Excel;
 using Lumina.Excel.GeneratedSheets;
 using LuminaSupplemental.Excel.Model;
@@ -65,16 +66,76 @@ namespace LuminaSupplemental.SpaghettiGenerator
                 _submarinesByName.TryAdd(submarine.Destination.ToString().ToParseable(), submarine);
             }
         }
-        
-        public string FixIndent( StringBuilder sb, int level )
+
+        public void ProcessShopNames(List<ShopName> shopNames)
         {
-            var indent = "";
-            for( var i = 0; i < level * 4; i++ )
+            var customTalkSheet = Service.GameData.GetExcelSheet< CustomTalk >();
+
+            foreach( var customTalk in customTalkSheet )
             {
-                indent += " ";
+                var instructions = new List<(uint, string)>();
+                var count = customTalk.ScriptInstruction.Length;
+                for( uint i = 0; i < count; i++ )
+                {
+                    instructions.Add( (i, customTalk.ScriptInstruction[i].ToString()) );
+                }
+                var shopInstructions = instructions.Where(i => i.Item2.Contains("SHOP") && !i.Item2.Contains("LOGMSG")).ToArray();
+                if (shopInstructions.Length == 0)
+                    continue;
+                
+                foreach (var shopInstruction in shopInstructions)
+                {
+                    var label = customTalk.ScriptInstruction[ shopInstruction.Item1 ].ToString();
+                    var argument = customTalk.ScriptArg[ shopInstruction.Item1 ];
+                    var shopName = Utils.GetShopName(argument, label);
+                    if( shopName != null )
+                    {
+                        shopNames.Add( new ShopName()
+                        {
+                            RowId = (uint)(shopNames.Count +1),
+                            ShopId = argument,
+                            Name = shopName
+                        });
+                    }
+                }
             }
 
-            return indent + sb.ToString().Replace( "\n", $"\n{indent}");
+            var shops = new Dictionary< uint, string >()
+            {
+                {1769869, "Request to keep your aetherpool gear"},
+                {1769743, "Exchange Wolf Marks (Melee)"},
+                {1769744, "Exchange Wolf Marks (Ranged)"},
+                {1769820, "Create or augment Eureka gear. (Paladin)"},
+                {1769821, "Create or augment Eureka gear. (Warrior)"},
+                {1769822,"Create or augment Eureka gear. (Dark Knight)"},
+                {1769823,"Create or augment Eureka gear. (Dragoon)"},
+                {1769824,"Create or augment Eureka gear. (Monk)"},
+                {1769825,"Create or augment Eureka gear. (Ninja)"},
+                {1769826,"Create or augment Eureka gear. (Samurai)"},
+                {1769827,"Create or augment Eureka gear. (Bard)"},
+                {1769828,"Create or augment Eureka gear. (Machinist)"},
+                {1769829,"Create or augment Eureka gear. (Black Mage)"},
+                {1769830,"Create or augment Eureka gear. (Summoner)"},
+                {1769831,"Create or augment Eureka gear. (Red Mage)"},
+                {1769832,"Create or augment Eureka gear. (White Mage)"},
+                {1769833,"Create or augment Eureka gear. (Scholar)"},
+                {1769834,"Create or augment Eureka gear. (Astrologian)"},
+                {1769871,"Exchange artifacts"},
+                {1769870,"Request to keep your empyrean aetherpool gear"},
+                {1770282,"Exchange Faux Leaves"},
+                {1770286,"Exchange Faire Voucher"},
+                {1770087,"Exchange Bozjan clusters for items."},
+            };
+            foreach( var shopName in shops )
+            {
+                shopNames.Add( new ShopName()
+                {
+                    RowId = (uint)( shopNames.Count + 1 ),
+                    ShopId = shopName.Key,
+                    Name = shopName.Value
+                } );
+            }
+
         }
 
         public void ProcessDutiesJson( List< DungeonChest > dungeonChests, List< DungeonChestItem > dungeonChestItems, List< DungeonBoss > dungeonBosses, List< DungeonBossChest > dungeonBossChests, List<DungeonBossDrop> dungeonBossDrops )
@@ -386,23 +447,46 @@ namespace LuminaSupplemental.SpaghettiGenerator
             }
         }
 
+        public void ProcessManualItems( List< ItemSupplement > itemSupplements )
+        {
+            var reader = CSVFile.CSVReader.FromFile(@"ManualData\Items.csv", CSVSettings.CSV);
+
+            foreach( var line in reader.Lines() )
+            {
+                var sourceItemId = uint.Parse(line[ 0 ]);
+                var outputItemId = uint.Parse(line[ 1 ]);
+                var source = Enum.Parse<ItemSupplementSource>(line[ 2 ]);
+                itemSupplements.Add( new ItemSupplement((uint)(itemSupplements.Count + 1), outputItemId, sourceItemId, source) );
+            }
+        }
         public void Generate()
         {
             var itemSupplements = new List<ItemSupplement>();
             var submarineDrops = new List<SubmarineDrop>();
             var airshipDrops = new List<AirshipDrop>();
             var dungeonDrops = new List<DungeonDrop>();
+            var airshipUnlocks = new List< AirshipUnlock >();
+            var submarineUnlocks = new List< SubmarineUnlock >();
             var mobDrops = new List< MobDrop >();
             var dungeonChests = new List< DungeonChest >();
             var dungeonChestItems = new List< DungeonChestItem >();
             var dungeonBosses = new List< DungeonBoss >();
             var dungeonBossChests = new List< DungeonBossChest >();
             var dungeonBossDrops = new List< DungeonBossDrop >();
+            var eNpcPlaces = new List< ENpcPlace >();
+            var shopNames = new List< ShopName >();
+            var eNpcShops = new List< ENpcShop >();
             
-            ProcessItemsTSV(itemSupplements, submarineDrops, airshipDrops, dungeonDrops);
+            ProcessItemsTSV(itemSupplements, dungeonDrops);
             ParseExtraItemSets(itemSupplements);
+            ProcessManualItems( itemSupplements );
             ProcessMobDrops( mobDrops );
             ProcessDutiesJson( dungeonChests, dungeonChestItems, dungeonBosses, dungeonBossChests, dungeonBossDrops );
+            ProcessEventNpcs( eNpcPlaces );
+            ProcessShopNames( shopNames );
+            ProcessEventShops( eNpcShops );
+            ProcessAirshipUnlocks( airshipUnlocks, airshipDrops );
+            ProcessSubmarineUnlocks( submarineUnlocks, submarineDrops );
 
             WriteFile( itemSupplements, $"./output/ItemSupplement.csv" );
             WriteFile( airshipDrops, $"./output/AirshipDrop.csv" );
@@ -414,6 +498,187 @@ namespace LuminaSupplemental.SpaghettiGenerator
             WriteFile( dungeonBosses, $"./output/DungeonBoss.csv" );
             WriteFile( dungeonBossChests, $"./output/DungeonBossChest.csv" );
             WriteFile( dungeonBossDrops, $"./output/DungeonBossDrop.csv" );
+            WriteFile( eNpcPlaces, $"./output/ENpcPlace.csv" );
+            WriteFile( shopNames, $"./output/ShopName.csv" );
+            WriteFile( eNpcShops, $"./output/ENpcShop.csv" );
+            WriteFile( airshipUnlocks, $"./output/AirshipUnlock.csv" );
+        }
+
+        private void ProcessSubmarineUnlocks( List<SubmarineUnlock> submarineUnlocks, List<SubmarineDrop> submarineDrops )
+        {
+            var reader = CSVFile.CSVReader.FromFile(@"ManualData\SubmarineUnlocks.csv");
+
+            foreach( var line in reader.Lines() )
+            {
+                var sector = line[ 0 ];
+                var unlockSector = line[ 1 ];
+                var rankRequired = uint.Parse(line[ 2 ]);
+                var items = line[ 3 ] + "," + line[ 4 ];
+                
+                sector = sector.ToParseable();
+                unlockSector = unlockSector.ToParseable();
+                if( _submarinesByName.ContainsKey( sector ) )
+                {
+                    var actualSector = _submarinesByName[ sector ];
+                    SubmarineExploration? actualUnlockSector = null;
+                    if( _submarinesByName.ContainsKey( unlockSector ) )
+                    {
+                        actualUnlockSector = _submarinesByName[ unlockSector ];
+                    }
+
+                    submarineUnlocks.Add(new SubmarineUnlock()
+                    {
+                        RowId = (uint)( submarineUnlocks.Count + 1 ),
+                        SubmarineExplorationId = actualSector.RowId,
+                        SubmarineExplorationUnlockId = actualUnlockSector?.RowId ?? 0,
+                        RankRequired = rankRequired
+                    });
+
+                    var items1List = items.Split( "," );
+                    foreach( var itemName in items1List )
+                    {
+                        var parseableItemName = itemName.Trim().ToParseable();
+                        var outputItem = _itemsByString.ContainsKey( parseableItemName ) ? _itemsByString[ parseableItemName ] : null;
+                        if( outputItem != null )
+                        {
+                            submarineDrops.Add( new SubmarineDrop()
+                            {
+                                RowId = (uint)(submarineDrops.Count + 1),
+                                SubmarineExplorationId = actualSector.RowId,
+                                ItemId = outputItem.RowId
+                            });
+                        }
+                        else
+                        {
+                            Console.WriteLine("Could not find item with name " + itemName.Trim() + " in the sector " + actualSector.Destination.ToString());
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Could not find the submarine point with name " + sector);
+                }
+            }
+        }
+
+        private void ProcessAirshipUnlocks( List<AirshipUnlock> airshipUnlocks, List<AirshipDrop> airshipDrops )
+        {
+            var reader = CSVFile.CSVReader.FromFile(@"ManualData\AirshipUnlocks.csv");
+
+            foreach( var line in reader.Lines() )
+            {
+                var sector = line[ 0 ];
+                var unlockSector = line[ 1 ];
+                var rankRequired = uint.Parse(line[ 2 ]);
+                var surveillanceRequired = line[ 3 ];
+                var items = line[ 4 ] + "," + line[ 5 ];
+                
+                sector = "Sea of Clouds " + $"{int.Parse( sector ):D2}";
+                unlockSector = unlockSector != "" ? "Sea of Clouds " + $"{int.Parse( unlockSector ):D2}" : "";
+                sector = sector.ToParseable();
+                unlockSector = unlockSector.ToParseable();
+                //Sectors are stored as numbers
+                if( _airshipsByName.ContainsKey( sector ) )
+                {
+                    var actualSector = _airshipsByName[ sector ];
+                    AirshipExplorationPoint? actualUnlockSector = null;
+                    if( _airshipsByName.ContainsKey( unlockSector ) )
+                    {
+                        actualUnlockSector = _airshipsByName[ unlockSector ];
+                    }
+
+                    var actualSurveillanceRequired = uint.Parse( surveillanceRequired );
+                    airshipUnlocks.Add(new AirshipUnlock()
+                    {
+                        RowId = (uint)( airshipUnlocks.Count + 1 ),
+                        AirshipExplorationPointId = actualSector.RowId,
+                        AirshipExplorationPointUnlockId = actualUnlockSector?.RowId ?? 0,
+                        SurveillanceRequired = actualSurveillanceRequired,
+                        RankRequired = rankRequired
+                    });
+
+                    var items1List = items.Split( "," );
+                    foreach( var itemName in items1List )
+                    {
+                        var parseableItemName = itemName.Trim().ToParseable();
+                        var outputItem = _itemsByString.ContainsKey( parseableItemName ) ? _itemsByString[ parseableItemName ] : null;
+                        if( outputItem != null )
+                        {
+                            airshipDrops.Add( new AirshipDrop()
+                            {
+                                RowId = (uint)(airshipDrops.Count + 1),
+                                AirshipExplorationPointId = actualSector.RowId,
+                                ItemId = outputItem.RowId
+                            });
+                        }
+                        else
+                        {
+                            Console.WriteLine("Could not find item with name " + itemName.Trim() + " in the sector " + actualSector.NameShort);
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Could not find the airship point with name " + sector);
+                }
+            }
+        }
+
+        private void ProcessEventShops( List<ENpcShop> eNpcShops )
+        {
+            var shops = new Dictionary< uint, uint >()
+            {
+                {1769635, 1016289},
+                {1769675, 1017338},
+                {1769869, 1017338},
+                {1769743, 1018655},
+                {1769744, 1018655},
+                
+                {1769820, 1025047},
+                {1769821, 1025047},
+                {1769822, 1025047},
+                {1769823, 1025047},
+                {1769824, 1025047},
+                {1769825, 1025047},
+                {1769826, 1025047},
+                {1769827, 1025047},
+                {1769828, 1025047},
+                {1769829, 1025047},
+                {1769830, 1025047},
+                {1769831, 1025047},
+                {1769832, 1025047},
+                {1769833, 1025047},
+                {1769834, 1025047},
+                
+                {1769871, 1025848},
+                {1769870, 1025848},
+                
+                {262919, 1025763},
+                
+                {1769957, 1027998},
+                {1769958, 1027538},
+                {1769959, 1027385},
+                {1769960, 1027497},
+                {1769961, 1027892},
+                {1769962, 1027665},
+                {1769963, 1027709},
+                {1769964, 1027766},
+                
+                {1770282, 1033921},
+                
+                {1770087, 1034007},
+                //Support this later{1770087, 1036895},
+            };
+            
+            foreach( var shopName in shops )
+            {
+                eNpcShops.Add( new ENpcShop()
+                {
+                    RowId = (uint)( eNpcShops.Count + 1 ),
+                    ShopId = shopName.Key,
+                    ENpcResidentId = shopName.Value
+                } );
+            }
         }
 
         public void WriteFile< T >( List< T > items, string outputPath )
@@ -431,7 +696,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
             fileStream5.Close();
         }
 
-        private void ProcessItemsTSV( List< ItemSupplement > itemSupplements, List< SubmarineDrop > submarineDrops, List< AirshipDrop > airshipDrops, List< DungeonDrop > dungeonDrops )
+        private void ProcessItemsTSV( List< ItemSupplement > itemSupplements, List< DungeonDrop > dungeonDrops )
         {
             var reader = CSVFile.CSVReader.FromFile(@"FFXIV Data - Items.tsv", CSVSettings.TSV);
 
@@ -472,8 +737,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
                         GenerateItemSupplement( source, outputItemId, sources, itemSupplements );
                         break;
                     case "Voyage":
-                        GenerateSubmarineDrops( outputItemId, sources, submarineDrops );
-                        GenerateAirshipDrops( outputItemId, sources, airshipDrops );
+                        //No longer a need to parse from GT's data as it's out of date.
                         break;
                     case "Instance":
                         GenerateDungeonDrops( outputItemId, sources, dungeonDrops );
@@ -492,11 +756,23 @@ namespace LuminaSupplemental.SpaghettiGenerator
             {
                 foreach( var sourceItem in sources )
                 {
+                    if( sourceItem.Contains( "Sea of Clouds" ) )
+                    {
+                        continue;
+                    }
                     var sourceName = sourceItem.ToParseable();
+                    //Hacks because of misspelling
+                    sourceName = sourceName.Replace( "valut", "vault" );
+                    sourceName = sourceName.Replace( "southernrimilalatrench", "thesouthernrimilalatrench" );
+                    sourceName = sourceName.Replace( "rimialashelf", "rimilalashelf" );
                     var submarineExploration = _submarinesByName.ContainsKey( sourceName ) ? _submarinesByName[ sourceName ] : null;
                     if( submarineExploration != null )
                     {
                         submarineDrops.Add( new SubmarineDrop( (uint)submarineDrops.Count + 1, outputItem.RowId, submarineExploration.RowId ) );
+                    }
+                    else
+                    {
+                        Console.WriteLine( "Could not find a match for input item: " + outputItemId + " and submarine zone " + sourceName );
                     }
                 }
             }
@@ -514,6 +790,10 @@ namespace LuminaSupplemental.SpaghettiGenerator
             {
                 foreach( var sourceItem in sources )
                 {
+                    if( !sourceItem.Contains( "Sea of Clouds" ) )
+                    {
+                        continue;
+                    }
                     var sourceName = sourceItem.ToParseable();
                     var airshipExploration = _airshipsByName.ContainsKey( sourceName ) ? _airshipsByName[ sourceName ] : null;
                     if( airshipExploration != null )
@@ -598,6 +878,20 @@ namespace LuminaSupplemental.SpaghettiGenerator
                 {
                     mobDrops.Add( new MobDrop((uint)(mobDrops.Count + 1), itemId, itemDrop.Key ) );
                 }
+            }
+        }
+        public void ProcessEventNpcs(List<ENpcPlace> npcPlaces)
+        {
+            var eNpcPlaces = Service.DatabaseBuilder.ENpcPlaces;
+            foreach( var eNpcPlace in eNpcPlaces )
+            {
+                npcPlaces.Add( new ENpcPlace()
+                {
+                    RowId = (uint)(npcPlaces.Count + 1),
+                    TerritoryTypeId = eNpcPlace.TerritoryTypeId,
+                    ENpcResidentId = eNpcPlace.ENpcResidentId,
+                    Position = eNpcPlace.Position
+                });
             }
         }
     }

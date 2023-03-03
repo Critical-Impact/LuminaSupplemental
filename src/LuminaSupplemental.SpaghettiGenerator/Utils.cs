@@ -4,11 +4,72 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using Lumina.Excel.GeneratedSheets;
 
 namespace Garland.Data
 {
     public static class Utils
     {
+        public static string? GetShopName(uint argument, string label)
+        {
+            if (label.Contains("FCCSHOP"))
+                return "Spend company credits (items)";
+            else if (label == "MOBSHOP1")
+                return "Exchange Centurio Seals";
+            else if (label == "MOBSHOP2")
+                return "Exchange Centurio Seals (Advanced)";
+            else if (label == "SHOP_SPOIL")
+                return "Exchange Spoils";
+            else if (label == "SPECIAL_SHOP0" && argument == 1769813)
+                return "Achievement Rewards";
+            else if (label == "SPECIAL_SHOP1" && argument == 1769845)
+                return "Achievement Rewards 2";
+            else if (label == "SPECIAL_SHOP2" && argument == 1769846)
+                return "Achievement Rewards 3";
+            else if (label == "SHOP_0" && argument == 1769842)
+                return "Gold Certificates of Commendation";
+            else if (label == "SHOP_1" && argument == 1769841)
+                return "Silver Certificates of Commendation";
+            else if (label == "SHOP_2" && argument == 1769956)
+                return "Bronze Certificates of Commendation";
+            else if (label == "SHOP" && argument == 1769812)
+                return "PVP Rewards";
+            else if (label == "REPLICA_SHOP0" && argument == 262918)
+                return "Purchase a Eureka weapon replica (DoW).";
+            else if (label == "REPLICA_SHOP1" && argument == 262922)
+                return "Purchase a Eureka weapon replica (DoM).";
+            else if (label == "FREE_SHOP_BATTLE" && argument == 1769898)
+                return "Battle Achievement Rewards";
+            else if (label == "FREE_SHOP_PVP" && argument == 1769899)
+                return "PvP Achievement Rewards";
+            else if (label == "FREE_SHOP_CHARACTER" && argument == 1769900)
+                return "Character Achievement Rewards";
+            else if (label == "FREE_SHOP_ITEM" && argument == 1769901)
+                return "Item Achievement Rewards";
+            else if (label == "FREE_SHOP_CRAFT" && argument == 1769902)
+                return "Crafting Achievement Rewards";
+            else if (label == "FREE_SHOP_GATHERING" && argument == 1769903)
+                return "Gathering Achievement Rewards";
+            else if (label == "FREE_SHOP_QUEST" && argument == 1769904)
+                return "Quest Achievement Rewards";
+            else if (label == "FREE_SHOP_EXPLORATION" && argument == 1769905)
+                return "Exploration Achievement Rewards";
+            else if (label == "FREE_SHOP_GRANDCOMPANY" && argument == 1769906)
+                return "Grand Company Achievement Rewards";
+
+            else if (label == "SPSHOP_HANDLER_ID" && argument == 1770041)
+                return "Skybuilders' Scrips";
+            else if (label == "SPSHOP2_HANDLER_ID" && argument == 1770281)
+                return "Skybuilders' Scrips (Gear/Furnishings)";
+            else if (label == "SPSHOP3_HANDLER_ID" && argument == 1770301)
+                return "Skybuilders' Scrips (Materials/Materia/Items)";
+            else if (label == "SPSHOP4_HANDLER_ID" && argument == 1770343)
+                return "Fête Tokens";
+            else
+            {
+                return null;
+            }
+        }
         public static KeyValuePair<string, JToken> GetPair(JObject value)
         {
             var collection = (ICollection<KeyValuePair<string, JToken>>)value;

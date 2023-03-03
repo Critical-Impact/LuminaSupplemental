@@ -18,6 +18,16 @@
       <PackageReference Include="System.Data.SQLite" Version="1.0.117" />
       <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.117" />
       <PackageReference Include="System.Data.SQLite.Linq" Version="1.0.117" />
+      <None Remove="ManualData\Items.csv" />
+      <Content Include="ManualData\Items.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Update="ManualData\AirshipUnlocks.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="ManualData\SubmarineUnlocks.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

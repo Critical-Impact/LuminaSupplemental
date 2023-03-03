@@ -12,6 +12,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
 
         public Dictionary<uint, HashSet<uint>> ItemDropsByMobId = new Dictionary<uint, HashSet<uint>>();
         public Dictionary<uint, HashSet<uint>> PlaceNamesByMobId = new Dictionary<uint, HashSet<uint>>();
+        public List<ENpcPlaces.ENpcData> ENpcPlaces = new List<ENpcPlaces.ENpcData>();
         #endregion
 
         public SQLite.SQLiteConnection Libra => _libra;
@@ -30,6 +31,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
             var modules = new Queue<Module>(new Module[]
             {
                 new Mobs(),
+                new ENpcPlaces()
             });
 
             var total = modules.Count;
