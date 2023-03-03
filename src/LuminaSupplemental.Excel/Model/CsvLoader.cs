@@ -51,7 +51,12 @@ public static class CsvLoader
     public const string MobDropResourceName = "LuminaSupplemental.Excel.Generated.MobDrop.csv";
     public const string SubmarineDropResourceName = "LuminaSupplemental.Excel.Generated.SubmarineDrop.csv";
     public const string AirshipDropResourceName = "LuminaSupplemental.Excel.Generated.AirshipDrop.csv";
+    public const string AirshipUnlockResourceName = "LuminaSupplemental.Excel.Generated.AirshipUnlock.csv";
+    public const string SubmarineUnlockResourceName = "LuminaSupplemental.Excel.Generated.SubmarineUnlock.csv";
     public const string MobSpawnResourceName = "LuminaSupplemental.Excel.Generated.MobSpawn.csv";
+    public const string ENpcPlaceResourceName = "LuminaSupplemental.Excel.Generated.ENpcPlace.csv";
+    public const string ShopNameResourceName = "LuminaSupplemental.Excel.Generated.ShopName.csv";
+    public const string ENpcShopResourceName = "LuminaSupplemental.Excel.Generated.ENpcShop.csv";
 
     public static List< T > LoadResource<T>(string resourceName, out bool success, GameData? gameData = null, Language? language = null) where T : ICsv, new()
     {

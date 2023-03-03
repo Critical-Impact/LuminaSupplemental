@@ -61,6 +61,14 @@
       <EmbeddedResource Include="Generated\MobDrop.csv" />
       <EmbeddedResource Include="Generated\MobSpawn.csv" />
       <EmbeddedResource Include="Generated\SubmarineDrop.csv" />
+      <EmbeddedResource Include="Generated\ENpcPlace.csv" />
+      <EmbeddedResource Include="Generated\AirshipUnlock.csv" />
+      <EmbeddedResource Include="Generated\ENpcShop.csv" />
+      <EmbeddedResource Include="Generated\ShopName.csv" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="Generated\ShopNames.csv" />
     </ItemGroup>
 
 

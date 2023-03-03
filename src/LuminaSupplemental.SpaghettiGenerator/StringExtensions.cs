@@ -22,6 +22,11 @@ public static class StringExtensions
 
     public static string ToParseable( this string input )
     {
+        if( input.Contains( "\u00a0" ) )
+        {
+            var startIndex = input.IndexOf( "\u00a0" );
+            input = input.Remove( startIndex );
+        }
         if( input.Contains( "(IL" ) )
         {
             var startIndex = input.IndexOf( "(IL" );
