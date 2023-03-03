@@ -65,6 +65,7 @@
       <EmbeddedResource Include="Generated\AirshipUnlock.csv" />
       <EmbeddedResource Include="Generated\ENpcShop.csv" />
       <EmbeddedResource Include="Generated\ShopName.csv" />
+      <EmbeddedResource Include="Generated\SubmarineUnlock.csv" />
     </ItemGroup>
 
     <ItemGroup>

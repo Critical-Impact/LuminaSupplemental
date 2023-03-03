@@ -502,6 +502,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
             WriteFile( shopNames, $"./output/ShopName.csv" );
             WriteFile( eNpcShops, $"./output/ENpcShop.csv" );
             WriteFile( airshipUnlocks, $"./output/AirshipUnlock.csv" );
+            WriteFile( submarineUnlocks, $"./output/SubmarineUnlock.csv" );
         }
 
         private void ProcessSubmarineUnlocks( List<SubmarineUnlock> submarineUnlocks, List<SubmarineDrop> submarineDrops )
