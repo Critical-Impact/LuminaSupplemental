@@ -39,9 +39,9 @@ namespace LuminaSupplemental.Excel.Model
         public void FromCsv(string[] lineData)
         {
             RowId = uint.Parse( lineData[ 0 ] );
-            SubmarineExplorationId = uint.Parse( lineData[ 0 ] );
-            SubmarineExplorationUnlockId = uint.Parse( lineData[ 1 ] );
-            RankRequired = uint.Parse( lineData[ 2 ] );
+            SubmarineExplorationId = uint.Parse( lineData[ 1 ] );
+            SubmarineExplorationUnlockId = uint.Parse( lineData[ 2 ] );
+            RankRequired = uint.Parse( lineData[ 3 ] );
         }
 
         public string[] ToCsv()
