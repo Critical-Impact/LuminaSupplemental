@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -26,6 +27,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
         private ExcelSheet<BNpcName> _bnpcNameSheet;
         private readonly ExcelSheet<SubmarineExploration> _submarineSheet;
         private readonly ExcelSheet<AirshipExplorationPoint> _airshipSheet;
+        private readonly ExcelSheet<TerritoryType> _territoryTypeSheet;
 
 
         public LookupGenerator(string tmplPath = null)
@@ -34,6 +36,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
             _bnpcNameSheet = Service.GameData.GetExcelSheet<BNpcName>()!;
             _submarineSheet = Service.GameData.GetExcelSheet<SubmarineExploration>()!;
             _airshipSheet = Service.GameData.GetExcelSheet<AirshipExplorationPoint>()!;
+            _territoryTypeSheet = Service.GameData.GetExcelSheet<TerritoryType>()!;
             var dutySheet = Service.GameData.GetExcelSheet<ContentFinderCondition>()!;
 
             _itemsByString = new Dictionary<string, Item>();
@@ -476,6 +479,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
             var eNpcPlaces = new List< ENpcPlace >();
             var shopNames = new List< ShopName >();
             var eNpcShops = new List< ENpcShop >();
+            var mobSpawns = new List< MobSpawnPosition >();
             
             ProcessItemsTSV(itemSupplements, dungeonDrops);
             ParseExtraItemSets(itemSupplements);
@@ -487,6 +491,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
             ProcessEventShops( eNpcShops );
             ProcessAirshipUnlocks( airshipUnlocks, airshipDrops );
             ProcessSubmarineUnlocks( submarineUnlocks, submarineDrops );
+            ProcessMobSpawnData( mobSpawns );
 
             WriteFile( itemSupplements, $"./output/ItemSupplement.csv" );
             WriteFile( airshipDrops, $"./output/AirshipDrop.csv" );
@@ -503,6 +508,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
             WriteFile( eNpcShops, $"./output/ENpcShop.csv" );
             WriteFile( airshipUnlocks, $"./output/AirshipUnlock.csv" );
             WriteFile( submarineUnlocks, $"./output/SubmarineUnlock.csv" );
+            WriteFile( mobSpawns, $"./output/MobSpawn.csv" );
         }
 
         private void ProcessSubmarineUnlocks( List<SubmarineUnlock> submarineUnlocks, List<SubmarineDrop> submarineDrops )
@@ -893,6 +899,133 @@ namespace LuminaSupplemental.SpaghettiGenerator
                     ENpcResidentId = eNpcPlace.ENpcResidentId,
                     Position = eNpcPlace.Position
                 });
+            }
+        }
+        
+        private bool WithinRange(Vector3 pointA, Vector3 pointB, float maxRange)
+        {
+            RectangleF recA = new RectangleF( new PointF(pointA.X - maxRange, pointA.Y - maxRange), new SizeF(maxRange,maxRange));
+            RectangleF recB = new RectangleF( new PointF(pointB.X - maxRange, pointB.Y - maxRange), new SizeF(maxRange,maxRange));
+            return recA.IntersectsWith(recB);
+        }
+
+        private bool MobAllowed( uint bnpcNameId )
+        {
+            if( bnpcNameId == 0 )
+            {
+                return false;
+            }
+            var bnpcName = _bnpcNameSheet.GetRow( bnpcNameId );
+            var bannedNames = new List< string >()
+            {
+                "Emerald Carbuncle",
+                "Topaz Carbuncle",
+                "Carbuncle",
+                "Ruby Carbuncle",
+                "Eos",
+                "Selene",
+                "Ifrit-Egi",
+                "Titan-Egi",
+                "Garuda-Egi",
+                "Demi-Bahamut",
+                "Demi-Phoenix",
+                "Esteem",
+                "Automaton Queen",
+                "Rook Autoturret",
+                "Seraph",
+            };
+            var hashSet = bannedNames.Select( c => c.ToParseable() ).ToHashSet();
+            return !hashSet.Contains( bnpcName.Singular.ToString().ToParseable() );
+        }
+
+        private Dictionary< uint, bool > _territoriesAllowed = new Dictionary< uint, bool >();
+        private bool TerritoryTypeAllowed( uint territoryRowId )
+        {
+            if( _territoriesAllowed.ContainsKey( territoryRowId ) )
+            {
+                return _territoriesAllowed[ territoryRowId ];
+            }
+            
+            var bannedPlaceNames = new List< string >()
+            {
+                "The Lavender Beds",
+                "The Lavender Beds Subdivision",
+                "Mist",
+                "Mist Subdivision",
+                "The Goblet",
+                "The Goblet Subdivision",
+                "Shirogane",
+                "Shirogane Subdivision",
+                "Empyreum",
+                "Empyreum Subdivision",
+                
+            };
+            var hashSet = bannedPlaceNames.Select( c => c.ToParseable() ).ToHashSet();
+
+
+
+            foreach( var territory in _territoryTypeSheet )
+            {
+                var placeName = territory.PlaceName.Value.Name.ToString().ToParseable();
+                if( hashSet.Contains( placeName ) )
+                {
+                    _territoriesAllowed.Add( territory.RowId, false );
+                }
+                else
+                {
+                    _territoriesAllowed.Add( territory.RowId, true );
+                }
+            }
+
+            return true;
+        }
+        
+        public void ProcessMobSpawnData(List<MobSpawnPosition> npcPlaces)
+        {
+            Dictionary< uint, Dictionary< uint, List< MobSpawnPosition > > > positions = new(); 
+            var importFiles = Directory.GetFiles( Path.Join(  AppDomain.CurrentDomain.BaseDirectory, "ManualData", "MobImports"), "*.csv" );
+            foreach( var importFile in importFiles )
+            {
+                var reader = CSVFile.CSVReader.FromFile( importFile );
+                var lines = reader.Lines();
+                foreach( var line in lines )
+                {
+                    MobSpawnPosition mobSpawnPosition = new MobSpawnPosition();
+                    mobSpawnPosition.FromCsv(line);
+                    AddEntry( mobSpawnPosition, positions );
+                }
+            }
+            var newPositions = positions.SelectMany(c => c.Value.SelectMany(d => d.Value.Select(e => e))).ToList();
+            npcPlaces.AddRange( newPositions );
+        }
+        private const float maxRange = 1.0f;
+        public void AddEntry(MobSpawnPosition spawnPosition, Dictionary< uint, Dictionary< uint, List< MobSpawnPosition > > > positions)
+        {
+            positions.TryAdd(spawnPosition.TerritoryTypeId, new Dictionary<uint, List<MobSpawnPosition>>());
+            positions[spawnPosition.TerritoryTypeId].TryAdd(spawnPosition.BNpcNameId, new List<MobSpawnPosition>());
+            //Store 
+            var existingPositions = positions[spawnPosition.TerritoryTypeId][spawnPosition.BNpcNameId];
+            if (!existingPositions.Any(c => WithinRange(spawnPosition.Position, c.Position, maxRange)))
+            {
+                if( MobAllowed( spawnPosition.BNpcNameId ) )
+                {
+                    if( TerritoryTypeAllowed( spawnPosition.TerritoryTypeId ) )
+                    {
+                        existingPositions.Add( spawnPosition );
+                    }
+                    else
+                    {
+                        Console.WriteLine("Mob position ignored due to territory type restrictions");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Mob position ignored due to mob type restrictions");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Mob position ignored due to range restrictions");
             }
         }
     }

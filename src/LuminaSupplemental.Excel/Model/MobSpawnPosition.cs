@@ -2,20 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using CsvHelper.Configuration.Attributes;
+using CsvHelper.TypeConversion;
 using Lumina;
 using Lumina.Data;
 using Lumina.Excel;
 using Lumina.Excel.GeneratedSheets;
+using LuminaSupplemental.Excel.Converters;
 
 namespace LuminaSupplemental.Excel.Model;
 
 public class MobSpawnPosition : ICsv
 {
-    public uint BNpcBaseId;
-    public uint BNpcNameId;
-    public uint TerritoryTypeId;
-    public Vector3 Position;
-    public byte Subtype;
+    [Name("BNpcBaseId")] public uint BNpcBaseId { get; set; }
+    [Name("BNpcNameId")] public uint BNpcNameId { get; set; }
+    [Name("TerritoryTypeId")] public uint TerritoryTypeId { get; set; }
+    [Name("Position"), TypeConverter(typeof(Vector3Converter))] public Vector3 Position { get; set; }
+    [Name("Subtype")] public byte Subtype { get; set; }
 
     public LazyRow< BNpcBase > BNpcBase;
     public LazyRow< BNpcName > BNpcName;
