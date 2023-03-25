@@ -12,33 +12,24 @@ namespace LuminaSupplemental.Excel.Model;
 
 public static class CsvLoader
 {
-    public static List< T > LoadCsv<T>(string filePath, out bool success, GameData? gameData = null, Language? language = null) where T : ICsv, new()
+    public static List< T > LoadCsv<T>(string filePath, GameData? gameData = null, Language? language = null) where T : ICsv, new()
     {
         using var fileStream = new FileStream( filePath, FileMode.Open );
         using( StreamReader reader = new StreamReader( fileStream ) )
         {
-            try
+            var csvReader = CSVFile.CSVReader.FromString( reader.ReadToEnd() );
+            var items = new List< T >();
+            foreach( var line in csvReader.Lines() )
             {
-                var csvReader = CSVFile.CSVReader.FromString( reader.ReadToEnd() );
-                var items = new List< T >();
-                foreach( var line in csvReader.Lines() )
+                T item = new T();
+                item.FromCsv( line );
+                if( gameData != null && language != null )
                 {
-                    T item = new T();
-                    item.FromCsv( line );
-                    if( gameData != null && language != null )
-                    {
-                        item.PopulateData( gameData, language.Value );
-                    }
-                    items.Add( item );
+                    item.PopulateData( gameData, language.Value );
                 }
-                success = true;
-                return items;
+                items.Add( item );
             }
-            catch( Exception )
-            {
-                success = false;
-                return new List< T >();
-            }
+            return items;
         }
     }
     public const string DungeonBossResourceName = "LuminaSupplemental.Excel.Generated.DungeonBoss.csv";
@@ -58,28 +49,27 @@ public static class CsvLoader
     public const string ShopNameResourceName = "LuminaSupplemental.Excel.Generated.ShopName.csv";
     public const string ENpcShopResourceName = "LuminaSupplemental.Excel.Generated.ENpcShop.csv";
 
-    public static List< T > LoadResource<T>(string resourceName, out bool success, GameData? gameData = null, Language? language = null) where T : ICsv, new()
+    public static List< T > LoadResource<T>(string resourceName, out List<string> failedLines, GameData? gameData = null, Language? language = null) where T : ICsv, new()
     {
-        try
+        var assembly = Assembly.GetExecutingAssembly();
+        using( Stream? stream = assembly.GetManifestResourceStream( resourceName ) )
         {
-            var assembly = Assembly.GetExecutingAssembly();
-            using( Stream? stream = assembly.GetManifestResourceStream( resourceName ) )
+            failedLines = new List< string >();
+            if( stream == null )
             {
-                if( stream == null )
+                return new List< T >();
+            }
+            using( StreamReader reader = new StreamReader( stream ) )
+            {
+                var csvReader = CSVFile.CSVReader.FromString( reader.ReadToEnd() );
+                var items = new List< T >();
+                foreach( var line in csvReader.Lines() )
                 {
-                    success = false;
-                    return new List< T >();
-                }
-                using( StreamReader reader = new StreamReader( stream ) )
-                {
-
-
-                    var csvReader = CSVFile.CSVReader.FromString( reader.ReadToEnd() );
-                    var items = new List< T >();
-                    foreach( var line in csvReader.Lines() )
+                    T item = new T();
+                    try
                     {
-                        T item = new T();
                         item.FromCsv( line );
+                        
                         if( gameData != null && language != null )
                         {
                             item.PopulateData( gameData, language.Value );
@@ -87,16 +77,14 @@ public static class CsvLoader
 
                         items.Add( item );
                     }
-
-                    success = true;
-                    return items;
+                    catch( Exception e )
+                    {
+                        failedLines.Add( String.Join( ",",line ) );
+                    }
                 }
+
+                return items;
             }
-        }
-        catch( Exception )
-        {
-            success = false;
-            return new List< T >();
         }
     }
     
