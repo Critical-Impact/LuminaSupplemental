@@ -48,6 +48,7 @@ public static class CsvLoader
     public const string ENpcPlaceResourceName = "LuminaSupplemental.Excel.Generated.ENpcPlace.csv";
     public const string ShopNameResourceName = "LuminaSupplemental.Excel.Generated.ShopName.csv";
     public const string ENpcShopResourceName = "LuminaSupplemental.Excel.Generated.ENpcShop.csv";
+    public const string ItemPatchResourceName = "LuminaSupplemental.Excel.Generated.ItemPatch.csv";
 
     public static List< T > LoadResource<T>(string resourceName, out List<string> failedLines, GameData? gameData = null, Language? language = null) where T : ICsv, new()
     {
