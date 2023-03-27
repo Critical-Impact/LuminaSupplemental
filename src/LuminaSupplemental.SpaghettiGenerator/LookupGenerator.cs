@@ -161,13 +161,21 @@ namespace LuminaSupplemental.SpaghettiGenerator
                 {
                     firstItem = orderedPatch.Id;
                 }
+                
 
-                if( currentPatch != orderedPatch.Patch  )
+                if( currentPatch != orderedPatch.Patch && lastItem != null)
                 {
-                    patchData.Add( (currentPatch.Value, firstItem.Value, orderedPatch.Id) );
+                    patchData.Add( (currentPatch.Value, firstItem.Value, lastItem.Value) );
                     firstItem = null;
                     currentPatch = null;
                 }
+
+                lastItem = orderedPatch.Id;
+
+            }
+            if( currentPatch != null && firstItem != null && lastItem != null)
+            {
+                patchData.Add( (currentPatch.Value, firstItem.Value, lastItem.Value) );
             }
             foreach( var patch in patchData )
             {
