@@ -60,7 +60,7 @@ namespace LuminaSupplemental.Excel.Model
             Dictionary< uint, decimal > lookup = new();
             foreach( var itemPatch in itemPatches )
             {
-                for( uint i = itemPatch.StartItemId; i < itemPatch.EndItemId; i++ )
+                for( uint i = itemPatch.StartItemId; i <= itemPatch.EndItemId; i++ )
                 {
                     lookup.Add( i, itemPatch.PatchNo );
                 }
