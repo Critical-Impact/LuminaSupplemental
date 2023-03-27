@@ -13,6 +13,7 @@
     <ItemGroup>
       <Content Include="../GarlandTools/Supplemental/FFXIV Data - Items.tsv" CopyToOutputDirectory="Always" />
       <Content Include="../GarlandTools/Supplemental/FFXIV Data - Duties.json" CopyToOutputDirectory="Always" />
+      <Content Include="../GarlandTools/Supplemental/patches.json" CopyToOutputDirectory="Always" />
       <PackageReference Include="CSVFile" Version="3.1.0" />
       <PackageReference Include="CsvHelper" Version="30.0.1" />
       <PackageReference Include="System.Data.SQLite" Version="1.0.117" />

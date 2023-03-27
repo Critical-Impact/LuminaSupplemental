@@ -141,6 +141,41 @@ namespace LuminaSupplemental.SpaghettiGenerator
 
         }
 
+        public void ProcessPatchData( List< ItemPatch > itemPatches )
+        {
+            var patchText = File.ReadAllText( @"patches.json" );
+            var patches = JsonConvert.DeserializeObject<PatchJson[]>(patchText)!;
+            var orderedPatches = patches.Where( c => c.Type == "item" ).OrderBy( c => c.Id );
+            decimal? currentPatch = null;
+            uint? firstItem = null;
+            uint? lastItem = null;
+            var patchData = new List< (decimal, uint, uint) >();
+            foreach( var orderedPatch in orderedPatches )
+            {
+                if( currentPatch == null )
+                {
+                    currentPatch = orderedPatch.Patch;
+                }
+
+                if( firstItem == null )
+                {
+                    firstItem = orderedPatch.Id;
+                }
+
+                if( currentPatch != orderedPatch.Patch  )
+                {
+                    patchData.Add( (currentPatch.Value, firstItem.Value, orderedPatch.Id) );
+                    firstItem = null;
+                    currentPatch = null;
+                }
+            }
+            foreach( var patch in patchData )
+            {
+                itemPatches.Add( new ItemPatch((uint)(itemPatches.Count + 1), patch.Item2, patch.Item3, patch.Item1) );
+            }
+
+        }
+
         public void ProcessDutiesJson( List< DungeonChest > dungeonChests, List< DungeonChestItem > dungeonChestItems, List< DungeonBoss > dungeonBosses, List< DungeonBossChest > dungeonBossChests, List<DungeonBossDrop> dungeonBossDrops )
         {
             var dungeonBossCount = 1u;
@@ -480,6 +515,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
             var shopNames = new List< ShopName >();
             var eNpcShops = new List< ENpcShop >();
             var mobSpawns = new List< MobSpawnPosition >();
+            var itemPatches = new List< ItemPatch >();
             
             ProcessItemsTSV(itemSupplements, dungeonDrops);
             ParseExtraItemSets(itemSupplements);
@@ -492,6 +528,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
             ProcessAirshipUnlocks( airshipUnlocks, airshipDrops );
             ProcessSubmarineUnlocks( submarineUnlocks, submarineDrops );
             ProcessMobSpawnData( mobSpawns );
+            ProcessPatchData( itemPatches );
 
             WriteFile( itemSupplements, $"./output/ItemSupplement.csv" );
             WriteFile( airshipDrops, $"./output/AirshipDrop.csv" );
@@ -509,6 +546,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
             WriteFile( airshipUnlocks, $"./output/AirshipUnlock.csv" );
             WriteFile( submarineUnlocks, $"./output/SubmarineUnlock.csv" );
             WriteFile( mobSpawns, $"./output/MobSpawn.csv" );
+            WriteFile( itemPatches, $"./output/ItemPatch.csv" );
         }
 
         private void ProcessSubmarineUnlocks( List<SubmarineUnlock> submarineUnlocks, List<SubmarineDrop> submarineDrops )
