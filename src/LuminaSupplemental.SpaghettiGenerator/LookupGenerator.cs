@@ -166,8 +166,8 @@ namespace LuminaSupplemental.SpaghettiGenerator
                 if( currentPatch != orderedPatch.Patch && lastItem != null)
                 {
                     patchData.Add( (currentPatch.Value, firstItem.Value, lastItem.Value) );
-                    firstItem = null;
-                    currentPatch = null;
+                    firstItem = orderedPatch.Id;
+                    currentPatch = orderedPatch.Patch;
                 }
 
                 lastItem = orderedPatch.Id;
@@ -264,8 +264,8 @@ namespace LuminaSupplemental.SpaghettiGenerator
                         for( var index = 0; index < duty.Chests.Length; index++ )
                         {
                             var chest = duty.Chests[ index ];
-                            var xCoord = float.Parse( chest.Coords.X );
-                            var yCoord = float.Parse( chest.Coords.Y );
+                            var xCoord = float.Parse( chest.Coords.X, CultureInfo.InvariantCulture );
+                            var yCoord = float.Parse( chest.Coords.Y, CultureInfo.InvariantCulture );
                             var dungeonChest = new DungeonChest( (uint)(dungeonChests.Count + 1), (byte)(index + 1), actualDuty.RowId, new Vector2( xCoord, yCoord ) );
                             dungeonChests.Add( dungeonChest );
                             foreach( var item in chest.Items )

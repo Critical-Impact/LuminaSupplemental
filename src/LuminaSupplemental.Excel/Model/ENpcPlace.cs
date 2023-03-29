@@ -44,7 +44,7 @@ namespace LuminaSupplemental.Excel.Model
             RowId = uint.Parse( lineData[ 0 ] );
             ENpcResidentId = uint.Parse( lineData[ 1 ] );
             TerritoryTypeId = uint.Parse( lineData[ 2 ] );
-            var positionData = lineData[3].Split(";").Select(float.Parse).ToList();
+            var positionData = lineData[3].Split(";").Select(c => float.Parse(c, CultureInfo.InvariantCulture)).ToList();
             Position = new Vector2(positionData[0], positionData[1]);
         }
 

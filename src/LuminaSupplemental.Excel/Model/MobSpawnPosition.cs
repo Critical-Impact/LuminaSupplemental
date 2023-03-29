@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using CsvHelper.Configuration.Attributes;
@@ -55,7 +56,7 @@ public class MobSpawnPosition : ICsv
         BNpcBaseId = uint.Parse( lineData[ 0 ] );
         BNpcNameId = uint.Parse( lineData[ 1 ] );
         TerritoryTypeId = uint.Parse( lineData[ 2 ] );
-        var positionData = lineData[3].Split(";").Select(float.Parse).ToList();
+        var positionData = lineData[3].Split(";").Select(c => float.Parse(c, CultureInfo.InvariantCulture)).ToList();
         Position = new Vector3(positionData[0], positionData[1], positionData[2]);
         Subtype = byte.Parse(lineData[4]);
     }
