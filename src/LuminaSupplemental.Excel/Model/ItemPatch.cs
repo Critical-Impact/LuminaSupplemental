@@ -38,7 +38,7 @@ namespace LuminaSupplemental.Excel.Model
             RowId = uint.Parse( lineData[ 0 ] );
             StartItemId = uint.Parse( lineData[ 1 ] );
             EndItemId = uint.Parse( lineData[ 2 ] );
-            PatchNo = decimal.Parse( lineData[ 3 ] );
+            PatchNo = decimal.Parse( lineData[ 3 ], CultureInfo.InvariantCulture );
         }
 
         public string[] ToCsv()
