@@ -144,7 +144,18 @@ namespace LuminaSupplemental.SpaghettiGenerator
         public void ProcessPatchData( List< ItemPatch > itemPatches )
         {
             var patchText = File.ReadAllText( @"patches.json" );
-            var patches = JsonConvert.DeserializeObject<PatchJson[]>(patchText)!;
+            var patches = JsonConvert.DeserializeObject<PatchJson[]>(patchText)!.ToList();
+            
+            //Process extra data not in GT's jsons(no idea why)
+            
+            var reader = CSVFile.CSVReader.FromFile(@"ManualData\ExtraPatchData.csv", CSVSettings.CSV);
+            
+            foreach( var line in reader.Lines() )
+            {
+                var sourceItemId = uint.Parse(line[ 0 ]);
+                var patchId = decimal.Parse(line[ 1 ], CultureInfo.InvariantCulture);
+                patches.Add( new PatchJson() {Patch = patchId, Id = sourceItemId, Type = "item"} );
+            }
             var orderedPatches = patches.Where( c => c.Type == "item" ).OrderBy( c => c.Id );
             decimal? currentPatch = null;
             uint? firstItem = null;
@@ -301,6 +312,42 @@ namespace LuminaSupplemental.SpaghettiGenerator
                 {new []{"Asphodelos", "Coffer"}, "Asphodelos"},
                 {new []{"Bluefeather", "Coffer"}, "Bluefeather"},
                 {new []{"Byakko", "Coffer"}, "Byakko"},
+                {new []{"Archfiend Attire Coffer"}, "Archfiend"},
+                {new []{"Bookwyrm's Attire Coffer"}, "Bookwyrm's"},
+                {new []{"False Monarchy Attire Coffer"}, "False Monarchy"},
+                {new []{"Muzhik Attire Coffer"}, "Muzhik"},
+                {new []{"Spotted Attire Coffer"}, "Spotted"},
+                {new []{"Street Attire Coffer"}, "Street"},
+                {new []{"Chondrite", "Coffer"}, "Star Quartz"},
+                {new []{"Chondrite", "Coffer"}, "Chondrite"},
+                {new []{"Chondrite", "Coffer"}, "AR-Caean Velvet"},
+                {new []{"Chondrite", "Coffer"}, "Ophiotauroskin"},
+                {new []{"Crag", "Coffer"}, "Crags"},
+                {new []{"Crag", "Coffer"}, "Key of Titan"},
+                {new []{"Cryptlurker", "Coffer"}, "Cryptlurker's"},
+                {new []{"Diamond", "Coffer"}, "Diamond"},
+                {new []{"Divine Light", "Coffer"}, "Divine Light"},
+                {new []{"Dreadwyrm", "Coffer"}, "Dreadwyrm"},
+                {new []{"Emerald", "Coffer"}, "Emerald"},
+                {new []{"Expanse", "Coffer"}, "Expanse"},
+                {new []{"Flamecloaked", "Coffer"}, "Flamecloaked"},
+                {new []{"Genji Armo", "Coffer"}, "Genji"},
+                {new []{"Zurvanite", "Coffer"}, "Zurvanite"},
+                {new []{"Windswept", "Coffer"}, "Windswept"},
+                {new []{"Vortex", "Coffer"}, "Garuda's"},
+                {new []{"Tsukuyomi", "Coffer"}, "Tsukuyomi"},
+                {new []{"Titania", "Coffer"}, "The King's"},
+                {new []{"Tidal", "Coffer"}, "Wave "},
+                {new []{"Suzaku", "Coffer"}, "Suzaku's"},
+                {new []{"Susano", "Coffer"}, "Susano's"},
+                {new []{"Splendorous", "Coffer"}, "Splendorous "},
+                {new []{"Sophic", "Coffer"}, "Sophic "},
+                {new []{"Shinryu", "Coffer"}, "Shinryu's"},
+                {new []{"Sephirotic", "Coffer"}, "of the Sephirot"},
+                {new []{"Seiryu ", "Coffer"}, "Seiryu's"},
+                {new []{"Ruby ", "Coffer"}, "Ruby"},
+                {new []{"Pewter ", "Coffer"}, "Palm"},
+                {new []{"Omega ", "Coffer"}, "Omega"},
             };
             foreach( var cofferName in cofferNames )
             {
@@ -310,6 +357,69 @@ namespace LuminaSupplemental.SpaghettiGenerator
                 } ).ToList();
                 foreach( var coffer in coffers )
                 {
+                    var fullName = String.Join( " ", cofferName.Key );
+                    if( coffer.Name == fullName )
+                    {
+                        var items = _itemSheet.Where( c =>
+                            c.Name.ToString().StartsWith( cofferName.Value ) &&
+                            ( ( c.EquipSlotCategory.Value?.MainHand ?? 0 ) == 1 || ( c.EquipSlotCategory.Value?.OffHand ?? 0 ) == 1 ) );
+                        foreach( var item in items )
+                        {
+                            
+                            itemSupplements.Add( new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot) );
+                        }
+                    }
+
+                    if( coffer.Name.ToString().Contains( "Attire Coffer" ) )
+                    {
+                        var potentialItems = new string[]
+                        {
+                            "Armor",
+                            "Breeches",
+                            "Gauntlets",
+                            "Helm",
+                            "Sabatons",
+                            "Cap",
+                            "Jacket",
+                            "Gloves",
+                            "Slacks",
+                            "Shoes",
+                            "Mask",
+                            "Culottes",
+                            "Hat",
+                            "Dress",
+                            "Blinder",
+                            "Boots",
+                            "Coat",
+                            "Field Dressing",
+                            "Trousers",
+                            "Fedora",
+                            "Spencer",
+                            "Cargo Trousers",
+                            "Handwear",
+                            "High-top Shoes",
+                            "Top",
+                            "Spectacles",
+                            "Chasuble",
+                            "Waistwrap"
+                        };
+                        foreach( var potentialItem in potentialItems )
+                        {
+                            var items = _itemSheet.Where( c => c.Name.ToString().Contains( cofferName.Value ) && c.Name.ToString().Contains( potentialItem ) && 
+                                ( 
+                                    ( c.EquipSlotCategory.Value?.Body ?? 0 ) == 1 || 
+                                    ( c.EquipSlotCategory.Value?.Feet ?? 0 ) == 1  || 
+                                    ( c.EquipSlotCategory.Value?.Head ?? 0 ) == 1  || 
+                                    ( c.EquipSlotCategory.Value?.Gloves ?? 0 ) == 1  || 
+                                    ( c.EquipSlotCategory.Value?.Legs ?? 0 ) == 1 
+                                ));
+                            foreach( var item in items )
+                            {
+                                itemSupplements.Add( new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot) );
+                            }
+                        }
+                    }
+                    
                     //Weapon, Gear, Accessories
                     if( coffer.Name.ToString().Contains( "Weapon" ) )
                     {
@@ -503,6 +613,32 @@ namespace LuminaSupplemental.SpaghettiGenerator
                 var outputItemId = uint.Parse(line[ 1 ]);
                 var source = Enum.Parse<ItemSupplementSource>(line[ 2 ]);
                 itemSupplements.Add( new ItemSupplement((uint)(itemSupplements.Count + 1), outputItemId, sourceItemId, source) );
+            }
+            
+            reader = CSVFile.CSVReader.FromFile(@"ManualData\ItemsScraped.csv", CSVSettings.CSV);
+
+            foreach( var line in reader.Lines() )
+            {
+                var s1 = line[ 0 ];
+                var s2 = line[ 1 ];
+
+                var sourceItemName = s1.ToParseable();
+                var rewardItemName = s2.ToParseable();
+
+                if( _itemsByString.ContainsKey( sourceItemName ) && _itemsByString.ContainsKey( rewardItemName ) )
+                {
+                    var sourceItem = _itemsByString[ sourceItemName ];
+                    var rewardItem = _itemsByString[ rewardItemName ];
+                    itemSupplements.Add( new ItemSupplement( (uint)( itemSupplements.Count + 1 ), rewardItem.RowId, sourceItem.RowId, ItemSupplementSource.Loot ) );
+                }
+                else if( _itemsByString.ContainsKey( sourceItemName ) )
+                {
+                    Console.WriteLine("Could not find item with matching name: " + s1);
+                }
+                else if( _itemsByString.ContainsKey( rewardItemName ) )
+                {
+                    Console.WriteLine("Could not find item with matching name: " + s2);
+                }
             }
         }
         public void Generate()

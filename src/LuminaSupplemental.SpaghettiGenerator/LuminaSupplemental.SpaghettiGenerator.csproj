@@ -35,6 +35,13 @@
       <None Update="ManualData\MobImports\2.csv">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="ManualData\ItemsScraped.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Remove="ManualData\ExtraPatchData.csv" />
+      <Content Include="ManualData\ExtraPatchData.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>
