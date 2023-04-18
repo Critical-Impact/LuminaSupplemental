@@ -18,15 +18,19 @@ namespace LuminaSupplemental.SpaghettiGenerator
 {
     public class LookupGenerator
     {
-        private Dictionary< string, Item > _itemsByString;
+        private Dictionary< string, Item > _itemsByName;
         private Dictionary< string, ContentFinderCondition > _dutiesByString;
         private Dictionary< string, BNpcName > _bNpcsByName;
         private Dictionary< string, SubmarineExploration > _submarinesByName;
         private Dictionary< string, AirshipExplorationPoint > _airshipsByName;
+        private Dictionary< string, RetainerTaskRandom > _retainerTaskRandomByName;
+        private Dictionary< string, FittingShopItemSet > _fittingShopItemSetByName;
         private ExcelSheet<Item> _itemSheet;
         private ExcelSheet<BNpcName> _bnpcNameSheet;
         private readonly ExcelSheet<SubmarineExploration> _submarineSheet;
         private readonly ExcelSheet<AirshipExplorationPoint> _airshipSheet;
+        private readonly ExcelSheet<RetainerTaskRandom> _retainerTaskRandomSheet;
+        private readonly ExcelSheet<FittingShopItemSet> _fittingShopItemSetSheet;
         private readonly ExcelSheet<TerritoryType> _territoryTypeSheet;
 
 
@@ -37,12 +41,14 @@ namespace LuminaSupplemental.SpaghettiGenerator
             _submarineSheet = Service.GameData.GetExcelSheet<SubmarineExploration>()!;
             _airshipSheet = Service.GameData.GetExcelSheet<AirshipExplorationPoint>()!;
             _territoryTypeSheet = Service.GameData.GetExcelSheet<TerritoryType>()!;
+            _retainerTaskRandomSheet = Service.GameData.GetExcelSheet<RetainerTaskRandom>()!;
+            _fittingShopItemSetSheet = Service.GameData.GetExcelSheet<FittingShopItemSet>()!;
             var dutySheet = Service.GameData.GetExcelSheet<ContentFinderCondition>()!;
 
-            _itemsByString = new Dictionary<string, Item>();
+            _itemsByName = new Dictionary<string, Item>();
             foreach (var item in _itemSheet)
             {
-                _itemsByString.TryAdd(item.Name.ToString().ToParseable(), item);
+                _itemsByName.TryAdd(item.Name.ToString().ToParseable(), item);
             }
 
             _dutiesByString = new Dictionary<string, ContentFinderCondition>();
@@ -63,10 +69,22 @@ namespace LuminaSupplemental.SpaghettiGenerator
                 _airshipsByName.TryAdd(airship.NameShort.ToString().ToParseable(), airship);
             }
 
+            _retainerTaskRandomByName = new Dictionary<string, RetainerTaskRandom>();
+            foreach (var retainerTaskRandom in _retainerTaskRandomSheet)
+            {
+                _retainerTaskRandomByName.TryAdd(retainerTaskRandom.Name.ToString().ToParseable(), retainerTaskRandom);
+            }
+
             _submarinesByName = new Dictionary<string, SubmarineExploration>();
             foreach (var submarine in _submarineSheet)
             {
                 _submarinesByName.TryAdd(submarine.Destination.ToString().ToParseable(), submarine);
+            }
+
+            _fittingShopItemSetByName = new Dictionary<string, FittingShopItemSet>();
+            foreach (var fittingShopItemSet in _fittingShopItemSetSheet)
+            {
+                _fittingShopItemSetByName.TryAdd(fittingShopItemSet.Unknown6.ToString().ToParseable(), fittingShopItemSet);
             }
         }
 
@@ -234,7 +252,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
                                 foreach( var drop in fight.Drops )
                                 {
                                     var itemName = drop.Name.ToParseable();
-                                    var actualItem = _itemsByString.ContainsKey( itemName ) ? _itemsByString[ itemName ] : null;
+                                    var actualItem = _itemsByName.ContainsKey( itemName ) ? _itemsByName[ itemName ] : null;
                                     if( actualItem != null )
                                     {
                                         dungeonBossDrops.Add( new DungeonBossDrop((uint)(dungeonBossDrops.Count + 1), actualDuty.RowId, (uint)index, actualItem.RowId, 1 ) );
@@ -254,7 +272,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
                                     foreach( var item in treasure.Items )
                                     {
                                         var itemName = item.ToParseable();
-                                        var actualItem = _itemsByString.ContainsKey( itemName ) ? _itemsByString[ itemName ] : null;
+                                        var actualItem = _itemsByName.ContainsKey( itemName ) ? _itemsByName[ itemName ] : null;
                                         if( actualItem != null )
                                         {
                                             dungeonBossChests.Add( new DungeonBossChest(dungeonBossChestCount, (uint)index, actualItem.RowId, actualDuty.RowId, 1, chestNo ) );
@@ -282,7 +300,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
                             foreach( var item in chest.Items )
                             {
                                 var itemName = item.ToParseable();
-                                var actualItem = _itemsByString.ContainsKey( itemName ) ? _itemsByString[ itemName ] : null;
+                                var actualItem = _itemsByName.ContainsKey( itemName ) ? _itemsByName[ itemName ] : null;
                                 if( actualItem != null )
                                 {
 
@@ -625,17 +643,17 @@ namespace LuminaSupplemental.SpaghettiGenerator
                 var sourceItemName = s1.ToParseable();
                 var rewardItemName = s2.ToParseable();
 
-                if( _itemsByString.ContainsKey( sourceItemName ) && _itemsByString.ContainsKey( rewardItemName ) )
+                if( _itemsByName.ContainsKey( sourceItemName ) && _itemsByName.ContainsKey( rewardItemName ) )
                 {
-                    var sourceItem = _itemsByString[ sourceItemName ];
-                    var rewardItem = _itemsByString[ rewardItemName ];
+                    var sourceItem = _itemsByName[ sourceItemName ];
+                    var rewardItem = _itemsByName[ rewardItemName ];
                     itemSupplements.Add( new ItemSupplement( (uint)( itemSupplements.Count + 1 ), rewardItem.RowId, sourceItem.RowId, ItemSupplementSource.Loot ) );
                 }
-                else if( _itemsByString.ContainsKey( sourceItemName ) )
+                else if( _itemsByName.ContainsKey( sourceItemName ) )
                 {
                     Console.WriteLine("Could not find item with matching name: " + s1);
                 }
-                else if( _itemsByString.ContainsKey( rewardItemName ) )
+                else if( _itemsByName.ContainsKey( rewardItemName ) )
                 {
                     Console.WriteLine("Could not find item with matching name: " + s2);
                 }
@@ -660,7 +678,10 @@ namespace LuminaSupplemental.SpaghettiGenerator
             var eNpcShops = new List< ENpcShop >();
             var mobSpawns = new List< MobSpawnPosition >();
             var itemPatches = new List< ItemPatch >();
-            
+            var retainerVentureItems = new List< RetainerVentureItem >();
+            var storeItems = new List< StoreItem >();
+
+            StoreParser.UpdateItems();
             ProcessItemsTSV(itemSupplements, dungeonDrops);
             ParseExtraItemSets(itemSupplements);
             ProcessManualItems( itemSupplements );
@@ -673,6 +694,8 @@ namespace LuminaSupplemental.SpaghettiGenerator
             ProcessSubmarineUnlocks( submarineUnlocks, submarineDrops );
             ProcessMobSpawnData( mobSpawns );
             ProcessPatchData( itemPatches );
+            ProcessRetainerVentures( retainerVentureItems );
+            ProcessStoreItems( storeItems );
 
             WriteFile( itemSupplements, $"./output/ItemSupplement.csv" );
             WriteFile( airshipDrops, $"./output/AirshipDrop.csv" );
@@ -691,6 +714,86 @@ namespace LuminaSupplemental.SpaghettiGenerator
             WriteFile( submarineUnlocks, $"./output/SubmarineUnlock.csv" );
             WriteFile( mobSpawns, $"./output/MobSpawn.csv" );
             WriteFile( itemPatches, $"./output/ItemPatch.csv" );
+            WriteFile( retainerVentureItems, $"./output/RetainerVentureItem.csv" );
+            WriteFile( storeItems, $"./output/StoreItem.csv" );
+        }
+
+        private void ProcessStoreItems( List< StoreItem > storeItems )
+        {
+            foreach( var product in StoreParser.StoreProducts )
+            {
+                var fittingShopItemName = product.Value.Name;
+                var parsedShopItemName = fittingShopItemName.Trim().ToParseable();
+                FittingShopItemSet? fittingShopItemSet = null;
+                if( _fittingShopItemSetByName.ContainsKey( parsedShopItemName ) )
+                {
+                    fittingShopItemSet = _fittingShopItemSetByName[ parsedShopItemName ];
+                }
+                else if(product.Value.Items.Count != 1)
+                {
+                    Console.WriteLine("Could not find a fitting shop item set with the name " + fittingShopItemName + ", it has more than 1 item so the assumption is it's a set.");
+                }
+                foreach( var item in product.Value.Items )
+                {
+                    var itemName = item.Name;
+                    var parsedItemName = itemName.Trim().ToParseable();
+                    if( _itemsByName.ContainsKey( parsedItemName ) )
+                    {
+                        var outputItem = _itemsByName[ parsedItemName ];
+                        storeItems.Add( new StoreItem()
+                        {
+                            RowId = (uint)(storeItems.Count + 1),
+                            FittingShopItemSetId = fittingShopItemSet?.RowId ?? 0,
+                            ItemId = outputItem.RowId
+                        });
+                    }
+                    else
+                    {
+                        Console.WriteLine("Could not find an item with the name " + itemName + " while parsing store data.");
+                    }
+                }
+            }
+            
+        }
+
+        private void ProcessRetainerVentures( List<RetainerVentureItem> retainerVentureItems )
+        {
+            var reader = CSVFile.CSVReader.FromFile(@"ManualData\RetainerVentures.csv");
+
+            foreach( var line in reader.Lines() )
+            {
+                var ventureName = line[ 0 ];
+                var items = line[1].Split( "," );
+                
+                var parsedVentureName = ventureName.ToParseable();
+                if( _retainerTaskRandomByName.ContainsKey( parsedVentureName ) )
+                {
+                    var retainerTaskRandom = _retainerTaskRandomByName[ parsedVentureName ];
+
+                    foreach( var itemName in items )
+                    {
+                        var parseableItemName = itemName.Trim().ToParseable();
+                        var outputItem = _itemsByName.ContainsKey( parseableItemName ) ? _itemsByName[ parseableItemName ] : null;
+                        if( outputItem != null )
+                        {
+                            retainerVentureItems.Add( new RetainerVentureItem()
+                            {
+                                RowId = (uint)(retainerVentureItems.Count + 1),
+                                RetainerTaskRandomId = retainerTaskRandom.RowId,
+                                ItemId = outputItem.RowId
+                            });
+                        }
+                        else
+                        {
+                            Console.WriteLine("Could not find item with name " + itemName.Trim() + " in the retainer task random with name " + ventureName);
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Could not find the retainer task random with name " + ventureName);
+                }
+            }
         }
 
         private void ProcessSubmarineUnlocks( List<SubmarineUnlock> submarineUnlocks, List<SubmarineDrop> submarineDrops )
@@ -727,7 +830,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
                     foreach( var itemName in items1List )
                     {
                         var parseableItemName = itemName.Trim().ToParseable();
-                        var outputItem = _itemsByString.ContainsKey( parseableItemName ) ? _itemsByString[ parseableItemName ] : null;
+                        var outputItem = _itemsByName.ContainsKey( parseableItemName ) ? _itemsByName[ parseableItemName ] : null;
                         if( outputItem != null )
                         {
                             submarineDrops.Add( new SubmarineDrop()
@@ -790,7 +893,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
                     foreach( var itemName in items1List )
                     {
                         var parseableItemName = itemName.Trim().ToParseable();
-                        var outputItem = _itemsByString.ContainsKey( parseableItemName ) ? _itemsByString[ parseableItemName ] : null;
+                        var outputItem = _itemsByName.ContainsKey( parseableItemName ) ? _itemsByName[ parseableItemName ] : null;
                         if( outputItem != null )
                         {
                             airshipDrops.Add( new AirshipDrop()
@@ -940,7 +1043,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
         private void GenerateSubmarineDrops( string outputItemId, List< string > sources, List< SubmarineDrop > submarineDrops )
         {
             outputItemId = outputItemId.ToParseable();
-            var outputItem = _itemsByString.ContainsKey( outputItemId ) ? _itemsByString[ outputItemId ] : null;
+            var outputItem = _itemsByName.ContainsKey( outputItemId ) ? _itemsByName[ outputItemId ] : null;
             if( outputItem != null )
             {
                 foreach( var sourceItem in sources )
@@ -974,7 +1077,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
         private void GenerateAirshipDrops( string outputItemId, List< string > sources, List< AirshipDrop > airshipDrops )
         {
             outputItemId = outputItemId.ToParseable();
-            var outputItem = _itemsByString.ContainsKey( outputItemId ) ? _itemsByString[ outputItemId ] : null;
+            var outputItem = _itemsByName.ContainsKey( outputItemId ) ? _itemsByName[ outputItemId ] : null;
             if( outputItem != null )
             {
                 foreach( var sourceItem in sources )
@@ -1004,7 +1107,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
         private void GenerateDungeonDrops( string outputItemId, List< string > sources, List< DungeonDrop > dungeonDrops )
         {
             outputItemId = outputItemId.ToParseable();
-            var outputItem = _itemsByString.ContainsKey( outputItemId ) ? _itemsByString[ outputItemId ] : null;
+            var outputItem = _itemsByName.ContainsKey( outputItemId ) ? _itemsByName[ outputItemId ] : null;
             if( outputItem != null )
             {
                 foreach( var sourceItem in sources )
@@ -1035,13 +1138,13 @@ namespace LuminaSupplemental.SpaghettiGenerator
             }
 
             outputItemId = outputItemId.ToParseable();
-            var outputItem = _itemsByString.ContainsKey( outputItemId ) ? _itemsByString[ outputItemId ] : null;
+            var outputItem = _itemsByName.ContainsKey( outputItemId ) ? _itemsByName[ outputItemId ] : null;
             if( outputItem != null )
             {
                 foreach( var sourceItem in sources )
                 {
                     var sourceName = sourceItem.ToParseable();
-                    var actualItem = _itemsByString.ContainsKey( sourceName ) ? _itemsByString[ sourceName ] : null;
+                    var actualItem = _itemsByName.ContainsKey( sourceName ) ? _itemsByName[ sourceName ] : null;
                     if( actualItem != null )
                     {
                         itemSupplements.Add( new ItemSupplement( (uint)itemSupplements.Count + 1, outputItem.RowId, actualItem.RowId, source.Value ) );
