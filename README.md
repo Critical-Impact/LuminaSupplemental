@@ -12,7 +12,7 @@ While this is not an exhaustive list(as more gets added all the time), it provid
 * Extra Event NPC Locations
 * Extra Event NPC Shops
 * Item Patch Data
-* Supplemental Item Data(Desynth,Reduction,Loot,Gardening,)
+* Supplemental Item Data(Desynth,Reduction,Loot,Gardening,Coffer Contents)
 * Mob Drop Data(This is user sourced, if you want to help out please check out Allagan Tool's mob tracker)
 * Mob Spawn Data(As above)
 * Retainer Venture Items
