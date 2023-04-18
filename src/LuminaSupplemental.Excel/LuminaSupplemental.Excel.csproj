@@ -70,10 +70,4 @@
       <EmbeddedResource Include="Generated\RetainerVentureItem.csv" />
       <EmbeddedResource Include="Generated\StoreItem.csv" />
     </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Include="Generated\ShopNames.csv" />
-    </ItemGroup>
-
-
 </Project>
