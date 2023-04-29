@@ -210,7 +210,6 @@ namespace LuminaSupplemental.SpaghettiGenerator
             {
                 itemPatches.Add( new ItemPatch((uint)(itemPatches.Count + 1), patch.Item2, patch.Item3, patch.Item1) );
             }
-
         }
 
         public void ProcessDutiesJson( List< DungeonChest > dungeonChests, List< DungeonChestItem > dungeonChestItems, List< DungeonBoss > dungeonBosses, List< DungeonBossChest > dungeonBossChests, List<DungeonBossDrop> dungeonBossDrops )
@@ -696,6 +695,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
             ProcessPatchData( itemPatches );
             ProcessRetainerVentures( retainerVentureItems );
             ProcessStoreItems( storeItems );
+            ProcessSkybuilderItems(itemSupplements);
 
             WriteFile( itemSupplements, $"./output/ItemSupplement.csv" );
             WriteFile( airshipDrops, $"./output/AirshipDrop.csv" );
@@ -716,6 +716,30 @@ namespace LuminaSupplemental.SpaghettiGenerator
             WriteFile( itemPatches, $"./output/ItemPatch.csv" );
             WriteFile( retainerVentureItems, $"./output/RetainerVentureItem.csv" );
             WriteFile( storeItems, $"./output/StoreItem.csv" );
+        }
+
+        private void ProcessSkybuilderItems( List< ItemSupplement > itemSupplements )
+        {
+            var items = _itemSheet.Where( c => c.Name.ToString().Contains( "Approved" ) ).ToList();
+            foreach( var item in items )
+            {
+                var regularVersion = item.Name.ToString().Replace( "Approved ", "" ).ToParseable();
+                if(_itemsByName.ContainsKey(regularVersion))
+                {
+                    var sourceItem = _itemsByName[regularVersion];
+                    itemSupplements.Add( new ItemSupplement()
+                    {
+                        ItemSupplementSource = ItemSupplementSource.SkybuilderHandIn,
+                        SourceItemId = sourceItem.RowId,
+                        ItemId = item.RowId,
+                        RowId = (uint)itemSupplements.Count + 1
+                    } );
+                }
+                else
+                {
+                    Console.WriteLine("Could not find a non-approved version of " + regularVersion + " for matching skybuilder items.");
+                }
+            }
         }
 
         private void ProcessStoreItems( List< StoreItem > storeItems )
