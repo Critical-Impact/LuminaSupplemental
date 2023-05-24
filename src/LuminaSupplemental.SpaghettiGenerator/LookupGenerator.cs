@@ -365,6 +365,9 @@ namespace LuminaSupplemental.SpaghettiGenerator
                 {new []{"Ruby ", "Coffer"}, "Ruby"},
                 {new []{"Pewter ", "Coffer"}, "Palm"},
                 {new []{"Omega ", "Coffer"}, "Omega"},
+                {new []{"Voidcast ", "Coffer"}, "Voidcast"},
+                {new []{"Ascension ", "Coffer"}, "Ascension"},
+                {new []{"Ascension ", "Coffer"}, "of Ascension"},
             };
             foreach( var cofferName in cofferNames )
             {
@@ -1324,17 +1327,17 @@ namespace LuminaSupplemental.SpaghettiGenerator
                     }
                     else
                     {
-                        Console.WriteLine("Mob position ignored due to territory type restrictions");
+                        //Console.WriteLine("Mob position ignored due to territory type restrictions");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Mob position ignored due to mob type restrictions");
+                    //Console.WriteLine("Mob position ignored due to mob type restrictions");
                 }
             }
             else
             {
-                Console.WriteLine("Mob position ignored due to range restrictions");
+                //Console.WriteLine("Mob position ignored due to range restrictions");
             }
         }
     }
