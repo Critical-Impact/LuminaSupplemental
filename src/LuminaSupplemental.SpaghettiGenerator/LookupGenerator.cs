@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Numerics;
 using System.Text;
 using CSVFile;
@@ -32,6 +34,8 @@ namespace LuminaSupplemental.SpaghettiGenerator
         private readonly ExcelSheet<RetainerTaskRandom> _retainerTaskRandomSheet;
         private readonly ExcelSheet<FittingShopItemSet> _fittingShopItemSetSheet;
         private readonly ExcelSheet<TerritoryType> _territoryTypeSheet;
+        private readonly ExcelSheet<Companion> _companionSheet;
+        private readonly ExcelSheet<Pet> _petSheet;
 
 
         public LookupGenerator(string tmplPath = null)
@@ -43,6 +47,8 @@ namespace LuminaSupplemental.SpaghettiGenerator
             _territoryTypeSheet = Service.GameData.GetExcelSheet<TerritoryType>()!;
             _retainerTaskRandomSheet = Service.GameData.GetExcelSheet<RetainerTaskRandom>()!;
             _fittingShopItemSetSheet = Service.GameData.GetExcelSheet<FittingShopItemSet>()!;
+            _companionSheet = Service.GameData.GetExcelSheet<Companion>()!;
+            _petSheet = Service.GameData.GetExcelSheet<Pet>()!;
             var dutySheet = Service.GameData.GetExcelSheet<ContentFinderCondition>()!;
 
             _itemsByName = new Dictionary<string, Item>();
@@ -86,6 +92,66 @@ namespace LuminaSupplemental.SpaghettiGenerator
             {
                 _fittingShopItemSetByName.TryAdd(fittingShopItemSet.Unknown6.ToString().ToParseable(), fittingShopItemSet);
             }
+        }
+        
+        public void Generate()
+        {
+            var itemSupplements = new List<ItemSupplement>();
+            var submarineDrops = new List<SubmarineDrop>();
+            var airshipDrops = new List<AirshipDrop>();
+            var dungeonDrops = new List<DungeonDrop>();
+            var airshipUnlocks = new List< AirshipUnlock >();
+            var submarineUnlocks = new List< SubmarineUnlock >();
+            var mobDrops = new List< MobDrop >();
+            var dungeonChests = new List< DungeonChest >();
+            var dungeonChestItems = new List< DungeonChestItem >();
+            var dungeonBosses = new List< DungeonBoss >();
+            var dungeonBossChests = new List< DungeonBossChest >();
+            var dungeonBossDrops = new List< DungeonBossDrop >();
+            var eNpcPlaces = new List< ENpcPlace >();
+            var shopNames = new List< ShopName >();
+            var eNpcShops = new List< ENpcShop >();
+            var mobSpawns = new List< MobSpawnPosition >();
+            var itemPatches = new List< ItemPatch >();
+            var retainerVentureItems = new List< RetainerVentureItem >();
+            var storeItems = new List< StoreItem >();
+
+            StoreParser.UpdateItems();
+            ProcessItemsTSV(itemSupplements, dungeonDrops);
+            ParseExtraItemSets(itemSupplements);
+            ProcessManualItems( itemSupplements );
+            ProcessMobDrops( mobDrops );
+            ProcessDutiesJson( dungeonChests, dungeonChestItems, dungeonBosses, dungeonBossChests, dungeonBossDrops );
+            ProcessEventNpcs( eNpcPlaces );
+            ProcessShopNames( shopNames );
+            ProcessEventShops( eNpcShops );
+            ProcessAirshipUnlocks( airshipUnlocks, airshipDrops );
+            ProcessSubmarineUnlocks( submarineUnlocks, submarineDrops );
+            ProcessMobSpawnData( mobSpawns );
+            ProcessPatchData( itemPatches );
+            ProcessRetainerVentures( retainerVentureItems );
+            ProcessStoreItems( storeItems );
+            ProcessSkybuilderItems(itemSupplements);
+
+            WriteFile( itemSupplements, $"./output/ItemSupplement.csv" );
+            WriteFile( airshipDrops, $"./output/AirshipDrop.csv" );
+            WriteFile( submarineDrops, $"./output/SubmarineDrop.csv" );
+            WriteFile( dungeonDrops, $"./output/DungeonDrop.csv" );
+            WriteFile( mobDrops, $"./output/MobDrop.csv" );
+            WriteFile( dungeonChests, $"./output/DungeonChest.csv" );
+            WriteFile( dungeonChestItems, $"./output/DungeonChestItem.csv" );
+            WriteFile( dungeonBosses, $"./output/DungeonBoss.csv" );
+            WriteFile( dungeonBossChests, $"./output/DungeonBossChest.csv" );
+            WriteFile( dungeonBossDrops, $"./output/DungeonBossDrop.csv" );
+            WriteFile( eNpcPlaces, $"./output/ENpcPlace.csv" );
+            WriteFile( shopNames, $"./output/ShopName.csv" );
+            WriteFile( eNpcShops, $"./output/ENpcShop.csv" );
+            WriteFile( airshipUnlocks, $"./output/AirshipUnlock.csv" );
+            WriteFile( submarineUnlocks, $"./output/SubmarineUnlock.csv" );
+            WriteFile( mobSpawns, $"./output/MobSpawn.csv" );
+            WriteFile( itemPatches, $"./output/ItemPatch.csv" );
+            WriteFile( retainerVentureItems, $"./output/RetainerVentureItem.csv" );
+            WriteFile( storeItems, $"./output/StoreItem.csv" );
         }
 
         public void ProcessShopNames(List<ShopName> shopNames)
@@ -661,65 +727,6 @@ namespace LuminaSupplemental.SpaghettiGenerator
                 }
             }
         }
-        public void Generate()
-        {
-            var itemSupplements = new List<ItemSupplement>();
-            var submarineDrops = new List<SubmarineDrop>();
-            var airshipDrops = new List<AirshipDrop>();
-            var dungeonDrops = new List<DungeonDrop>();
-            var airshipUnlocks = new List< AirshipUnlock >();
-            var submarineUnlocks = new List< SubmarineUnlock >();
-            var mobDrops = new List< MobDrop >();
-            var dungeonChests = new List< DungeonChest >();
-            var dungeonChestItems = new List< DungeonChestItem >();
-            var dungeonBosses = new List< DungeonBoss >();
-            var dungeonBossChests = new List< DungeonBossChest >();
-            var dungeonBossDrops = new List< DungeonBossDrop >();
-            var eNpcPlaces = new List< ENpcPlace >();
-            var shopNames = new List< ShopName >();
-            var eNpcShops = new List< ENpcShop >();
-            var mobSpawns = new List< MobSpawnPosition >();
-            var itemPatches = new List< ItemPatch >();
-            var retainerVentureItems = new List< RetainerVentureItem >();
-            var storeItems = new List< StoreItem >();
-
-            StoreParser.UpdateItems();
-            ProcessItemsTSV(itemSupplements, dungeonDrops);
-            ParseExtraItemSets(itemSupplements);
-            ProcessManualItems( itemSupplements );
-            ProcessMobDrops( mobDrops );
-            ProcessDutiesJson( dungeonChests, dungeonChestItems, dungeonBosses, dungeonBossChests, dungeonBossDrops );
-            ProcessEventNpcs( eNpcPlaces );
-            ProcessShopNames( shopNames );
-            ProcessEventShops( eNpcShops );
-            ProcessAirshipUnlocks( airshipUnlocks, airshipDrops );
-            ProcessSubmarineUnlocks( submarineUnlocks, submarineDrops );
-            ProcessMobSpawnData( mobSpawns );
-            ProcessPatchData( itemPatches );
-            ProcessRetainerVentures( retainerVentureItems );
-            ProcessStoreItems( storeItems );
-            ProcessSkybuilderItems(itemSupplements);
-
-            WriteFile( itemSupplements, $"./output/ItemSupplement.csv" );
-            WriteFile( airshipDrops, $"./output/AirshipDrop.csv" );
-            WriteFile( submarineDrops, $"./output/SubmarineDrop.csv" );
-            WriteFile( dungeonDrops, $"./output/DungeonDrop.csv" );
-            WriteFile( mobDrops, $"./output/MobDrop.csv" );
-            WriteFile( dungeonChests, $"./output/DungeonChest.csv" );
-            WriteFile( dungeonChestItems, $"./output/DungeonChestItem.csv" );
-            WriteFile( dungeonBosses, $"./output/DungeonBoss.csv" );
-            WriteFile( dungeonBossChests, $"./output/DungeonBossChest.csv" );
-            WriteFile( dungeonBossDrops, $"./output/DungeonBossDrop.csv" );
-            WriteFile( eNpcPlaces, $"./output/ENpcPlace.csv" );
-            WriteFile( shopNames, $"./output/ShopName.csv" );
-            WriteFile( eNpcShops, $"./output/ENpcShop.csv" );
-            WriteFile( airshipUnlocks, $"./output/AirshipUnlock.csv" );
-            WriteFile( submarineUnlocks, $"./output/SubmarineUnlock.csv" );
-            WriteFile( mobSpawns, $"./output/MobSpawn.csv" );
-            WriteFile( itemPatches, $"./output/ItemPatch.csv" );
-            WriteFile( retainerVentureItems, $"./output/RetainerVentureItem.csv" );
-            WriteFile( storeItems, $"./output/StoreItem.csv" );
-        }
 
         private void ProcessSkybuilderItems( List< ItemSupplement > itemSupplements )
         {
@@ -1221,6 +1228,23 @@ namespace LuminaSupplemental.SpaghettiGenerator
             return recA.IntersectsWith(recB);
         }
 
+        private List<string> _disallowedBNpcNames;
+
+        private void GenerateDisallowedBNpcNameList()
+        {
+            _disallowedBNpcNames = new List< string >();
+            var pets = _petSheet.Where( c => c.Name.ToString().ToParseable() != "" );
+            foreach( var pet in pets )
+            {
+                _disallowedBNpcNames.Add( pet.Name.ToString().ToParseable() );
+            }
+            var companions = _companionSheet.Where( c => c.Singular.ToString().ToParseable() != "" );
+            foreach( var companion in companions )
+            {
+                _disallowedBNpcNames.Add( companion.Singular.ToString().ToParseable() );
+            }
+        }
+
         private bool MobAllowed( uint bnpcNameId )
         {
             if( bnpcNameId == 0 )
@@ -1228,25 +1252,18 @@ namespace LuminaSupplemental.SpaghettiGenerator
                 return false;
             }
             var bnpcName = _bnpcNameSheet.GetRow( bnpcNameId );
-            var bannedNames = new List< string >()
+            if( bnpcName == null )
             {
-                "Emerald Carbuncle",
-                "Topaz Carbuncle",
-                "Carbuncle",
-                "Ruby Carbuncle",
-                "Eos",
-                "Selene",
-                "Ifrit-Egi",
-                "Titan-Egi",
-                "Garuda-Egi",
-                "Demi-Bahamut",
-                "Demi-Phoenix",
-                "Esteem",
-                "Automaton Queen",
-                "Rook Autoturret",
-                "Seraph",
-            };
-            var hashSet = bannedNames.Select( c => c.ToParseable() ).ToHashSet();
+                Console.WriteLine( $"Failed to find bnpcname with ID {bnpcNameId}");
+                return false;
+            }
+
+            if( _disallowedBNpcNames == null )
+            {
+                GenerateDisallowedBNpcNameList();
+            }
+
+            var hashSet = _disallowedBNpcNames.ToHashSet();
             return !hashSet.Contains( bnpcName.Singular.ToString().ToParseable() );
         }
 
@@ -1279,7 +1296,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
             foreach( var territory in _territoryTypeSheet )
             {
                 var placeName = territory.PlaceName.Value.Name.ToString().ToParseable();
-                if( hashSet.Contains( placeName ) )
+                if( hashSet.Contains( placeName ) || territory.PlaceName.Row == 0 )
                 {
                     _territoriesAllowed.Add( territory.RowId, false );
                 }
@@ -1309,7 +1326,42 @@ namespace LuminaSupplemental.SpaghettiGenerator
             }
             var newPositions = positions.SelectMany(c => c.Value.SelectMany(d => d.Value.Select(e => e))).ToList();
             npcPlaces.AddRange( newPositions );
+
+            try
+            {
+                MappyParser.UpdateMappyData();
+            }
+            catch( Exception e )
+            {
+                Console.WriteLine( "Failed to parse mappy data because " + e.Message );
+                throw;
+            }
+
+            var mappyEntries = MappyParser.MappyEntries;
+
+            foreach( var mappyEntry in mappyEntries )
+            {
+                if( mappyEntry.Type == "BNPC" )
+                {
+                    MobSpawnPosition mobSpawnPosition = new MobSpawnPosition();
+                    mobSpawnPosition.Position = new Vector3( (float)mappyEntry.CoordinateX, (float)mappyEntry.CoordinateY, (float)mappyEntry.CoordinateZ );
+                    mobSpawnPosition.BNpcNameId = mappyEntry.BNpcBaseID;
+                    mobSpawnPosition.BNpcBaseId = mappyEntry.BNpcNameID;
+                    mobSpawnPosition.TerritoryTypeId = (uint)mappyEntry.MapTerritoryID;
+                    mobSpawnPosition.Subtype = 0;
+                    if( _bnpcNameSheet.GetRow( mappyEntry.BNpcNameID ) != null )
+                    {
+                        AddEntry( mobSpawnPosition, positions );
+                    }
+                    else
+                    {
+                        Console.WriteLine( $"Failed to find bnpcname with ID {mappyEntry.BNpcNameID}");
+                    }
+                }
+            }
+
         }
+
         private const float maxRange = 1.0f;
         public void AddEntry(MobSpawnPosition spawnPosition, Dictionary< uint, Dictionary< uint, List< MobSpawnPosition > > > positions)
         {
