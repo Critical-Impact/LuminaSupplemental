@@ -1,0 +1,15 @@
+[Basic]
+FFXIVGameDirectory=C:\Program Files (x86)\SquareEnix\FINAL FANTASY XIV - A Realm Reborn\game\sqpack
+LibraSQLFilePath=C:\somedirectory\app_data.sqlite #you must provide this file yourself
+
+[Parsing]
+ParseOnlineSources=False
+OnlineCacheDirectory=C:\somedirectory
+ProcessMobSpawnHTML=False
+
+[Proxy]
+ProxyEnable=False
+ProxyHost=proxy.example.com
+ProxyPort=8080
+ProxyUsername=myusername
+ProxyPassword=mypassword

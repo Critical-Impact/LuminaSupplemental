@@ -60,7 +60,7 @@ public class StoreParser {
     }
 
 
-    public static void UpdateItems() {
+    public static void UpdateItems(string cacheDirectory) {
         UpdateStatus = "Fetching Product List";
         using var wc = new WebClient();
         var json = wc.DownloadString("https://api.store.finalfantasyxiv.com/ffxivcatalog/api/products/?lang=en-us&currency=USD&limit=10000");
@@ -71,8 +71,7 @@ public class StoreParser {
         }
 
         StoreItems.Clear();
-
-        var storeProductCacheDirectory = "./FFXIV Store Cache";
+        var storeProductCacheDirectory = Path.Combine(cacheDirectory,"FFXIV Store Cache");;
         Directory.CreateDirectory(storeProductCacheDirectory);
 
         var allItems = Service.GameData.Excel.GetSheet<Item>(Language.English);

@@ -1,3 +1,6 @@
 [submodule "src/GarlandTools"]
 	path = src/GarlandTools
 	url = https://github.com/ufx/GarlandTools
+[submodule "src/ffxiv-lodestone-item-id"]
+	path = src/ffxiv-lodestone-item-id
+	url = https://github.com/Asvel/ffxiv-lodestone-item-id.git

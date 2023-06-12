@@ -28,7 +28,9 @@ namespace LuminaSupplemental.SpaghettiGenerator
         private Dictionary< string, RetainerTaskRandom > _retainerTaskRandomByName;
         private Dictionary< string, FittingShopItemSet > _fittingShopItemSetByName;
         private ExcelSheet<Item> _itemSheet;
+        private HashSet<uint> _bannedItems;
         private ExcelSheet<BNpcName> _bnpcNameSheet;
+        private AppConfig _appConfig;
         private readonly ExcelSheet<SubmarineExploration> _submarineSheet;
         private readonly ExcelSheet<AirshipExplorationPoint> _airshipSheet;
         private readonly ExcelSheet<RetainerTaskRandom> _retainerTaskRandomSheet;
@@ -38,7 +40,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
         private readonly ExcelSheet<Pet> _petSheet;
 
 
-        public LookupGenerator(string tmplPath = null)
+        public LookupGenerator(AppConfig appConfig)
         {
             _itemSheet = Service.GameData.GetExcelSheet<Item>()!;
             _bnpcNameSheet = Service.GameData.GetExcelSheet<BNpcName>()!;
@@ -49,10 +51,16 @@ namespace LuminaSupplemental.SpaghettiGenerator
             _fittingShopItemSetSheet = Service.GameData.GetExcelSheet<FittingShopItemSet>()!;
             _companionSheet = Service.GameData.GetExcelSheet<Companion>()!;
             _petSheet = Service.GameData.GetExcelSheet<Pet>()!;
+            _appConfig = appConfig;
+            _bannedItems = new HashSet< uint >()
+            {
+                0,
+                24225
+            };
             var dutySheet = Service.GameData.GetExcelSheet<ContentFinderCondition>()!;
 
             _itemsByName = new Dictionary<string, Item>();
-            foreach (var item in _itemSheet)
+            foreach (var item in _itemSheet.Where(c => !_bannedItems.Contains(c.RowId) && c.Name.ToString() != ""))
             {
                 _itemsByName.TryAdd(item.Name.ToString().ToParseable(), item);
             }
@@ -116,28 +124,59 @@ namespace LuminaSupplemental.SpaghettiGenerator
             var retainerVentureItems = new List< RetainerVentureItem >();
             var storeItems = new List< StoreItem >();
 
-            StoreParser.UpdateItems();
+            if( _appConfig.Parsing.ParseOnlineSources )
+            {
+                Console.WriteLine("Parsing Lodestone");
+                LodestoneParser.ParsePages(_appConfig.Parsing.OnlineCacheDirectory);
+                Console.WriteLine("Parsing SQ Store");
+                StoreParser.UpdateItems(_appConfig.Parsing.OnlineCacheDirectory);
+            }
+
+            Console.WriteLine("Processing supplement TSVs");
             ProcessItemsTSV(itemSupplements, dungeonDrops);
+            Console.WriteLine("Calculating extra item sets");
             ParseExtraItemSets(itemSupplements);
+            Console.WriteLine("Processing manually supplied supplements");
             ProcessManualItems( itemSupplements );
-            ProcessMobDrops( mobDrops );
+            if( _appConfig.Parsing.ProcessMobSpawnHTML )
+            {
+                Console.WriteLine("Processing mob drop data from lodestone HTML, this may take a while");
+                ProcessMobDrops( mobDrops );
+            }
+            
+            Console.WriteLine("Processing duty information");
             ProcessDutiesJson( dungeonChests, dungeonChestItems, dungeonBosses, dungeonBossChests, dungeonBossDrops );
+            Console.WriteLine("Processing additional event NPC locations");
             ProcessEventNpcs( eNpcPlaces );
+            Console.WriteLine("Processing additional shop names");
             ProcessShopNames( shopNames );
+            Console.WriteLine("Processing additional event shops");
             ProcessEventShops( eNpcShops );
+            Console.WriteLine("Processing airship unlock/drop data");
             ProcessAirshipUnlocks( airshipUnlocks, airshipDrops );
+            Console.WriteLine("Processing submarine unlock/drop data");
             ProcessSubmarineUnlocks( submarineUnlocks, submarineDrops );
+            Console.WriteLine("Processing mob spawn data");
             ProcessMobSpawnData( mobSpawns );
+            Console.WriteLine("Processing patch information about items");
             ProcessPatchData( itemPatches );
+            Console.WriteLine("Calculating venture items");
             ProcessRetainerVentures( retainerVentureItems );
+            Console.WriteLine("Processing SQ store items");
             ProcessStoreItems( storeItems );
+            Console.WriteLine("Processing Skybuilder Items");
             ProcessSkybuilderItems(itemSupplements);
 
+            Console.WriteLine("Writing to output directory");
             WriteFile( itemSupplements, $"./output/ItemSupplement.csv" );
             WriteFile( airshipDrops, $"./output/AirshipDrop.csv" );
             WriteFile( submarineDrops, $"./output/SubmarineDrop.csv" );
             WriteFile( dungeonDrops, $"./output/DungeonDrop.csv" );
-            WriteFile( mobDrops, $"./output/MobDrop.csv" );
+            if( _appConfig.Parsing.ProcessMobSpawnHTML )
+            {
+                WriteFile( mobDrops, $"./output/MobDrop.csv" );
+            }
+
             WriteFile( dungeonChests, $"./output/DungeonChest.csv" );
             WriteFile( dungeonChestItems, $"./output/DungeonChestItem.csv" );
             WriteFile( dungeonBosses, $"./output/DungeonBoss.csv" );
@@ -318,7 +357,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
                                 {
                                     var itemName = drop.Name.ToParseable();
                                     var actualItem = _itemsByName.ContainsKey( itemName ) ? _itemsByName[ itemName ] : null;
-                                    if( actualItem != null )
+                                    if( actualItem != null && actualItem.RowId != 0 )
                                     {
                                         dungeonBossDrops.Add( new DungeonBossDrop((uint)(dungeonBossDrops.Count + 1), actualDuty.RowId, (uint)index, actualItem.RowId, 1 ) );
                                     }
@@ -439,16 +478,16 @@ namespace LuminaSupplemental.SpaghettiGenerator
             {
                 var coffers = _itemSheet.Where( c =>
                 {
-                    return c.Name.ToString().StartsWith( cofferName.Key[ 0 ] ) && cofferName.Key.Skip( 1 ).All( d => c.Name.ToString().Contains( d ) );
+                    return  !_bannedItems.Contains(c.RowId) && c.Name.ToString().StartsWith( cofferName.Key[ 0 ] ) && cofferName.Key.Skip( 1 ).All( d => c.Name.ToString().Contains( d ) );
                 } ).ToList();
                 foreach( var coffer in coffers )
                 {
                     var fullName = String.Join( " ", cofferName.Key );
                     if( coffer.Name == fullName )
                     {
-                        var items = _itemSheet.Where( c =>
-                            c.Name.ToString().StartsWith( cofferName.Value ) &&
-                            ( ( c.EquipSlotCategory.Value?.MainHand ?? 0 ) == 1 || ( c.EquipSlotCategory.Value?.OffHand ?? 0 ) == 1 ) );
+                        var items = _itemSheet.Where( c => !_bannedItems.Contains(c.RowId) &&
+                                                           c.Name.ToString().StartsWith( cofferName.Value ) &&
+                                                           ( ( c.EquipSlotCategory.Value?.MainHand ?? 0 ) == 1 || ( c.EquipSlotCategory.Value?.OffHand ?? 0 ) == 1 ) );
                         foreach( var item in items )
                         {
                             
@@ -491,14 +530,14 @@ namespace LuminaSupplemental.SpaghettiGenerator
                         };
                         foreach( var potentialItem in potentialItems )
                         {
-                            var items = _itemSheet.Where( c => c.Name.ToString().Contains( cofferName.Value ) && c.Name.ToString().Contains( potentialItem ) && 
-                                ( 
-                                    ( c.EquipSlotCategory.Value?.Body ?? 0 ) == 1 || 
-                                    ( c.EquipSlotCategory.Value?.Feet ?? 0 ) == 1  || 
-                                    ( c.EquipSlotCategory.Value?.Head ?? 0 ) == 1  || 
-                                    ( c.EquipSlotCategory.Value?.Gloves ?? 0 ) == 1  || 
-                                    ( c.EquipSlotCategory.Value?.Legs ?? 0 ) == 1 
-                                ));
+                            var items = _itemSheet.Where( c => !_bannedItems.Contains(c.RowId) && c.Name.ToString().Contains( cofferName.Value ) && c.Name.ToString().Contains( potentialItem ) && 
+                                                               ( 
+                                                                   ( c.EquipSlotCategory.Value?.Body ?? 0 ) == 1 || 
+                                                                   ( c.EquipSlotCategory.Value?.Feet ?? 0 ) == 1  || 
+                                                                   ( c.EquipSlotCategory.Value?.Head ?? 0 ) == 1  || 
+                                                                   ( c.EquipSlotCategory.Value?.Gloves ?? 0 ) == 1  || 
+                                                                   ( c.EquipSlotCategory.Value?.Legs ?? 0 ) == 1 
+                                                               ));
                             foreach( var item in items )
                             {
                                 itemSupplements.Add( new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot) );
@@ -509,9 +548,9 @@ namespace LuminaSupplemental.SpaghettiGenerator
                     //Weapon, Gear, Accessories
                     if( coffer.Name.ToString().Contains( "Weapon" ) )
                     {
-                        var items = _itemSheet.Where( c =>
-                            c.Name.ToString().Contains( cofferName.Value ) &&
-                            ( ( c.EquipSlotCategory.Value?.MainHand ?? 0 ) == 1 || ( c.EquipSlotCategory.Value?.OffHand ?? 0 ) == 1 ) );
+                        var items = _itemSheet.Where( c => !_bannedItems.Contains(c.RowId) &&
+                                                           c.Name.ToString().Contains( cofferName.Value ) &&
+                                                           ( ( c.EquipSlotCategory.Value?.MainHand ?? 0 ) == 1 || ( c.EquipSlotCategory.Value?.OffHand ?? 0 ) == 1 ) );
                         foreach( var item in items )
                         {
                             
@@ -536,15 +575,15 @@ namespace LuminaSupplemental.SpaghettiGenerator
                         {
                             if( coffer.Name.ToString().Contains( armourType ) )
                             {
-                                var items = _itemSheet.Where( c =>
-                                    c.Name.ToString().Contains( cofferName.Value ) && c.Name.ToString().Contains( armourType ) && 
-                                    ( 
-                                        ( c.EquipSlotCategory.Value?.Body ?? 0 ) == 1 || 
-                                        ( c.EquipSlotCategory.Value?.Feet ?? 0 ) == 1  || 
-                                        ( c.EquipSlotCategory.Value?.Head ?? 0 ) == 1  || 
-                                        ( c.EquipSlotCategory.Value?.Gloves ?? 0 ) == 1  || 
-                                        ( c.EquipSlotCategory.Value?.Legs ?? 0 ) == 1 
-                                    ));
+                                var items = _itemSheet.Where( c => !_bannedItems.Contains(c.RowId) &&
+                                                                   c.Name.ToString().Contains( cofferName.Value ) && c.Name.ToString().Contains( armourType ) && 
+                                                                   ( 
+                                                                       ( c.EquipSlotCategory.Value?.Body ?? 0 ) == 1 || 
+                                                                       ( c.EquipSlotCategory.Value?.Feet ?? 0 ) == 1  || 
+                                                                       ( c.EquipSlotCategory.Value?.Head ?? 0 ) == 1  || 
+                                                                       ( c.EquipSlotCategory.Value?.Gloves ?? 0 ) == 1  || 
+                                                                       ( c.EquipSlotCategory.Value?.Legs ?? 0 ) == 1 
+                                                                   ));
                                 foreach( var item in items )
                                 {
                                     itemSupplements.Add( new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot) );
@@ -555,9 +594,9 @@ namespace LuminaSupplemental.SpaghettiGenerator
 
                     if( coffer.Name.ToString().Contains( "Head Gear" ) )
                     {
-                        var items = _itemSheet.Where( c =>
-                            c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
-                            ( c.EquipSlotCategory.Value?.Head ?? 0 ) == 1);
+                        var items = _itemSheet.Where( c => !_bannedItems.Contains(c.RowId) &&
+                                                           c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
+                                                           ( c.EquipSlotCategory.Value?.Head ?? 0 ) == 1);
                         foreach( var item in items )
                         {
                             itemSupplements.Add( new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot) );
@@ -566,9 +605,9 @@ namespace LuminaSupplemental.SpaghettiGenerator
 
                     if( coffer.Name.ToString().Contains( "Chest Gear" ) )
                     {
-                        var items = _itemSheet.Where( c =>
-                            c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
-                            ( c.EquipSlotCategory.Value?.Body ?? 0 ) == 1);
+                        var items = _itemSheet.Where( c => !_bannedItems.Contains(c.RowId) &&
+                                                           c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
+                                                           ( c.EquipSlotCategory.Value?.Body ?? 0 ) == 1);
                         foreach( var item in items )
                         {
                             itemSupplements.Add( new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot) );
@@ -577,9 +616,9 @@ namespace LuminaSupplemental.SpaghettiGenerator
 
                     if( coffer.Name.ToString().Contains( "Hand Gear" ) )
                     {
-                        var items = _itemSheet.Where( c =>
-                            c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
-                            ( c.EquipSlotCategory.Value?.Gloves ?? 0 ) == 1);
+                        var items = _itemSheet.Where( c => !_bannedItems.Contains(c.RowId) &&
+                                                           c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
+                                                           ( c.EquipSlotCategory.Value?.Gloves ?? 0 ) == 1);
                         foreach( var item in items )
                         {
                             itemSupplements.Add( new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot) );
@@ -588,9 +627,9 @@ namespace LuminaSupplemental.SpaghettiGenerator
 
                     if( coffer.Name.ToString().Contains( "Leg Gear" ) )
                     {
-                        var items = _itemSheet.Where( c =>
-                            c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
-                            ( c.EquipSlotCategory.Value?.Legs ?? 0 ) == 1);
+                        var items = _itemSheet.Where( c => !_bannedItems.Contains(c.RowId) &&
+                                                           c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
+                                                           ( c.EquipSlotCategory.Value?.Legs ?? 0 ) == 1);
                         foreach( var item in items )
                         {
                             itemSupplements.Add( new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot) );
@@ -599,9 +638,9 @@ namespace LuminaSupplemental.SpaghettiGenerator
 
                     if( coffer.Name.ToString().Contains( "Foot Gear" ) )
                     {
-                        var items = _itemSheet.Where( c =>
-                            c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
-                            ( c.EquipSlotCategory.Value?.Feet ?? 0 ) == 1);
+                        var items = _itemSheet.Where( c => !_bannedItems.Contains(c.RowId) &&
+                                                           c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
+                                                           ( c.EquipSlotCategory.Value?.Feet ?? 0 ) == 1);
                         foreach( var item in items )
                         {
                             itemSupplements.Add( new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot) );
@@ -610,9 +649,9 @@ namespace LuminaSupplemental.SpaghettiGenerator
 
                     if( coffer.Name.ToString().Contains( "Earring Coffer" ) )
                     {
-                        var items = _itemSheet.Where( c =>
-                            c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
-                            ( c.EquipSlotCategory.Value?.Ears ?? 0 ) == 1);
+                        var items = _itemSheet.Where( c => !_bannedItems.Contains(c.RowId) &&
+                                                           c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
+                                                           ( c.EquipSlotCategory.Value?.Ears ?? 0 ) == 1);
                         foreach( var item in items )
                         {
                             itemSupplements.Add( new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot) );
@@ -621,9 +660,9 @@ namespace LuminaSupplemental.SpaghettiGenerator
 
                     if( coffer.Name.ToString().Contains( "Necklace Coffer" ) )
                     {
-                        var items = _itemSheet.Where( c =>
-                            c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
-                            ( c.EquipSlotCategory.Value?.Neck ?? 0 ) == 1);
+                        var items = _itemSheet.Where( c => !_bannedItems.Contains(c.RowId) &&
+                                                           c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
+                                                           ( c.EquipSlotCategory.Value?.Neck ?? 0 ) == 1);
                         foreach( var item in items )
                         {
                             itemSupplements.Add( new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot) );
@@ -632,9 +671,9 @@ namespace LuminaSupplemental.SpaghettiGenerator
 
                     if( coffer.Name.ToString().Contains( "Bracelet Coffer" ) )
                     {
-                        var items = _itemSheet.Where( c =>
-                            c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
-                            ( c.EquipSlotCategory.Value?.Wrists ?? 0 ) == 1);
+                        var items = _itemSheet.Where( c => !_bannedItems.Contains(c.RowId) &&
+                                                           c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
+                                                           ( c.EquipSlotCategory.Value?.Wrists ?? 0 ) == 1);
                         foreach( var item in items )
                         {
                             itemSupplements.Add( new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot) );
@@ -643,9 +682,9 @@ namespace LuminaSupplemental.SpaghettiGenerator
 
                     if( coffer.Name.ToString().Contains( "Ring Coffer" ) )
                     {
-                        var items = _itemSheet.Where( c =>
-                            c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
-                            ( c.EquipSlotCategory.Value?.FingerL ?? 0 ) == 1);
+                        var items = _itemSheet.Where( c => !_bannedItems.Contains(c.RowId) &&
+                                                           c.Name.ToString().StartsWith( cofferName.Value ) && c.Name.ToString().Contains( " of " ) && 
+                                                           ( c.EquipSlotCategory.Value?.FingerL ?? 0 ) == 1);
                         foreach( var item in items )
                         {
                             itemSupplements.Add( new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot) );
@@ -669,7 +708,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
                         {
                             if( coffer.Name.ToString().Contains( armourType ) )
                             {
-                                var items = _itemSheet.Where( c => c.Name.ToString().Contains( cofferName.Value ) && c.Name.ToString().Contains( armourType ) && 
+                                var items = _itemSheet.Where( c => !_bannedItems.Contains(c.RowId) && c.Name.ToString().Contains( cofferName.Value ) && c.Name.ToString().Contains( armourType ) && 
                                ( 
                                    ( c.EquipSlotCategory.Value?.Ears ?? 0 ) == 1 || 
                                    ( c.EquipSlotCategory.Value?.Neck ?? 0 ) == 1  || 
@@ -730,7 +769,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
 
         private void ProcessSkybuilderItems( List< ItemSupplement > itemSupplements )
         {
-            var items = _itemSheet.Where( c => c.Name.ToString().Contains( "Approved" ) ).ToList();
+            var items = _itemSheet.Where( c => !_bannedItems.Contains(c.RowId) && c.Name.ToString().Contains( "Approved" ) ).ToList();
             foreach( var item in items )
             {
                 var regularVersion = item.Name.ToString().Replace( "Approved ", "" ).ToParseable();
@@ -1197,13 +1236,20 @@ namespace LuminaSupplemental.SpaghettiGenerator
 
         public void ProcessMobDrops(List<MobDrop> mobDrops)
         {
-            var itemDrops = Service.DatabaseBuilder.ItemDropsByMobId;
+            /*var itemDrops = Service.DatabaseBuilder.ItemDropsByMobId;
             foreach( var itemDrop in itemDrops )
             {
                 foreach( var itemId in itemDrop.Value )
                 {
                     mobDrops.Add( new MobDrop((uint)(mobDrops.Count + 1), itemId, itemDrop.Key ) );
                 }
+            }*/
+
+            var storeMobDrops = LodestoneParser.ParseMobDrops();
+            foreach( var storeMobDrop in storeMobDrops )
+            {
+                storeMobDrop.RowId = (uint)(mobDrops.Count + 1);
+                mobDrops.Add( storeMobDrop );
             }
         }
         public void ProcessEventNpcs(List<ENpcPlace> npcPlaces)
@@ -1254,7 +1300,6 @@ namespace LuminaSupplemental.SpaghettiGenerator
             var bnpcName = _bnpcNameSheet.GetRow( bnpcNameId );
             if( bnpcName == null )
             {
-                Console.WriteLine( $"Failed to find bnpcname with ID {bnpcNameId}");
                 return false;
             }
 
@@ -1345,8 +1390,8 @@ namespace LuminaSupplemental.SpaghettiGenerator
                 {
                     MobSpawnPosition mobSpawnPosition = new MobSpawnPosition();
                     mobSpawnPosition.Position = new Vector3( (float)mappyEntry.CoordinateX, (float)mappyEntry.CoordinateY, (float)mappyEntry.CoordinateZ );
-                    mobSpawnPosition.BNpcNameId = mappyEntry.BNpcBaseID;
-                    mobSpawnPosition.BNpcBaseId = mappyEntry.BNpcNameID;
+                    mobSpawnPosition.BNpcNameId = mappyEntry.BNpcNameID;
+                    mobSpawnPosition.BNpcBaseId = mappyEntry.BNpcBaseID;
                     mobSpawnPosition.TerritoryTypeId = (uint)mappyEntry.MapTerritoryID;
                     mobSpawnPosition.Subtype = 0;
                     if( _bnpcNameSheet.GetRow( mappyEntry.BNpcNameID ) != null )
