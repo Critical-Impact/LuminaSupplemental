@@ -68,7 +68,7 @@ public class MobSpawnPosition : ICsv
             BNpcBaseId.ToString(),
             BNpcNameId.ToString(),
             TerritoryTypeId.ToString(),
-            Position.X + ";" + Position.Y + ";" + Position.Z,
+            Position.X.ToString(CultureInfo.InvariantCulture) + ";" + Position.Y.ToString(CultureInfo.InvariantCulture) + ";" + Position.Z.ToString(CultureInfo.InvariantCulture),
             Subtype.ToString()
         };
         return data.ToArray();
@@ -76,7 +76,7 @@ public class MobSpawnPosition : ICsv
 
     public bool IncludeInCsv()
     {
-        return false;
+        return true;
     }
 
     public virtual void PopulateData( GameData gameData, Language language )
