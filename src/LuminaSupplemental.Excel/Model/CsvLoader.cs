@@ -17,8 +17,13 @@ public static class CsvLoader
         using var fileStream = new FileStream( filePath, FileMode.Open );
         using( StreamReader reader = new StreamReader( fileStream ) )
         {
-            var csvReader = CSVFile.CSVReader.FromString( reader.ReadToEnd() );
             var items = new List< T >();
+            //Loading an empty file
+            if( reader.EndOfStream )
+            {
+                return items;
+            }
+            var csvReader = CSVFile.CSVReader.FromString( reader.ReadToEnd() );
             foreach( var line in csvReader.Lines() )
             {
                 T item = new T();
