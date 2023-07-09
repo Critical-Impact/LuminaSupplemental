@@ -38,6 +38,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
         private readonly ExcelSheet<TerritoryType> _territoryTypeSheet;
         private readonly ExcelSheet<Companion> _companionSheet;
         private readonly ExcelSheet<Pet> _petSheet;
+        private readonly ExcelSheet<ENpcResident> _enpcResidentSheet;
 
 
         public LookupGenerator(AppConfig appConfig)
@@ -51,6 +52,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
             _fittingShopItemSetSheet = Service.GameData.GetExcelSheet<FittingShopItemSet>()!;
             _companionSheet = Service.GameData.GetExcelSheet<Companion>()!;
             _petSheet = Service.GameData.GetExcelSheet<Pet>()!;
+            _enpcResidentSheet = Service.GameData.GetExcelSheet<ENpcResident>()!;
             _appConfig = appConfig;
             _bannedItems = new HashSet< uint >()
             {
@@ -123,6 +125,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
             var itemPatches = new List< ItemPatch >();
             var retainerVentureItems = new List< RetainerVentureItem >();
             var storeItems = new List< StoreItem >();
+            var houseVendors = new List< HouseVendor >();
 
             if( _appConfig.Parsing.ParseOnlineSources )
             {
@@ -166,6 +169,8 @@ namespace LuminaSupplemental.SpaghettiGenerator
             ProcessStoreItems( storeItems );
             Console.WriteLine("Processing Skybuilder Items");
             ProcessSkybuilderItems(itemSupplements);
+            Console.WriteLine("Processing house vendors");
+            ProcessHouseVendors( houseVendors );
 
             Console.WriteLine("Writing to output directory");
             WriteFile( itemSupplements, $"./output/ItemSupplement.csv" );
@@ -191,6 +196,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
             WriteFile( itemPatches, $"./output/ItemPatch.csv" );
             WriteFile( retainerVentureItems, $"./output/RetainerVentureItem.csv" );
             WriteFile( storeItems, $"./output/StoreItem.csv" );
+            WriteFile( houseVendors, $"./output/HouseVendor.csv" );
         }
 
         public void ProcessShopNames(List<ShopName> shopNames)
@@ -791,6 +797,39 @@ namespace LuminaSupplemental.SpaghettiGenerator
             }
         }
 
+        private void ProcessHouseVendors( List< HouseVendor > houseVendors )
+        {
+            var reader = CSVFile.CSVReader.FromFile(@"ManualData\HouseVendors.csv");
+
+            Dictionary< string, List< uint > > groupedResidents = new();
+
+            foreach( var line in reader.Lines() )
+            {
+                var residentId = uint.Parse(line[ 0 ]);
+                var resident = _enpcResidentSheet.GetRow( residentId );
+                if( resident != null )
+                {
+                     var residentName = resident.Singular.ToString().ToParseable();
+                     groupedResidents.TryAdd( residentName, new List< uint >() );
+                     groupedResidents[residentName].Add( residentId );
+                }
+            }
+
+            foreach( var item in groupedResidents )
+            {
+                var parentId = item.Value.First();
+                var children = item.Value.Skip( 1 );
+                var houseVendor = new HouseVendor((uint)(houseVendors.Count + 1), parentId, 0);
+                houseVendors.Add( houseVendor );
+                foreach( var child in children )
+                {
+                    var childVendor = new HouseVendor((uint)(houseVendors.Count + 1), child, parentId);
+                    houseVendors.Add( childVendor );
+                }
+            }
+
+        }
+
         private void ProcessStoreItems( List< StoreItem > storeItems )
         {
             foreach( var product in StoreParser.StoreProducts )
@@ -1368,6 +1407,8 @@ namespace LuminaSupplemental.SpaghettiGenerator
                     mobSpawnPosition.FromCsv(line);
                     AddEntry( mobSpawnPosition, positions );
                 }
+
+
             }
             var newPositions = positions.SelectMany(c => c.Value.SelectMany(d => d.Value.Select(e => e))).ToList();
             npcPlaces.AddRange( newPositions );

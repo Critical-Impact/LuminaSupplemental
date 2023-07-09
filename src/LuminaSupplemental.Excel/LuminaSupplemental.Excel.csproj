@@ -69,5 +69,6 @@
       <EmbeddedResource Include="Generated\ItemPatch.csv" />
       <EmbeddedResource Include="Generated\RetainerVentureItem.csv" />
       <EmbeddedResource Include="Generated\StoreItem.csv" />
+      <EmbeddedResource Include="Generated\HouseVendor.csv" />
     </ItemGroup>
 </Project>
