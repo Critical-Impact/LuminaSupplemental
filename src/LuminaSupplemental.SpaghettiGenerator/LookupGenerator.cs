@@ -257,6 +257,15 @@ namespace LuminaSupplemental.SpaghettiGenerator
                 {1770282,"Exchange Faux Leaves"},
                 {1770286,"Exchange Faire Voucher"},
                 {1770087,"Exchange Bozjan clusters for items."},
+                {1769957,"Gemstone Trader"},
+                {1769958,"Gemstone Trader"},
+                {1769959,"Gemstone Trader"},
+                {1769960,"Gemstone Trader"},
+                {1769961,"Gemstone Trader"},
+                {1769962,"Gemstone Trader"},
+                {1769963,"Gemstone Trader"},
+                {1769964,"Gemstone Trader"},
+                {262919,"Doman Junkmonger"},
             };
             foreach( var shopName in shops )
             {
