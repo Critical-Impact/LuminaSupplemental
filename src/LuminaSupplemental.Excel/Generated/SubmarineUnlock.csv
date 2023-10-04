@@ -92,7 +92,5 @@ RowId,SubmarineExplorationId,SubmarineExplorationUnlockId,RankRequired
 91,95,93,105
 92,96,95,105
 93,97,95,105
-94,98,96,106
-95,99,97,107
-96,100,96,108
-97,101,97,110
+94,99,97,107
+95,100,96,108
