@@ -31,6 +31,9 @@
         <DalamudLibPath>$(AppData)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'">
+        <DalamudLibPath>$(DALAMUD_HOME)/</DalamudLibPath>
+    </PropertyGroup>
 
     <ItemGroup>
         <Reference Include="Lumina">
