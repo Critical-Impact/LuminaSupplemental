@@ -1457,7 +1457,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
 
         }
 
-        private const float maxRange = 1.0f;
+        private const float maxRange = 4.0f;
         public void AddEntry(MobSpawnPosition spawnPosition, Dictionary< uint, Dictionary< uint, List< MobSpawnPosition > > > positions)
         {
             positions.TryAdd(spawnPosition.TerritoryTypeId, new Dictionary<uint, List<MobSpawnPosition>>());
