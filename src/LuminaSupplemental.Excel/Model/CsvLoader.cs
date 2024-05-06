@@ -12,11 +12,12 @@ namespace LuminaSupplemental.Excel.Model;
 
 public static class CsvLoader
 {
-    public static List< T > LoadCsv<T>(string filePath, GameData? gameData = null, Language? language = null) where T : ICsv, new()
+    public static List< T > LoadCsv<T>(string filePath, out List<string> failedLines, GameData? gameData = null, Language? language = null) where T : ICsv, new()
     {
         using var fileStream = new FileStream( filePath, FileMode.Open );
         using( StreamReader reader = new StreamReader( fileStream ) )
         {
+            failedLines = new List< string >();
             var items = new List< T >();
             //Loading an empty file
             if( reader.EndOfStream )
@@ -27,16 +28,24 @@ public static class CsvLoader
             foreach( var line in csvReader.Lines() )
             {
                 T item = new T();
-                item.FromCsv( line );
-                if( gameData != null && language != null )
+                try
                 {
-                    item.PopulateData( gameData, language.Value );
+                    item.FromCsv( line );
+                    if( gameData != null && language != null )
+                    {
+                        item.PopulateData( gameData, language.Value );
+                    }
+                    items.Add( item );
                 }
-                items.Add( item );
+                catch( Exception e )
+                {
+                    failedLines.Add( String.Join( ",",line ) );
+                }
             }
             return items;
         }
     }
+    
     public const string DungeonBossResourceName = "LuminaSupplemental.Excel.Generated.DungeonBoss.csv";
     public const string DungeonBossChestResourceName = "LuminaSupplemental.Excel.Generated.DungeonBossChest.csv";
     public const string DungeonBossDropResourceName = "LuminaSupplemental.Excel.Generated.DungeonBossDrop.csv";
