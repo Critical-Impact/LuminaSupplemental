@@ -294,6 +294,13 @@ namespace LuminaSupplemental.SpaghettiGenerator
                 var patchId = decimal.Parse(line[ 1 ], CultureInfo.InvariantCulture);
                 patches.Add( new PatchJson() {Patch = patchId, Id = sourceItemId, Type = "item"} );
             }
+            var patchWhereItemKnown = patches.Select( c => c.Id ).Distinct().ToHashSet();
+            var unknownPatchItems = _itemSheet.Where( c => !patchWhereItemKnown.Contains( c.RowId ) ).ToList();
+            foreach( var unknownPatchItem in unknownPatchItems )
+            {
+                patches.Add( new PatchJson() {Patch = new(9.9), Id = unknownPatchItem.RowId, Type = "item"} );
+                Console.WriteLine(unknownPatchItem.RowId);
+            }
             var orderedPatches = patches.Where( c => c.Type == "item" ).OrderBy( c => c.Id );
             decimal? currentPatch = null;
             uint? firstItem = null;
