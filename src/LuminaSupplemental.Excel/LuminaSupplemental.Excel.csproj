@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net8.0-windows</TargetFrameworks>
+        <TargetFramework>net8.0-windows</TargetFramework>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Authors>Critical-Impact</Authors>
         <PackageProjectUrl>https://github.com/Critical-Impact/LuminaSupplemental</PackageProjectUrl>
@@ -11,6 +11,14 @@
         <FileVersion>6.0.2</FileVersion>
         <Description>Supplemental data for lumina and dalamud plugins.</Description>
     </PropertyGroup>
+    
+    <PropertyGroup>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="docs\readme.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
     
     <PropertyGroup>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -28,11 +36,10 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <DalamudLibPath>$(AppData)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'">
-        <DalamudLibPath>$(DALAMUD_HOME)/</DalamudLibPath>
+        <DalamudLibPath Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(appdata)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
+        <DalamudLibPath Condition="$([MSBuild]::IsOSPlatform('Linux'))">$(HOME)/.xlcore/dalamud/Hooks/dev/</DalamudLibPath>
+        <DalamudLibPath Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(HOME)/Library/Application Support/XIV on Mac/dalamud/Hooks/dev/</DalamudLibPath>
+        <DalamudLibPath Condition="$(DALAMUD_HOME) != ''">$(DALAMUD_HOME)/</DalamudLibPath>
     </PropertyGroup>
 
     <ItemGroup>
