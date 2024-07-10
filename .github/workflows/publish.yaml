@@ -44,7 +44,7 @@ jobs:
       # Create the NuGet package in the folder from the environment variable NuGetDirectory
       - run: |
           $env:DALAMUD_HOME = "${{ env.DALAMUD_HOME }}"
-          dotnet pack --configuration Release --output ${{ env.NuGetDirectory }}
+          dotnet pack --configuration Release --output ${{ env.NuGetDirectory }} src
       
       # Publish the NuGet package as an artifact, so they can be used in the following jobs
       - uses: actions/upload-artifact@v3
@@ -63,7 +63,7 @@ jobs:
       - name: Run tests
         run: |
           $env:DALAMUD_HOME = "${{ env.DALAMUD_HOME }}"
-          dotnet test --configuration Release
+          dotnet test --configuration Release src
 
   deploy:
     # Publish only when creating a GitHub Release
