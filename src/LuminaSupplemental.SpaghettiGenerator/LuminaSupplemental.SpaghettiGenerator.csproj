@@ -6,13 +6,12 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <DalamudLibPath>$(AppData)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
+        <DalamudLibPath Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(appdata)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
+        <DalamudLibPath Condition="$([MSBuild]::IsOSPlatform('Linux'))">$(HOME)/.xlcore/dalamud/Hooks/dev/</DalamudLibPath>
+        <DalamudLibPath Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(HOME)/Library/Application Support/XIV on Mac/dalamud/Hooks/dev/</DalamudLibPath>
+        <DalamudLibPath Condition="$(DALAMUD_HOME) != ''">$(DALAMUD_HOME)/</DalamudLibPath>
     </PropertyGroup>
-
-    <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'">
-        <DalamudLibPath>$(DALAMUD_HOME)/</DalamudLibPath>
-    </PropertyGroup>
-
+    
     <ItemGroup>
       <Content Include="../GarlandTools/Supplemental/FFXIV Data - Items.tsv" CopyToOutputDirectory="Always" />
       <Content Include="../GarlandTools/Supplemental/FFXIV Data - Duties.json" CopyToOutputDirectory="Always" />
@@ -38,12 +37,6 @@
       <None Update="ManualData\SubmarineUnlocks.csv">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="ManualData\MobImports\1.csv">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="ManualData\MobImports\2.csv">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
       <None Update="ManualData\ItemsScraped.csv">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
@@ -57,16 +50,7 @@
       <None Update="ManualData\HouseVendors.csv">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="ManualData\MobImports\3.csv">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="ManualData\MobImports\4.csv">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="ManualData\MobImports\5.csv">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="ManualData\MobImports\6.csv">
+      <None Update="ManualData\MobImports\*.csv">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="config.ini">
@@ -103,9 +87,15 @@
       <Folder Include="DB" />
     </ItemGroup>
 
-    <Target Name="CopyGenerated" AfterTargets="Build">
+    <Target Condition="$([MSBuild]::IsOSPlatform('Windows'))" Name="CopyGenerated" AfterTargets="Build">
         <Message Text="Copying generated csvs" Importance="High" />
         <Exec Command="xcopy &quot;$(TargetDir)output\*.csv&quot; &quot;$(SolutionDir)LuminaSupplemental.Excel\Generated\&quot; /Y /c /q || cmd /c exit /b 0" />
+        <Message Text="Copied build files" Importance="High" />
+    </Target>
+    
+    <Target Condition="$([MSBuild]::IsOSPlatform('Linux'))" Name="CopyGenerated" AfterTargets="Build">
+        <Message Text="Copying generated csvs" Importance="High" />
+        <Exec Command="cp '$(TargetDir)output/'*.csv '$(SolutionDir)LuminaSupplemental.Excel/Generated/' -Rf" />
         <Message Text="Copied build files" Importance="High" />
     </Target>
 

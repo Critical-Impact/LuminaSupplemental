@@ -286,7 +286,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
             
             //Process extra data not in GT's jsons(no idea why)
             
-            var reader = CSVFile.CSVReader.FromFile(@"ManualData\ExtraPatchData.csv", CSVSettings.CSV);
+            var reader = CSVFile.CSVReader.FromFile(Path.Combine( "ManualData","ExtraPatchData.csv"), CSVSettings.CSV);
             
             foreach( var line in reader.Lines() )
             {
@@ -752,7 +752,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
 
         public void ProcessManualItems( List< ItemSupplement > itemSupplements )
         {
-            var reader = CSVFile.CSVReader.FromFile(@"ManualData\Items.csv", CSVSettings.CSV);
+            var reader = CSVFile.CSVReader.FromFile(Path.Combine( "ManualData","Items.csv"), CSVSettings.CSV);
 
             foreach( var line in reader.Lines() )
             {
@@ -762,7 +762,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
                 itemSupplements.Add( new ItemSupplement((uint)(itemSupplements.Count + 1), outputItemId, sourceItemId, source) );
             }
             
-            reader = CSVFile.CSVReader.FromFile(@"ManualData\ItemsScraped.csv", CSVSettings.CSV);
+            reader = CSVFile.CSVReader.FromFile(Path.Combine( "ManualData","ItemsScraped.csv"), CSVSettings.CSV);
 
             foreach( var line in reader.Lines() )
             {
@@ -815,7 +815,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
 
         private void ProcessHouseVendors( List< HouseVendor > houseVendors )
         {
-            var reader = CSVFile.CSVReader.FromFile(@"ManualData\HouseVendors.csv");
+            var reader = CSVFile.CSVReader.FromFile(Path.Combine( "ManualData","HouseVendors.csv"));
 
             Dictionary< string, List< uint > > groupedResidents = new();
 
@@ -886,7 +886,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
 
         private void ProcessRetainerVentures( List<RetainerVentureItem> retainerVentureItems )
         {
-            var reader = CSVFile.CSVReader.FromFile(@"ManualData\RetainerVentures.csv");
+            var reader = CSVFile.CSVReader.FromFile(Path.Combine( "ManualData","RetainerVentures.csv"));
 
             foreach( var line in reader.Lines() )
             {
@@ -926,7 +926,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
 
         private void ProcessSubmarineUnlocks( List<SubmarineUnlock> submarineUnlocks, List<SubmarineDrop> submarineDrops )
         {
-            var reader = CSVFile.CSVReader.FromFile(@"ManualData\SubmarineUnlocks.csv");
+            var reader = CSVFile.CSVReader.FromFile(Path.Combine( "ManualData","SubmarineUnlocks.csv"));
 
             foreach( var line in reader.Lines() )
             {
@@ -983,7 +983,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
 
         private void ProcessAirshipUnlocks( List<AirshipUnlock> airshipUnlocks, List<AirshipDrop> airshipDrops )
         {
-            var reader = CSVFile.CSVReader.FromFile(@"ManualData\AirshipUnlocks.csv");
+            var reader = CSVFile.CSVReader.FromFile(Path.Combine( "ManualData","AirshipUnlocks.csv"));
 
             foreach( var line in reader.Lines() )
             {
@@ -1309,7 +1309,15 @@ namespace LuminaSupplemental.SpaghettiGenerator
         }
         public void ProcessEventNpcs(List<ENpcPlace> npcPlaces)
         {
+            if( Service.DatabaseBuilder == null )
+            {
+                return;
+            }
             var eNpcPlaces = Service.DatabaseBuilder.ENpcPlaces;
+            if( eNpcPlaces == null )
+            {
+                return;
+            }
             foreach( var eNpcPlace in eNpcPlaces )
             {
                 npcPlaces.Add( new ENpcPlace()

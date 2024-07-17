@@ -95,9 +95,9 @@ namespace LuminaSupplemental.SpaghettiGenerator
             
             Service.GameData = new GameData( appConfig.Basic.FFXIVGameDirectory, new LuminaOptions(){ PanicOnSheetChecksumMismatch = false} );
             var sg = new LookupGenerator(appConfig);
-            var libraConnection = new SQLite.SQLiteConnection(appConfig.Basic.LibraSQLFilePath, SQLite.SQLiteOpenFlags.ReadOnly);
-            Service.DatabaseBuilder = new DatabaseBuilder(libraConnection);
-            Service.DatabaseBuilder.Build();
+            //var libraConnection = new SQLite.SQLiteConnection(appConfig.Basic.LibraSQLFilePath, SQLite.SQLiteOpenFlags.ReadOnly);
+            //Service.DatabaseBuilder = new DatabaseBuilder(libraConnection);
+            //Service.DatabaseBuilder.Build();
             Directory.CreateDirectory( "output" );
             sg.Generate();
         }
