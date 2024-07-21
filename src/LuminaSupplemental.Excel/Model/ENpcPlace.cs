@@ -20,17 +20,22 @@ namespace LuminaSupplemental.Excel.Model
         [Name("RowId")] public uint RowId { get; set; }
         [Name("ENpcResidentId")] public uint ENpcResidentId { get; set; }
         [Name("TerritoryTypeId")] public uint TerritoryTypeId { get; set; }
+        [Name("MapId")] public uint MapId { get; set; }
+        [Name("PlaceNameId")] public uint PlaceNameId { get; set; }
         [Name("Position"), TypeConverter(typeof(Vector2Converter))] public Vector2 Position { get; set; }
         
-        public LazyRow< ENpcResident > ENpcResident;
-        
-        public LazyRow< TerritoryType > TerritoryType;
+        public LazyRow<ENpcResident> ENpcResident;
+        public LazyRow<TerritoryType> TerritoryType;
+        public LazyRow<Map> Map;
+        public LazyRow<PlaceName> PlaceName;
 
-        public ENpcPlace(uint rowId, uint eNpcResidentId, uint territoryTypeId, Vector2 position )
+        public ENpcPlace(uint rowId, uint eNpcResidentId, uint territoryTypeId, uint mapId, uint placeNameId, Vector2 position )
         {
             RowId = rowId;
             ENpcResidentId = eNpcResidentId;
             TerritoryTypeId = territoryTypeId;
+            MapId = mapId;
+            PlaceNameId = placeNameId;
             Position = position;
         }
 
@@ -44,7 +49,9 @@ namespace LuminaSupplemental.Excel.Model
             RowId = uint.Parse( lineData[ 0 ] );
             ENpcResidentId = uint.Parse( lineData[ 1 ] );
             TerritoryTypeId = uint.Parse( lineData[ 2 ] );
-            var positionData = lineData[3].Split(";").Select(c => float.Parse(c, CultureInfo.InvariantCulture)).ToList();
+            MapId = uint.Parse( lineData[ 3 ] );
+            PlaceNameId = uint.Parse( lineData[ 4 ] );
+            var positionData = lineData[5].Split(";").Select(c => float.Parse(c, CultureInfo.InvariantCulture)).ToList();
             Position = new Vector2(positionData[0], positionData[1]);
         }
 
@@ -55,6 +62,8 @@ namespace LuminaSupplemental.Excel.Model
                 RowId.ToString(),
                 ENpcResidentId.ToString(),
                 TerritoryTypeId.ToString(),
+                MapId.ToString(),
+                PlaceNameId.ToString(),
                 Position.X + ";" + Position.Y,
             };
             return data.ToArray();
@@ -69,6 +78,25 @@ namespace LuminaSupplemental.Excel.Model
         {
             ENpcResident = new LazyRow< ENpcResident >( gameData, ENpcResidentId, language );
             TerritoryType = new LazyRow< TerritoryType >( gameData, TerritoryTypeId, language );
+            Map = new LazyRow<Map>( gameData, MapId, language );
+            PlaceName = new LazyRow<PlaceName>( gameData, PlaceNameId, language );
+        }
+        
+        public bool EqualRounded(ENpcPlace other)
+        {
+            if (Map.Row.Equals(other.Map.Row) && PlaceName.Row.Equals(other.PlaceName.Row))
+            {   
+                var x = (int) Position.X;
+                var y = (int) Position.Y;
+                var otherX = (int) other.Position.X;
+                var otherY = (int) other.Position.Y;
+                if (x == otherX && y == otherY)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
