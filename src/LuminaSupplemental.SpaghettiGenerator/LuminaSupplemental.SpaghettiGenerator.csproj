@@ -3,6 +3,7 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net8.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -17,12 +18,14 @@
       <Content Include="../GarlandTools/Supplemental/FFXIV Data - Duties.json" CopyToOutputDirectory="Always" />
       <Content Include="../GarlandTools/Supplemental/patches.json" CopyToOutputDirectory="Always" />
       <Content Include="../ffxiv-lodestone-item-id/lodestone-item-id.txt" CopyToOutputDirectory="Always" />
+      <PackageReference Include="Autofac" Version="8.0.0" />
       <PackageReference Include="CSVFile" Version="3.1.0" />
       <PackageReference Include="CsvHelper" Version="30.0.1" />
       <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.1" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Ini" Version="8.0.0" />
+      <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
       <PackageReference Include="SocksSharp" Version="1.1.1" />
       <PackageReference Include="System.Data.SQLite" Version="1.0.117" />
       <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.117" />
@@ -50,6 +53,9 @@
       <None Update="ManualData\HouseVendors.csv">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="ManualData\ManualENpcPlaceData.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
       <None Update="ManualData\MobImports\*.csv">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
@@ -69,6 +75,14 @@
         </Reference>
         <Reference Include="Lumina.Excel">
             <HintPath>$(DalamudLibPath)Lumina.Excel.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="Dalamud">
+            <HintPath>$(DalamudLibPath)Dalamud.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="Serilog">
+            <HintPath>$(DalamudLibPath)Serilog.dll</HintPath>
             <Private>True</Private>
         </Reference>
     </ItemGroup>

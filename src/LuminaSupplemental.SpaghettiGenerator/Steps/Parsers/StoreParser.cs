@@ -1,20 +1,19 @@
-using System.Linq;
-
-namespace LuminaSupplemental.SpaghettiGenerator;
-
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
-using System.Numerics;
 using System.Threading;
-using System.Threading.Tasks;
+
 using Lumina.Data;
 using Lumina.Excel.GeneratedSheets;
+
 using Newtonsoft.Json;
 
+namespace LuminaSupplemental.SpaghettiGenerator.Steps.Parsers;
+
 public class StoreParser {
+    private readonly AppConfig appConfig;
 
     public static Dictionary<uint, List<uint>> StoreItems = new();
     public static Dictionary<uint, Product> StoreProducts = new();
@@ -59,8 +58,13 @@ public class StoreParser {
         public List<Product> Products;
     }
 
+    public StoreParser(AppConfig appConfig)
+    {
+        this.appConfig = appConfig;
+    }
 
-    public static void UpdateItems(string cacheDirectory) {
+
+    public void UpdateItems() {
         UpdateStatus = "Fetching Product List";
         using var wc = new WebClient();
         var json = wc.DownloadString("https://api.store.finalfantasyxiv.com/ffxivcatalog/api/products/?lang=en-us&currency=USD&limit=10000");
@@ -71,7 +75,7 @@ public class StoreParser {
         }
 
         StoreItems.Clear();
-        var storeProductCacheDirectory = Path.Combine(cacheDirectory,"FFXIV Store Cache");;
+        var storeProductCacheDirectory = Path.Combine(this.appConfig.Parsing.OnlineCacheDirectory,"FFXIV Store Cache");;
         Directory.CreateDirectory(storeProductCacheDirectory);
 
         var allItems = Service.GameData.Excel.GetSheet<Item>(Language.English);

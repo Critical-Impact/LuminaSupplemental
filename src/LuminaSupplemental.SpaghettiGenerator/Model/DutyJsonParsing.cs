@@ -1,10 +1,12 @@
 using System;
 using System.Globalization;
+
 using LuminaSupplemental.Excel.Model;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace LuminaSupplemental.SpaghettiGenerator
+namespace LuminaSupplemental.SpaghettiGenerator.Model
 {
     public class DutyJson
     {

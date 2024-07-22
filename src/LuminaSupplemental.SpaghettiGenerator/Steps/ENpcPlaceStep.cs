@@ -1,0 +1,47 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Lumina;
+using Lumina.Excel;
+using Lumina.Excel.GeneratedSheets;
+
+using LuminaSupplemental.Excel.Model;
+using LuminaSupplemental.SpaghettiGenerator.Generator;
+
+namespace LuminaSupplemental.SpaghettiGenerator.Steps;
+
+public partial class ENpcPlaceStep : GeneratorStep
+{
+    private readonly ExcelSheet<Item> itemSheet;
+    private readonly ExcelSheet<TerritoryType> territoryTypeSheet;
+    private readonly GameData gameData;
+    private readonly Dictionary<string, Item> itemsByName;
+
+    public override Type OutputType => typeof(ENpcPlace);
+
+    public override string FileName => "ENpcPlace.csv";
+
+    public override string Name => "Event NPC Place";
+    
+
+    public ENpcPlaceStep(ExcelSheet<TerritoryType> territoryTypeSheet, GameData gameData)
+    {
+        this.territoryTypeSheet = territoryTypeSheet;
+        this.gameData = gameData;
+    }
+
+
+    public override List<ICsv> Run()
+    {
+        List<ENpcPlace> items = new ();
+        items.AddRange(this.ProcessManualData());
+        for (var index = 0; index < items.Count; index++)
+        {
+            var item = items[index];
+            item.RowId = (uint)(index + 1);
+        }
+
+        return [..items.Select(c => c)];
+    }
+}

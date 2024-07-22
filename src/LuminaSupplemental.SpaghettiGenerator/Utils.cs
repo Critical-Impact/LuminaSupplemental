@@ -1,12 +1,12 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using Lumina.Excel.GeneratedSheets;
 
-namespace Garland.Data
+using Newtonsoft.Json.Linq;
+
+namespace LuminaSupplemental.SpaghettiGenerator
 {
     public static class Utils
     {

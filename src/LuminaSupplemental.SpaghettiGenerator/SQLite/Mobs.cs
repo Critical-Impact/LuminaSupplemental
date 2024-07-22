@@ -42,8 +42,8 @@ namespace LuminaSupplemental.SpaghettiGenerator
 
                         if (data.region != null)
                         {
-                            var area = Garland.Data.Utils.GetPair(data.region);
-                            var zone = Garland.Data.Utils.GetPair(area.Value);
+                            var area = Utils.GetPair(data.region);
+                            var zone = Utils.GetPair(area.Value);
 
                             string key = (string)zone.Key;
                             if( UInt32.TryParse( key, out var parsedKey ) )

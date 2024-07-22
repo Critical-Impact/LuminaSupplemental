@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace LuminaSupplemental.SpaghettiGenerator;
+namespace LuminaSupplemental.SpaghettiGenerator.Model;
 
 public class PatchJson
 {
