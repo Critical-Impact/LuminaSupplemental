@@ -12,6 +12,10 @@ public partial class MobDropStep
         var gubalDrops = this.gubalApi.GetAllaganReportDrops();
         foreach (var gubalDrop in gubalDrops)
         {
+            if (gubalDrop.ItemId == 0 || gubalDrop.Data.MonsterId == 0)
+            {
+                continue;
+            }
             drops.Add(new MobDrop()
             {
                 ItemId = gubalDrop.ItemId,

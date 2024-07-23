@@ -3,18 +3,26 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+using Lumina;
+using Lumina.Excel;
 using Lumina.Excel.GeneratedSheets;
 
 using LuminaSupplemental.Excel.Model;
 using LuminaSupplemental.SpaghettiGenerator.Generator;
+using LuminaSupplemental.SpaghettiGenerator.Steps.Parsers;
+
+using ILogger = Serilog.ILogger;
 
 namespace LuminaSupplemental.SpaghettiGenerator.Steps;
 
 public partial class SubmarineDropStep : GeneratorStep
 {
     private readonly DataCacher dataCacher;
+    private readonly GubalApi gubalApi;
+    private readonly ExcelSheet<SubmarineExploration> submarineExplorationSheet;
     private readonly Dictionary<string,SubmarineExploration> submarinesByName;
     private readonly Dictionary<string,Item> itemsByName;
+    private readonly ILogger logger;
 
     public override Type OutputType => typeof(SubmarineDrop);
 
@@ -22,9 +30,12 @@ public partial class SubmarineDropStep : GeneratorStep
 
     public override string Name => "Submarine Drops";
     
-    public SubmarineDropStep(DataCacher dataCacher)
+    public SubmarineDropStep(DataCacher dataCacher, GubalApi gubalApi, ExcelSheet<SubmarineExploration> submarineExplorationSheet, ILogger logger)
     {
         this.dataCacher = dataCacher;
+        this.gubalApi = gubalApi;
+        this.submarineExplorationSheet = submarineExplorationSheet;
+        this.logger = logger;
         var bannedItems = new HashSet< uint >()
         {
             0,
@@ -39,6 +50,8 @@ public partial class SubmarineDropStep : GeneratorStep
     {
         List<SubmarineDrop> items = new ();
         items.AddRange(this.Process());
+        items.AddRange(this.ProcessGubalData());
+        items = items.DistinctBy(c => (c.ItemId, c.SubmarineExplorationId)).ToList();
         for (var index = 0; index < items.Count; index++)
         {
             var item = items[index];

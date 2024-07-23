@@ -45,7 +45,6 @@ public class Container
         builder.RegisterType<MappyParser>().SingleInstance();
         builder.RegisterType<LodestoneParser>().SingleInstance();
         builder.RegisterType<StoreParser>().SingleInstance();
-        builder.RegisterType<Test>().SingleInstance();
         builder.RegisterType<GubalApi>().SingleInstance();
         builder.Register<AppConfig>(
             c =>

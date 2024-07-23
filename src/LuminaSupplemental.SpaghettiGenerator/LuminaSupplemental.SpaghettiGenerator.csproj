@@ -109,7 +109,7 @@
     
     <Target Condition="$([MSBuild]::IsOSPlatform('Linux'))" Name="CopyGenerated" AfterTargets="Build">
         <Message Text="Copying generated csvs" Importance="High" />
-        <Exec Command="cp '$(TargetDir)output/'*.csv '$(SolutionDir)LuminaSupplemental.Excel/Generated/' -Rf" />
+        <Exec Command="find '$(TargetDir)output/' -name \*.csv -exec cp {} '$(SolutionDir)LuminaSupplemental.Excel/Generated/' \;" />
         <Message Text="Copied build files" Importance="High" />
     </Target>
 

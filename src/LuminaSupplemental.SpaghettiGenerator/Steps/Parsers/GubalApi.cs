@@ -95,5 +95,37 @@ public class GubalApi
 
             return result;
         }
+        
+        public List<AllaganReportsFateItem> GetAllaganReportFateItems()
+        {
+            var message = new HttpRequestMessage(HttpMethod.Post, "https://gubal.ffxivteamcraft.com/graphql");
+            message.Content = new StringContent(JsonSerializer.Serialize(new
+            {
+                query = "{ allagan_reports( where: {applied: {_eq: true}, source: {_in: [\"FATE\"]}}) { itemId data }}",
+            }));
+            message.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            var response = this.httpClient.Send(message);
+            var json     = response.Content.ReadAsStringAsync().Result;
+            var result   = JsonSerializer.Deserialize<GraphqlContainer<AllaganReportsFateContainer>>(json)!.data.AllaganReports;
+
+            return result;
+        }
+        
+        public List<AllaganReportsVoyageItem> GetAllaganReportVoyageItems()
+        {
+            var message = new HttpRequestMessage(HttpMethod.Post, "https://gubal.ffxivteamcraft.com/graphql");
+            message.Content = new StringContent(JsonSerializer.Serialize(new
+            {
+                query = "{ allagan_reports( where: {applied: {_eq: true}, source: {_in: [\"VOYAGE\"]}}) { itemId data }}",
+            }));
+            message.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            var response = this.httpClient.Send(message);
+            var json     = response.Content.ReadAsStringAsync().Result;
+            var result   = JsonSerializer.Deserialize<GraphqlContainer<AllaganReportsVoyageContainer>>(json)!.data.AllaganReports;
+
+            return result;
+        }
 }
 
