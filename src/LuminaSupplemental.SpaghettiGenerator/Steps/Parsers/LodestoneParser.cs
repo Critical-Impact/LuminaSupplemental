@@ -64,16 +64,32 @@ public class LodestoneParser {
                         using (var response = client.SendAsync(request).WaitAsync( TimeSpan.FromSeconds( 20 ) ).Result)
                         {
                             response.EnsureSuccessStatusCode();
-                            using (var responseStream = response.Content.ReadAsStream())
-                            using (var streamReader = new StreamReader(responseStream,Encoding.UTF8))
+                            if (response.Content.Headers.ContentEncoding.Contains("gzip"))
                             {
-                                string responseBody = streamReader.ReadToEndAsync().Result;
-                                
-                                Console.WriteLine($"Cached Lodestone Info: {itemId.Value} - at " + index2 + "/" + itemIdMap.Count);
-                                File.WriteAllText(cacheFile, responseBody);
-                                Thread.Sleep( random.Next(200,500) );
-                                ;
+                                using (var responseStream = response.Content.ReadAsStream())
+                                using (var decompressedStream = new System.IO.Compression.GZipStream(responseStream, System.IO.Compression.CompressionMode.Decompress))
+                                using (var streamReader = new StreamReader(decompressedStream))
+                                {
+                                    string responseBody = streamReader.ReadToEndAsync().Result;
+                                    Console.WriteLine($"Cached Lodestone Info: {itemId.Value} - at " + index2 + "/" + itemIdMap.Count);
+                                    File.WriteAllText(cacheFile, responseBody);
+                                    Thread.Sleep( random.Next(200,800) );
+                                }
                             }
+                            else
+                            {
+                                using (var responseStream = response.Content.ReadAsStream())
+                                using (var streamReader = new StreamReader(responseStream,Encoding.UTF8))
+                                {
+                                    string responseBody = streamReader.ReadToEndAsync().Result;
+                                
+                                    Console.WriteLine($"Cached Lodestone Info: {itemId.Value} - at " + index2 + "/" + itemIdMap.Count);
+                                    File.WriteAllText(cacheFile, responseBody);
+                                    Thread.Sleep( random.Next(200,800) );
+                                    ;
+                                }
+                            }
+
                         }
                     }
 
