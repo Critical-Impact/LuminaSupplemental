@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel;
+using Lumina.Excel.Sheets;
 
 using LuminaSupplemental.Excel.Model;
 using LuminaSupplemental.SpaghettiGenerator.Generator;
@@ -13,26 +14,26 @@ namespace LuminaSupplemental.SpaghettiGenerator.Steps;
 public partial class AirshipUnlockStep : GeneratorStep
 {
     private readonly DataCacher dataCacher;
-    private readonly Dictionary<string,AirshipExplorationPoint> airshipsByName;
-    private readonly Dictionary<string,Item> itemsByName;
+    private readonly ExcelSheet<AirshipExplorationPoint> airshipExplorationPointSheet;
+    private readonly Dictionary<string,uint> airshipsByName;
 
     public override Type OutputType => typeof(AirshipUnlock);
 
     public override string FileName => "AirshipUnlock.csv";
 
     public override string Name => "Airship Unlocks";
-    
-    
-    public AirshipUnlockStep(DataCacher dataCacher)
+
+
+    public AirshipUnlockStep(DataCacher dataCacher, ExcelSheet<AirshipExplorationPoint> airshipExplorationPointSheet)
     {
         this.dataCacher = dataCacher;
+        this.airshipExplorationPointSheet = airshipExplorationPointSheet;
         var bannedItems = new HashSet< uint >()
         {
             0,
             24225
         };
         this.airshipsByName = this.dataCacher.ByName<AirshipExplorationPoint>(item => item.NameShort.ToString().ToParseable());
-        this.itemsByName = this.dataCacher.ByName<Item>(item => item.Name.ToString().ToParseable(), item => !bannedItems.Contains(item.RowId));
     }
 
 
@@ -48,11 +49,11 @@ public partial class AirshipUnlockStep : GeneratorStep
 
         return [..items.Select(c => c)];
     }
-    
+
     private List<AirshipUnlock> Process()
     {
         List<AirshipUnlock> airshipUnlocks = new();
-        
+
         var reader = CSVFile.CSVReader.FromFile(Path.Combine("ManualData", "AirshipUnlocks.csv"));
 
         foreach (var line in reader.Lines())
@@ -69,11 +70,11 @@ public partial class AirshipUnlockStep : GeneratorStep
             //Sectors are stored as numbers
             if (airshipsByName.ContainsKey(sector))
             {
-                var actualSector = airshipsByName[sector];
+                var actualSector = airshipExplorationPointSheet.GetRow(airshipsByName[sector]);
                 AirshipExplorationPoint? actualUnlockSector = null;
                 if (airshipsByName.ContainsKey(unlockSector))
                 {
-                    actualUnlockSector = airshipsByName[unlockSector];
+                    actualUnlockSector = airshipExplorationPointSheet.GetRow(airshipsByName[unlockSector]);
                 }
 
                 var actualSurveillanceRequired = uint.Parse(surveillanceRequired);

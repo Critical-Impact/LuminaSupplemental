@@ -4,7 +4,8 @@ using System.Globalization;
 using System.IO;
 using System.Numerics;
 
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel;
+using Lumina.Excel.Sheets;
 
 using LuminaSupplemental.Excel.Model;
 using LuminaSupplemental.SpaghettiGenerator.Generator;
@@ -21,16 +22,22 @@ public class GTParser
     public List<DungeonBoss> DungeonBosses = [];
     public List<DungeonBossChest> DungeonBossChests = [];
     public List<DungeonBossDrop> DungeonBossDrops = [];
-    
+
     private readonly DataCacher dataCacher;
-    private readonly Dictionary<string, ContentFinderCondition> dutiesByString;
-    private readonly Dictionary<string, Item> itemsByName;
-    private readonly Dictionary<string, BNpcName> bNpcsByName;
+    private readonly ExcelSheet<ContentFinderCondition> contentFinderConditionSheet;
+    private readonly ExcelSheet<BNpcName> bNpcNameSheet;
+    private readonly ExcelSheet<Item> itemSheet;
+    private readonly Dictionary<string, uint> dutiesByString;
+    private readonly Dictionary<string, uint> itemsByName;
+    private readonly Dictionary<string, uint> bNpcsByName;
     private bool processed = false;
 
-    public GTParser(DataCacher dataCacher)
+    public GTParser(DataCacher dataCacher, ExcelSheet<ContentFinderCondition> contentFinderConditionSheet, ExcelSheet<BNpcName> bNpcNameSheet, ExcelSheet<Item> itemSheet)
     {
         this.dataCacher = dataCacher;
+        this.contentFinderConditionSheet = contentFinderConditionSheet;
+        this.bNpcNameSheet = bNpcNameSheet;
+        this.itemSheet = itemSheet;
         var bannedItems = new HashSet<uint>() { 0, 24225 };
         this.dutiesByString = this.dataCacher.ByName<ContentFinderCondition>(item => item.Name.ToString().ToParseable());
         this.bNpcsByName = this.dataCacher.ByName<BNpcName>(item => item.Singular.ToString().ToParseable());
@@ -60,7 +67,7 @@ public class GTParser
             var dutyName = duty.Name.ToParseable();
             if (this.dutiesByString.ContainsKey(dutyName))
             {
-                var actualDuty = this.dutiesByString[dutyName];
+                var actualDuty = this.contentFinderConditionSheet.GetRow(this.dutiesByString[dutyName]);
                 if (duty.Fights != null)
                 {
                     for (var index = 0; index < duty.Fights.Length; index++)
@@ -71,7 +78,7 @@ public class GTParser
                             var bossName = boss.Name.ToParseable();
                             if (this.bNpcsByName.ContainsKey(bossName))
                             {
-                                var bnpc = this.bNpcsByName[bossName];
+                                var bnpc = this.bNpcNameSheet.GetRow(this.bNpcsByName[bossName]);
                                 this.DungeonBosses.Add(new DungeonBoss(dungeonBossCount, bnpc.RowId, (uint)index, actualDuty.RowId));
                                 dungeonBossCount++;
                             }
@@ -86,11 +93,11 @@ public class GTParser
                             foreach (var drop in fight.Drops)
                             {
                                 var itemName = drop.Name.ToParseable();
-                                var actualItem = this.itemsByName.ContainsKey(itemName) ? this.itemsByName[itemName] : null;
-                                if (actualItem != null && actualItem.RowId != 0)
+                                Item? actualItem = this.itemsByName.ContainsKey(itemName) ? this.itemSheet.GetRow(this.itemsByName[itemName]) : null;
+                                if (actualItem != null && actualItem.Value.RowId != 0)
                                 {
                                     this.DungeonBossDrops.Add(
-                                        new DungeonBossDrop((uint)(this.DungeonBossDrops.Count + 1), actualDuty.RowId, (uint)index, actualItem.RowId, 1));
+                                        new DungeonBossDrop((uint)(this.DungeonBossDrops.Count + 1), actualDuty.RowId, (uint)index, actualItem.Value.RowId, 1));
                                 }
                                 else
                                 {
@@ -107,11 +114,11 @@ public class GTParser
                                 foreach (var item in treasure.Items)
                                 {
                                     var itemName = item.ToParseable();
-                                    var actualItem = this.itemsByName.ContainsKey(itemName) ? this.itemsByName[itemName] : null;
+                                    Item? actualItem = this.itemsByName.ContainsKey(itemName) ? this.itemSheet.GetRow(this.itemsByName[itemName]) : null;
                                     if (actualItem != null)
                                     {
                                         this.DungeonBossChests.Add(
-                                            new DungeonBossChest(dungeonBossChestCount, (uint)index, actualItem.RowId, actualDuty.RowId, 1, chestNo));
+                                            new DungeonBossChest(dungeonBossChestCount, (uint)index, actualItem.Value.RowId, actualDuty.RowId, 1, chestNo));
                                         dungeonBossChestCount++;
                                     }
                                     else
@@ -136,10 +143,10 @@ public class GTParser
                         foreach (var item in chest.Items)
                         {
                             var itemName = item.ToParseable();
-                            var actualItem = this.itemsByName.ContainsKey(itemName) ? this.itemsByName[itemName] : null;
+                            Item? actualItem = this.itemsByName.ContainsKey(itemName) ? this.itemSheet.GetRow(this.itemsByName[itemName]) : null;
                             if (actualItem != null)
                             {
-                                var chestItem = new DungeonChestItem((uint)(this.DungeonChestItems.Count + 1), actualItem.RowId, dungeonChest.RowId);
+                                var chestItem = new DungeonChestItem((uint)(this.DungeonChestItems.Count + 1), actualItem.Value.RowId, dungeonChest.RowId);
                                 this.DungeonChestItems.Add(chestItem);
                             }
                         }

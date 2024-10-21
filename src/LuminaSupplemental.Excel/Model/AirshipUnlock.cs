@@ -1,29 +1,24 @@
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Reflection;
-using CsvHelper;
 using CsvHelper.Configuration.Attributes;
 using Lumina;
 using Lumina.Data;
 using Lumina.Excel;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 
 namespace LuminaSupplemental.Excel.Model
 {
     public class AirshipUnlock : ICsv
     {
         [Name("RowId")] public uint RowId { get; set; }
-        
+
         [Name("AirshipExplorationPointId")] public uint AirshipExplorationPointId { get; set; }
         [Name("AirshipExplorationPointUnlockId")] public uint AirshipExplorationPointUnlockId { get; set; }
         [Name("SurveillanceRequired")] public uint SurveillanceRequired { get; set; }
         [Name("RankRequired")] public uint RankRequired { get; set; }
 
-        public LazyRow< AirshipExplorationPoint > AirshipExplorationPoint;
-        public LazyRow< AirshipExplorationPoint > AirshipExplorationPointUnlock;
-        
+        public RowRef< AirshipExplorationPoint > AirshipExplorationPoint;
+        public RowRef< AirshipExplorationPoint > AirshipExplorationPointUnlock;
+
         public AirshipUnlock(uint rowId, uint airshipExplorationPointId, uint airshipExplorationPointUnlockId,uint surveillanceRequired, uint rankRequired)
         {
             RowId = rowId;
@@ -35,7 +30,7 @@ namespace LuminaSupplemental.Excel.Model
 
         public AirshipUnlock()
         {
-            
+
         }
 
         public void FromCsv(string[] lineData)
@@ -57,10 +52,10 @@ namespace LuminaSupplemental.Excel.Model
             return false;
         }
 
-        public virtual void PopulateData( GameData gameData, Language language )
+        public virtual void PopulateData( ExcelModule module, Language language )
         {
-            AirshipExplorationPoint = new LazyRow< AirshipExplorationPoint >( gameData, AirshipExplorationPointId, language );
-            AirshipExplorationPointUnlock = new LazyRow< AirshipExplorationPoint >( gameData, AirshipExplorationPointUnlockId, language );
+            AirshipExplorationPoint = new RowRef< AirshipExplorationPoint >( module, AirshipExplorationPointId);
+            AirshipExplorationPointUnlock = new RowRef< AirshipExplorationPoint >( module, AirshipExplorationPointUnlockId);
         }
     }
 }

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-using Lumina.Excel.GeneratedSheets;
+using Lumina;
+using Lumina.Excel;
+using Lumina.Excel.Sheets;
 
 using LuminaSupplemental.Excel.Model;
 using LuminaSupplemental.SpaghettiGenerator.Generator;
@@ -13,17 +15,17 @@ namespace LuminaSupplemental.SpaghettiGenerator.Steps;
 public partial class SubmarineUnlockStep : GeneratorStep
 {
     private readonly DataCacher dataCacher;
-    private readonly Dictionary<string,SubmarineExploration> submarinesByName;
-    private readonly Dictionary<string,Item> itemsByName;
+    private readonly Dictionary<string,uint> submarinesByName;
+    private readonly ExcelSheet<SubmarineExploration> submarineExplorationSheet;
 
     public override Type OutputType => typeof(SubmarineUnlock);
 
     public override string FileName => "SubmarineUnlock.csv";
 
     public override string Name => "Submarine Unlocks";
-    
 
-    public SubmarineUnlockStep(DataCacher dataCacher)
+
+    public SubmarineUnlockStep(DataCacher dataCacher, ExcelSheet<SubmarineExploration> submarineExplorationSheet)
     {
         this.dataCacher = dataCacher;
         var bannedItems = new HashSet< uint >()
@@ -32,7 +34,7 @@ public partial class SubmarineUnlockStep : GeneratorStep
             24225
         };
         this.submarinesByName = this.dataCacher.ByName<SubmarineExploration>(item => item.Destination.ToString().ToParseable());
-        this.itemsByName = this.dataCacher.ByName<Item>(item => item.Name.ToString().ToParseable(), item => !bannedItems.Contains(item.RowId));
+        this.submarineExplorationSheet = submarineExplorationSheet;
     }
 
 
@@ -49,12 +51,12 @@ public partial class SubmarineUnlockStep : GeneratorStep
 
         return [..items.Select(c => c)];
     }
-    
+
     private List<SubmarineUnlock> Process()
     {
         List<SubmarineUnlock> submarineUnlocks = new();
-        
-          
+
+
         var reader = CSVFile.CSVReader.FromFile(Path.Combine( "ManualData","SubmarineUnlocks.csv"));
 
         foreach( var line in reader.Lines() )
@@ -62,16 +64,16 @@ public partial class SubmarineUnlockStep : GeneratorStep
             var sector = line[ 0 ];
             var unlockSector = line[ 1 ];
             var rankRequired = uint.Parse(line[ 2 ]);
-            
+
             sector = sector.ToParseable();
             unlockSector = unlockSector.ToParseable();
             if( submarinesByName.ContainsKey( sector ) )
             {
-                var actualSector = submarinesByName[ sector ];
+                var actualSector =  this.submarineExplorationSheet.GetRow(submarinesByName[ sector ]);
                 SubmarineExploration? actualUnlockSector = null;
                 if( submarinesByName.ContainsKey( unlockSector ) )
                 {
-                    actualUnlockSector = submarinesByName[ unlockSector ];
+                    actualUnlockSector = this.submarineExplorationSheet.GetRow(submarinesByName[ unlockSector ]);
                 }
 
                 submarineUnlocks.Add(new SubmarineUnlock()
@@ -87,7 +89,7 @@ public partial class SubmarineUnlockStep : GeneratorStep
                 Console.WriteLine("Could not find the submarine point with name " + sector);
             }
         }
-        
+
         return submarineUnlocks;
     }
 }

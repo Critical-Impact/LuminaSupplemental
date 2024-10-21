@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 
 using LuminaSupplemental.Excel.Model;
 using LuminaSupplemental.SpaghettiGenerator.Generator;
@@ -14,7 +14,7 @@ public partial class DungeonBossDropStep : GeneratorStep
 {
     private readonly DataCacher dataCacher;
     private readonly GTParser gtParser;
-    private readonly Dictionary<string,ContentFinderCondition> dutiesByString;
+    private readonly Dictionary<string,uint> dutiesByString;
 
     public override Type OutputType => typeof(DungeonBossDrop);
 

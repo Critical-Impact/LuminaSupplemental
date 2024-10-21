@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 
 using Lumina.Data;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 
 using LuminaSupplemental.Excel.Model;
 

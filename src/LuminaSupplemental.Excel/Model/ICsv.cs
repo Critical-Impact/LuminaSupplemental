@@ -1,5 +1,6 @@
 using Lumina;
 using Lumina.Data;
+using Lumina.Excel;
 
 namespace LuminaSupplemental.Excel.Model;
 
@@ -9,5 +10,5 @@ public interface ICsv
     public string[] ToCsv();
     public bool IncludeInCsv();
 
-    public  void PopulateData( GameData gameData, Language language );
+    public  void PopulateData( ExcelModule gameData, Language language );
 }

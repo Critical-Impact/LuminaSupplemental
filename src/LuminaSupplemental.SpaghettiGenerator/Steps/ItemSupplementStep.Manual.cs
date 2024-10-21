@@ -35,8 +35,8 @@ public partial class ItemSupplementStep
 
             if (itemsByName.ContainsKey(sourceItemName) && itemsByName.ContainsKey(rewardItemName))
             {
-                var sourceItem = itemsByName[sourceItemName];
-                var rewardItem = itemsByName[rewardItemName];
+                var sourceItem = this.itemSheet.GetRow(itemsByName[sourceItemName]);
+                var rewardItem = this.itemSheet.GetRow(itemsByName[rewardItemName]);
                 itemSupplements.Add(new ItemSupplement((uint)(itemSupplements.Count + 1), rewardItem.RowId, sourceItem.RowId, ItemSupplementSource.Loot));
             }
             else if (itemsByName.ContainsKey(sourceItemName))

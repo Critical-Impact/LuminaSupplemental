@@ -5,7 +5,7 @@ using System.Linq;
 
 using Lumina;
 using Lumina.Excel;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 
 using LuminaSupplemental.Excel.Model;
 using LuminaSupplemental.SpaghettiGenerator.Generator;
@@ -20,22 +20,24 @@ public partial class SubmarineDropStep : GeneratorStep
     private readonly DataCacher dataCacher;
     private readonly GubalApi gubalApi;
     private readonly ExcelSheet<SubmarineExploration> submarineExplorationSheet;
-    private readonly Dictionary<string,SubmarineExploration> submarinesByName;
-    private readonly Dictionary<string,Item> itemsByName;
+    private readonly Dictionary<string,uint> submarinesByName;
+    private readonly Dictionary<string,uint> itemsByName;
     private readonly ILogger logger;
+    private readonly ExcelSheet<Item> itemSheet;
 
     public override Type OutputType => typeof(SubmarineDrop);
 
     public override string FileName => "SubmarineDrop.csv";
 
     public override string Name => "Submarine Drops";
-    
-    public SubmarineDropStep(DataCacher dataCacher, GubalApi gubalApi, ExcelSheet<SubmarineExploration> submarineExplorationSheet, ILogger logger)
+
+    public SubmarineDropStep(DataCacher dataCacher, GubalApi gubalApi, ExcelSheet<SubmarineExploration> submarineExplorationSheet, ILogger logger, ExcelSheet<Item> itemSheet)
     {
         this.dataCacher = dataCacher;
         this.gubalApi = gubalApi;
         this.submarineExplorationSheet = submarineExplorationSheet;
         this.logger = logger;
+        this.itemSheet = itemSheet;
         var bannedItems = new HashSet< uint >()
         {
             0,
@@ -60,35 +62,35 @@ public partial class SubmarineDropStep : GeneratorStep
 
         return [..items.Select(c => c)];
     }
-    
+
     private List<SubmarineDrop> Process()
     {
         List<SubmarineDrop> submarineDrops = new();
-        
+
         var reader = CSVFile.CSVReader.FromFile(Path.Combine( "ManualData","SubmarineUnlocks.csv"));
 
         foreach( var line in reader.Lines() )
         {
             var sector = line[ 0 ];
             var items = line[ 3 ] + "," + line[ 4 ];
-            
+
             sector = sector.ToParseable();
             if( submarinesByName.ContainsKey( sector ) )
             {
-                var actualSector = submarinesByName[ sector ];
+                var actualSector = this.submarineExplorationSheet.GetRow(submarinesByName[ sector ]);
 
                 var items1List = items.Split( "," );
                 foreach( var itemName in items1List )
                 {
                     var parseableItemName = itemName.Trim().ToParseable();
-                    var outputItem = itemsByName.ContainsKey( parseableItemName ) ? itemsByName[ parseableItemName ] : null;
+                    Item? outputItem = itemsByName.ContainsKey( parseableItemName ) ? this.itemSheet.GetRow(itemsByName[ parseableItemName ]) : null;
                     if( outputItem != null )
                     {
                         submarineDrops.Add( new SubmarineDrop()
                         {
                             RowId = (uint)(submarineDrops.Count + 1),
                             SubmarineExplorationId = actualSector.RowId,
-                            ItemId = outputItem.RowId
+                            ItemId = outputItem.Value.RowId
                         });
                     }
                     else
@@ -102,7 +104,7 @@ public partial class SubmarineDropStep : GeneratorStep
                 Console.WriteLine("Could not find the submarine point with name " + sector);
             }
         }
-        
+
         return submarineDrops;
     }
 }

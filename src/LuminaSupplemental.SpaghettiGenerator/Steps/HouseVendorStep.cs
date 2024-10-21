@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 
 using Lumina.Excel;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 
 using LuminaSupplemental.Excel.Model;
 using LuminaSupplemental.SpaghettiGenerator.Generator;
@@ -20,7 +20,7 @@ public partial class HouseVendorStep : GeneratorStep
     public override string FileName => "HouseVendor.csv";
 
     public override string Name => "Housing Vendors";
-    
+
 
     public HouseVendorStep(ExcelSheet<ENpcResident> eNpcResidentSheet)
     {
@@ -40,11 +40,11 @@ public partial class HouseVendorStep : GeneratorStep
 
         return [..items.Select(c => c)];
     }
-    
+
     private List<HouseVendor> Process()
     {
         List<HouseVendor> houseVendors = new();
-        
+
         var reader = CSVFile.CSVReader.FromFile(Path.Combine( "ManualData","HouseVendors.csv"));
 
         Dictionary< string, List< uint > > groupedResidents = new();
@@ -52,10 +52,10 @@ public partial class HouseVendorStep : GeneratorStep
         foreach( var line in reader.Lines() )
         {
             var residentId = uint.Parse(line[ 0 ]);
-            var resident = eNpcResidentSheet.GetRow( residentId );
+            var resident = eNpcResidentSheet.GetRowOrDefault( residentId );
             if( resident != null )
             {
-                var residentName = resident.Singular.ToString().ToParseable();
+                var residentName = resident.Value.Singular.ToString().ToParseable();
                 groupedResidents.TryAdd( residentName, new List< uint >() );
                 groupedResidents[residentName].Add( residentId );
             }
@@ -73,7 +73,7 @@ public partial class HouseVendorStep : GeneratorStep
                 houseVendors.Add( childVendor );
             }
         }
-        
+
         return houseVendors;
     }
 }

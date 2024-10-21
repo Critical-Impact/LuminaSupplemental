@@ -6,7 +6,7 @@ using System.Net;
 using System.Threading;
 
 using Lumina.Data;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 
 using Newtonsoft.Json;
 
@@ -109,7 +109,7 @@ public class StoreParser {
                     StoreProducts.Add(p.ID, productListing.Product);
 
                     foreach (var item in productListing.Product.Items) {
-                        var matchingItems = allItems.Where(i => i.Name.RawString == item.Name).ToList();
+                        var matchingItems = allItems.Where(i => i.Name.ExtractText() == item.Name).ToList();
                         if (matchingItems.Count == 0) {
                             Console.WriteLine($"Failed to find matching item for {item.Name}.");
                             continue;

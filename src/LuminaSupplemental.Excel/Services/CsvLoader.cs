@@ -4,11 +4,15 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+
 using CsvHelper;
+
 using Lumina;
 using Lumina.Data;
 
-namespace LuminaSupplemental.Excel.Model;
+using LuminaSupplemental.Excel.Model;
+
+namespace LuminaSupplemental.Excel.Services;
 
 public static class CsvLoader
 {
@@ -33,7 +37,7 @@ public static class CsvLoader
                     item.FromCsv( line );
                     if( gameData != null && language != null )
                     {
-                        item.PopulateData( gameData, language.Value );
+                        item.PopulateData( gameData.Excel, language.Value );
                     }
                     items.Add( item );
                 }
@@ -45,7 +49,7 @@ public static class CsvLoader
             return items;
         }
     }
-    
+
     public const string DungeonBossResourceName = "LuminaSupplemental.Excel.Generated.DungeonBoss.csv";
     public const string DungeonBossChestResourceName = "LuminaSupplemental.Excel.Generated.DungeonBossChest.csv";
     public const string DungeonBossDropResourceName = "LuminaSupplemental.Excel.Generated.DungeonBossDrop.csv";
@@ -88,10 +92,10 @@ public static class CsvLoader
                     try
                     {
                         item.FromCsv( line );
-                        
+
                         if( gameData != null && language != null )
                         {
-                            item.PopulateData( gameData, language.Value );
+                            item.PopulateData( gameData.Excel, language.Value );
                         }
 
                         items.Add( item );
@@ -106,7 +110,7 @@ public static class CsvLoader
             }
         }
     }
-    
+
     public static bool ToCsv<T>( List<T> items, string filePath ) where T : ICsv, new()
     {
         try

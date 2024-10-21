@@ -10,7 +10,9 @@ using CsvHelper.Configuration.Attributes;
 using Lumina;
 using Lumina.Data;
 using Lumina.Excel;
-using Lumina.Excel.GeneratedSheets;
+
+using Lumina.Excel.Sheets;
+
 using LuminaSupplemental.Excel.Converters;
 
 namespace LuminaSupplemental.Excel.Model
@@ -21,7 +23,7 @@ namespace LuminaSupplemental.Excel.Model
         [Name("ENpcResidentId")] public uint ENpcResidentId { get; set; }
         [Name("ShopId")] public uint ShopId { get; set; }
         
-        public LazyRow< ENpcResident > ENpcResident;
+        public RowRef< ENpcResident > ENpcResident;
 
         public ENpcShop(uint rowId, uint eNpcResidentId, uint shopId)
         {
@@ -58,9 +60,9 @@ namespace LuminaSupplemental.Excel.Model
             return false;
         }
 
-        public virtual void PopulateData( GameData gameData, Language language )
+        public virtual void PopulateData( ExcelModule module, Language language )
         {
-            ENpcResident = new LazyRow< ENpcResident >( gameData, ENpcResidentId, language );
+            ENpcResident = new RowRef< ENpcResident >( module, ENpcResidentId);
         }
     }
 }

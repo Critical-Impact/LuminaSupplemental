@@ -8,7 +8,8 @@ using CsvHelper.Configuration.Attributes;
 using Lumina;
 using Lumina.Data;
 using Lumina.Excel;
-using Lumina.Excel.GeneratedSheets;
+
+using Lumina.Excel.Sheets;
 
 namespace LuminaSupplemental.Excel.Model
 {
@@ -18,9 +19,9 @@ namespace LuminaSupplemental.Excel.Model
         [Name("ItemId")] public uint ItemId { get; set; }
         [Name("SubmarineExplorationId")] public uint SubmarineExplorationId { get; set; }
         
-        public LazyRow< SubmarineExploration > SubmarineExploration;
+        public RowRef< SubmarineExploration > SubmarineExploration;
         
-        public LazyRow< Item > Item;
+        public RowRef< Item > Item;
 
         public SubmarineDrop(uint rowId, uint itemId, uint submarineExplorationId )
         {
@@ -51,10 +52,10 @@ namespace LuminaSupplemental.Excel.Model
             return false;
         }
 
-        public virtual void PopulateData( GameData gameData, Language language )
+        public virtual void PopulateData( ExcelModule module, Language language )
         {
-            SubmarineExploration = new LazyRow< SubmarineExploration >( gameData, SubmarineExplorationId, language );
-            Item = new LazyRow< Item >( gameData, ItemId, language );
+            SubmarineExploration = new RowRef< SubmarineExploration >( module, SubmarineExplorationId);
+            Item = new RowRef< Item >( module, ItemId);
         }
     }
 }

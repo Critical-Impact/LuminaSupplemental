@@ -9,7 +9,8 @@ using CsvHelper.TypeConversion;
 using Lumina;
 using Lumina.Data;
 using Lumina.Excel;
-using Lumina.Excel.GeneratedSheets;
+
+using Lumina.Excel.Sheets;
 
 namespace LuminaSupplemental.Excel.Model
 {
@@ -19,9 +20,9 @@ namespace LuminaSupplemental.Excel.Model
         [Name("ItemId")] public uint ItemId { get; set; }
         [Name("FittingShopItemSetId")] public uint FittingShopItemSetId { get; set; }
         
-        public LazyRow< Item > Item;
+        public RowRef< Item > Item;
         
-        public LazyRow< FittingShopItemSet > FittingShopItemSet;
+        public RowRef< FittingShopItemSet > FittingShopItemSet;
 
         public StoreItem(uint rowId, uint itemId, uint fittingShopItemSetId )
         {
@@ -52,10 +53,10 @@ namespace LuminaSupplemental.Excel.Model
             return false;
         }
 
-        public virtual void PopulateData( GameData gameData, Language language )
+        public virtual void PopulateData( ExcelModule module, Language language )
         {
-            Item = new LazyRow< Item >( gameData, ItemId, language );
-            FittingShopItemSet = new LazyRow< FittingShopItemSet >( gameData, FittingShopItemSetId, language );
+            Item = new RowRef< Item >( module, ItemId);
+            FittingShopItemSet = new RowRef< FittingShopItemSet >( module, FittingShopItemSetId);
         }
     }
 }

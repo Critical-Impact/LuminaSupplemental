@@ -17,7 +17,7 @@ public partial class ItemSupplementStep
             var regularVersion = item.Name.ToString().Replace("Approved ", "").ToParseable();
             if (itemsByName.ContainsKey(regularVersion))
             {
-                var sourceItem = itemsByName[regularVersion];
+                var sourceItem = this.itemSheet.GetRow(itemsByName[regularVersion]);
                 itemSupplements.Add(
                     new ItemSupplement()
                     {
