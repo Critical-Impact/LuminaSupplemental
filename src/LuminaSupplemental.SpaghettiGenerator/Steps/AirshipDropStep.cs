@@ -19,6 +19,7 @@ public partial class AirshipDropStep : GeneratorStep
     private readonly DataCacher dataCacher;
     private readonly GubalApi gubalApi;
     private readonly ExcelSheet<AirshipExplorationPoint> airshipExplorationPointSheet;
+    private readonly ExcelSheet<Item> itemSheet;
     private readonly ILogger logger;
     private readonly Dictionary<string,uint> airshipsByName;
     private readonly Dictionary<string,uint> itemsByName;
@@ -30,11 +31,12 @@ public partial class AirshipDropStep : GeneratorStep
     public override string Name => "Airship Drops";
 
 
-    public AirshipDropStep(DataCacher dataCacher, GubalApi gubalApi, ExcelSheet<AirshipExplorationPoint> airshipExplorationPointSheet, ILogger logger)
+    public AirshipDropStep(DataCacher dataCacher, GubalApi gubalApi, ExcelSheet<AirshipExplorationPoint> airshipExplorationPointSheet, ExcelSheet<Item> itemSheet, ILogger logger)
     {
         this.dataCacher = dataCacher;
         this.gubalApi = gubalApi;
         this.airshipExplorationPointSheet = airshipExplorationPointSheet;
+        this.itemSheet = itemSheet;
         this.logger = logger;
         var bannedItems = new HashSet< uint >()
         {
@@ -83,7 +85,7 @@ public partial class AirshipDropStep : GeneratorStep
                 foreach (var itemName in items1List)
                 {
                     var parseableItemName = itemName.Trim().ToParseable();
-                    AirshipExplorationPoint? outputItem = itemsByName.ContainsKey(parseableItemName) ? airshipExplorationPointSheet.GetRow(itemsByName[parseableItemName]) : null;
+                    Item? outputItem = this.itemsByName.TryGetValue(parseableItemName, out var value) ? itemSheet.GetRow(value) : null;
                     if (outputItem != null)
                     {
                         airshipDrops.Add(

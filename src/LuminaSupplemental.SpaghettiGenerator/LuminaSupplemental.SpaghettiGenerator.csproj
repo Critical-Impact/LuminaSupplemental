@@ -12,7 +12,7 @@
         <DalamudLibPath Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(HOME)/Library/Application Support/XIV on Mac/dalamud/Hooks/dev/</DalamudLibPath>
         <DalamudLibPath Condition="$(DALAMUD_HOME) != ''">$(DALAMUD_HOME)/</DalamudLibPath>
     </PropertyGroup>
-    
+
     <ItemGroup>
       <Content Include="../GarlandTools/Supplemental/FFXIV Data - Items.tsv" CopyToOutputDirectory="Always" />
       <Content Include="../GarlandTools/Supplemental/FFXIV Data - Duties.json" CopyToOutputDirectory="Always" />
@@ -106,10 +106,10 @@
         <Exec Command="xcopy &quot;$(TargetDir)output\*.csv&quot; &quot;$(SolutionDir)LuminaSupplemental.Excel\Generated\&quot; /Y /c /q || cmd /c exit /b 0" />
         <Message Text="Copied build files" Importance="High" />
     </Target>
-    
+
     <Target Condition="$([MSBuild]::IsOSPlatform('Linux'))" Name="CopyGenerated" AfterTargets="Build">
         <Message Text="Copying generated csvs" Importance="High" />
-        <Exec Command="find '$(TargetDir)output/' -name \*.csv -exec cp {} '$(SolutionDir)LuminaSupplemental.Excel/Generated/' \;" />
+        <Exec Command="mkdir '$(TargetDir)output/'; find '$(TargetDir)output/' -name \*.csv -exec cp {} '$(SolutionDir)LuminaSupplemental.Excel/Generated/' \;" />
         <Message Text="Copied build files" Importance="High" />
     </Target>
 
