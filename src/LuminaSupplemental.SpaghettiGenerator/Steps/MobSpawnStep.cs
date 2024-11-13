@@ -6,7 +6,7 @@ using System.Linq;
 using System.Numerics;
 
 using Lumina.Excel;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 
 using LuminaSupplemental.Excel.Model;
 using LuminaSupplemental.SpaghettiGenerator.Generator;
@@ -27,7 +27,7 @@ public partial class MobSpawnStep : GeneratorStep
     public override string FileName => "MobSpawn.csv";
 
     public override string Name => "Mob Spawns";
-    
+
 
     public MobSpawnStep(ExcelSheet<BNpcName> bnpcNameSheet, ExcelSheet<Pet> petSheet, ExcelSheet<Companion> companionSheet, ExcelSheet<TerritoryType> territoryTypeSheet, MappyParser mappyParser)
     {
@@ -46,12 +46,12 @@ public partial class MobSpawnStep : GeneratorStep
 
         return [..items.Select(c => c)];
     }
-    
+
     private List<MobSpawnPosition> Process()
     {
         List<MobSpawnPosition> mobSpawns = new();
-        
-        Dictionary< uint, Dictionary< uint, List< MobSpawnPosition > > > positions = new(); 
+
+        Dictionary< uint, Dictionary< uint, List< MobSpawnPosition > > > positions = new();
         var importFiles = Directory.GetFiles( Path.Join(  AppDomain.CurrentDomain.BaseDirectory, "ManualData", "MobImports"), "*.csv" );
         foreach( var importFile in importFiles )
         {
@@ -72,7 +72,7 @@ public partial class MobSpawnStep : GeneratorStep
         try
         {
            var mappyEntries = mappyParser.RetrieveMappyCache();
-           
+
            foreach( var mappyEntry in mappyEntries )
            {
                if( mappyEntry.Type == "BNPC" )
@@ -83,7 +83,7 @@ public partial class MobSpawnStep : GeneratorStep
                    mobSpawnPosition.BNpcBaseId = mappyEntry.BNpcBaseID;
                    mobSpawnPosition.TerritoryTypeId = (uint)mappyEntry.MapTerritoryID;
                    mobSpawnPosition.Subtype = 0;
-                   if( bnpcNameSheet.GetRow( mappyEntry.BNpcNameID ) != null )
+                   if( bnpcNameSheet.GetRowOrDefault( mappyEntry.BNpcNameID ) != null )
                    {
                        AddEntry( mobSpawnPosition, positions );
                    }
@@ -99,16 +99,16 @@ public partial class MobSpawnStep : GeneratorStep
             Console.WriteLine( "Failed to parse mappy data because " + e.Message );
             throw;
         }
-        
+
         return mobSpawns;
     }
-    
+
     private const float maxRange = 4.0f;
     public void AddEntry(MobSpawnPosition spawnPosition, Dictionary< uint, Dictionary< uint, List< MobSpawnPosition > > > positions)
     {
         positions.TryAdd(spawnPosition.TerritoryTypeId, new Dictionary<uint, List<MobSpawnPosition>>());
         positions[spawnPosition.TerritoryTypeId].TryAdd(spawnPosition.BNpcNameId, new List<MobSpawnPosition>());
-        //Store 
+        //Store
         var existingPositions = positions[spawnPosition.TerritoryTypeId][spawnPosition.BNpcNameId];
         if (!existingPositions.Any(c => WithinRange(spawnPosition.Position, c.Position, maxRange)))
         {
@@ -133,7 +133,7 @@ public partial class MobSpawnStep : GeneratorStep
             //Console.WriteLine("Mob position ignored due to range restrictions");
         }
     }
-    
+
     private bool WithinRange(Vector3 pointA, Vector3 pointB, float maxRange)
         {
             RectangleF recA = new RectangleF( new PointF(pointA.X - maxRange, pointA.Y - maxRange), new SizeF(maxRange,maxRange));
@@ -164,7 +164,7 @@ public partial class MobSpawnStep : GeneratorStep
             {
                 return false;
             }
-            var bnpcName = bnpcNameSheet.GetRow( bnpcNameId );
+            var bnpcName = bnpcNameSheet.GetRowOrDefault( bnpcNameId );
             if( bnpcName == null )
             {
                 return false;
@@ -176,7 +176,7 @@ public partial class MobSpawnStep : GeneratorStep
             }
 
             var hashSet = _disallowedBNpcNames.ToHashSet();
-            return !hashSet.Contains( bnpcName.Singular.ToString().ToParseable() );
+            return !hashSet.Contains( bnpcName.Value.Singular.ToString().ToParseable() );
         }
 
         private Dictionary< uint, bool > _territoriesAllowed = new Dictionary< uint, bool >();
@@ -186,7 +186,7 @@ public partial class MobSpawnStep : GeneratorStep
             {
                 return _territoriesAllowed[ territoryRowId ];
             }
-            
+
             var bannedPlaceNames = new List< string >()
             {
                 "The Lavender Beds",
@@ -199,7 +199,7 @@ public partial class MobSpawnStep : GeneratorStep
                 "Shirogane Subdivision",
                 "Empyreum",
                 "Empyreum Subdivision",
-                
+
             };
             var hashSet = bannedPlaceNames.Select( c => c.ToParseable() ).ToHashSet();
 
@@ -208,7 +208,7 @@ public partial class MobSpawnStep : GeneratorStep
             foreach( var territory in territoryTypeSheet )
             {
                 var placeName = territory.PlaceName.Value!.Name.ToString().ToParseable();
-                if( hashSet.Contains( placeName ) || territory.PlaceName.Row == 0 )
+                if( hashSet.Contains( placeName ) || territory.PlaceName.RowId == 0 )
                 {
                     _territoriesAllowed.Add( territory.RowId, false );
                 }

@@ -8,7 +8,8 @@ using CsvHelper.Configuration.Attributes;
 using Lumina;
 using Lumina.Data;
 using Lumina.Excel;
-using Lumina.Excel.GeneratedSheets;
+
+using Lumina.Excel.Sheets;
 
 namespace LuminaSupplemental.Excel.Model
 {
@@ -18,9 +19,9 @@ namespace LuminaSupplemental.Excel.Model
         [Name("ItemId")] public uint ItemId { get; set; }
         [Name("RetainerTaskRandomId")] public uint RetainerTaskRandomId { get; set; }
         
-        public LazyRow< Item > Item;
+        public RowRef< Item > Item;
         
-        public LazyRow< RetainerTaskRandom > RetainerTaskRandom;
+        public RowRef< RetainerTaskRandom > RetainerTaskRandom;
 
         public VentureDrop(uint rowId, uint itemId, uint retainerTaskRandomId )
         {
@@ -46,10 +47,10 @@ namespace LuminaSupplemental.Excel.Model
             return false;
         }
 
-        public virtual void PopulateData( GameData gameData, Language language )
+        public virtual void PopulateData( ExcelModule module, Language language )
         {
-            RetainerTaskRandom = new LazyRow< RetainerTaskRandom >( gameData, RetainerTaskRandomId, language );
-            Item = new LazyRow< Item >( gameData, ItemId, language );
+            RetainerTaskRandom = new RowRef< RetainerTaskRandom >( module, RetainerTaskRandomId);
+            Item = new RowRef< Item >( module, ItemId);
         }
     }
 }

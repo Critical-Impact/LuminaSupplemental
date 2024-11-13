@@ -24,23 +24,23 @@ public partial class ENpcPlaceStep
             var territoryTypeId = uint.Parse( lineData[ 2 ] );
             var positionData = lineData[3].Split(";").Select(c => float.Parse(c, CultureInfo.InvariantCulture)).ToList();
             var position = new Vector2(positionData[0], positionData[1]);
-            var territoryType = this.territoryTypeSheet.GetRow( territoryTypeId );
+            var territoryType = this.territoryTypeSheet.GetRowOrDefault( territoryTypeId );
             if(territoryType == null) continue;
-            var map = territoryType.Map.Value;
+            var map = territoryType.Value.Map.ValueNullable;
             if(map == null) continue;
-            var placeName = territoryType.PlaceName.Value;
+            var placeName = territoryType.Value.PlaceName.ValueNullable;
             if(placeName == null) continue;
 
-            var eNpcPlace = new ENpcPlace( 0, eNpcResidentId, territoryTypeId,map.RowId,
-                                           placeName.RowId, position );
-            eNpcPlace.PopulateData( this.gameData, Language.English );
+            var eNpcPlace = new ENpcPlace( 0, eNpcResidentId, territoryTypeId,map.Value.RowId,
+                                           placeName.Value.RowId, position );
+            eNpcPlace.PopulateData( this.gameData.Excel, Language.English );
             manualData.Add( eNpcPlace );
 
         }
-        
+
         var rowId = 0u;
         Dictionary<uint, HashSet<ENpcPlace>> npcLevelLookup = new Dictionary<uint, HashSet<ENpcPlace>>();
-        
+
         foreach (var npc in manualData)
         {
             if (!npcLevelLookup.ContainsKey(npc.ENpcResidentId))
@@ -48,7 +48,7 @@ public partial class ENpcPlaceStep
                 npcLevelLookup.Add(npc.ENpcResidentId, new());
             }
 
-            if (npc.TerritoryType.Value != null)
+            if (npc.TerritoryType.ValueNullable != null)
             {
                 if (!npcLevelLookup[npc.ENpcResidentId].Any(c => c.EqualRounded(npc)))
                 {

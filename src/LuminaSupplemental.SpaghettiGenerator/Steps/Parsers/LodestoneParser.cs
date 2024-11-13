@@ -12,7 +12,7 @@ using System.IO;
 using System.Threading;
 
 using Lumina.Data;
-using Lumina.Excel.GeneratedSheets;
+
 using HtmlAgilityPack;
 
 public class LodestoneParser {

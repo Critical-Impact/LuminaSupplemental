@@ -4,7 +4,7 @@ using System.Linq;
 
 using Lumina;
 using Lumina.Excel;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 
 using LuminaSupplemental.Excel.Model;
 using LuminaSupplemental.SpaghettiGenerator.Generator;
@@ -22,7 +22,7 @@ public partial class ShopNameStep : GeneratorStep
     public override string FileName => "ShopName.csv";
 
     public override string Name => "Shop Names";
-    
+
 
     public ShopNameStep(ExcelSheet<CustomTalk> customTalkSheet)
     {
@@ -42,35 +42,35 @@ public partial class ShopNameStep : GeneratorStep
 
         return [..items.Select(c => c)];
     }
-    
+
     public List<ShopName> ProcessShopNames()
     {
         var shopNames = new List<ShopName>();
         foreach( var customTalk in customTalkSheet )
         {
             var instructions = new List<(uint, string)>();
-            var count = customTalk.ScriptInstruction.Length;
-            for( uint i = 0; i < count; i++ )
+            foreach (var scriptStruct in customTalk.Script)
             {
-                instructions.Add( (i, customTalk.ScriptInstruction[i].ToString()) );
+                instructions.Add( (scriptStruct.ScriptArg, scriptStruct.ScriptInstruction.ExtractText()) );
             }
-            var shopInstructions = instructions.Where(i => i.Item2.Contains("SHOP") && !i.Item2.Contains("LOGMSG")).ToArray();
-            if (shopInstructions.Length == 0)
-                continue;
-            
-            foreach (var shopInstruction in shopInstructions)
+
+            foreach (var scriptStruct in customTalk.Script)
             {
-                var label = customTalk.ScriptInstruction[ shopInstruction.Item1 ].ToString();
-                var argument = customTalk.ScriptArg[ shopInstruction.Item1 ];
-                var shopName = Utils.GetShopName(argument, label);
-                if( shopName != null )
+                var scriptInstructions = scriptStruct.ScriptInstruction.ExtractText();
+                if (scriptInstructions.Contains("SHOP") && !scriptInstructions.Contains("LOGMSG"))
                 {
-                    shopNames.Add( new ShopName()
+                    var argument = scriptStruct.ScriptArg;
+                    var shopName = Utils.GetShopName(argument, scriptInstructions);
+                    if (shopName != null)
                     {
-                        RowId = (uint)(shopNames.Count +1),
-                        ShopId = argument,
-                        Name = shopName
-                    });
+                        shopNames.Add(
+                            new ShopName()
+                            {
+                                RowId = (uint)(shopNames.Count + 1),
+                                ShopId = argument,
+                                Name = shopName
+                            });
+                    }
                 }
             }
         }

@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel;
+using Lumina.Excel.Sheets;
 
 using LuminaSupplemental.Excel.Model;
 using LuminaSupplemental.SpaghettiGenerator.Generator;
@@ -14,20 +15,24 @@ public partial class StoreItemStep : GeneratorStep
 {
     private readonly DataCacher dataCacher;
     private readonly AppConfig appConfig;
-    private readonly Dictionary<string,Item> itemsByName;
-    private readonly Dictionary<string,FittingShopItemSet> fittingShopItemSetByName;
+    private readonly ExcelSheet<Item> itemSheet;
+    private readonly ExcelSheet<FittingShopItemSet> fittingShopItemSetSheet;
+    private readonly Dictionary<string,uint> itemsByName;
+    private readonly Dictionary<string,uint> fittingShopItemSetByName;
 
     public override Type OutputType => typeof(StoreItem);
 
     public override string FileName => "StoreItem.csv";
 
     public override string Name => "Store Item";
-    
 
-    public StoreItemStep(DataCacher dataCacher, AppConfig appConfig)
+
+    public StoreItemStep(DataCacher dataCacher, AppConfig appConfig, ExcelSheet<Item> itemSheet, ExcelSheet<FittingShopItemSet> fittingShopItemSetSheet)
     {
         this.dataCacher = dataCacher;
         this.appConfig = appConfig;
+        this.itemSheet = itemSheet;
+        this.fittingShopItemSetSheet = fittingShopItemSetSheet;
         var bannedItems = new HashSet< uint >()
         {
             0,
@@ -54,11 +59,11 @@ public partial class StoreItemStep : GeneratorStep
 
         return [..items.Select(c => c)];
     }
-    
+
     private List<StoreItem> Process()
     {
         List<StoreItem> storeItems = new();
-        
+
         foreach( var product in StoreParser.StoreProducts )
         {
             var fittingShopItemName = product.Value.Name;
@@ -66,7 +71,7 @@ public partial class StoreItemStep : GeneratorStep
             FittingShopItemSet? fittingShopItemSet = null;
             if( this.fittingShopItemSetByName.ContainsKey( parsedShopItemName ) )
             {
-                fittingShopItemSet = fittingShopItemSetByName[ parsedShopItemName ];
+                fittingShopItemSet = this.fittingShopItemSetSheet.GetRow(fittingShopItemSetByName[ parsedShopItemName ]);
             }
             else if(product.Value.Items.Count != 1)
             {
@@ -78,7 +83,7 @@ public partial class StoreItemStep : GeneratorStep
                 var parsedItemName = itemName.Trim().ToParseable();
                 if( itemsByName.ContainsKey( parsedItemName ) )
                 {
-                    var outputItem = itemsByName[ parsedItemName ];
+                    var outputItem = this.itemSheet.GetRow(itemsByName[ parsedItemName ]);
                     storeItems.Add( new StoreItem()
                     {
                         RowId = (uint)(storeItems.Count + 1),
@@ -92,7 +97,7 @@ public partial class StoreItemStep : GeneratorStep
                 }
             }
         }
-        
+
         return storeItems;
     }
 }

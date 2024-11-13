@@ -4,7 +4,10 @@ using Newtonsoft.Json.Linq;
 using System.Linq;
 using System.Numerics;
 
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
+
+using LuminaSupplemental.Excel.Extensions;
+
 
 namespace LuminaSupplemental.SpaghettiGenerator
 {
@@ -21,16 +24,16 @@ namespace LuminaSupplemental.SpaghettiGenerator
 
             var placeIndex = _builder.Libra.Table< Libra.ENpcResident_PlaceName >()
                 .ToArray();
-            
+
             var npcIndex = _builder.Libra.Table< Libra.ENpcResident >()
                 .ToArray()
                 .ToDictionary( i => i.Key );
 
             foreach( var bnpcName in placeIndex )
             {
-                var territoryType = territoryTypeSheet.FirstOrDefault( c =>
-                    c.PlaceNameRegion.Row == (uint)bnpcName.region && c.PlaceName.Row == (uint)bnpcName.PlaceName_Key, null );
-                
+                var territoryType = territoryTypeSheet.FirstOrNull( c =>
+                                                                        c.PlaceNameRegion.RowId == (uint)bnpcName.region && c.PlaceName.RowId == (uint)bnpcName.PlaceName_Key );
+
                 if( territoryType != null )
                 {
                     if( npcIndex.ContainsKey( bnpcName.ENpcResident_Key ) )
@@ -44,7 +47,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
                          DatabaseBuilder.Instance.ENpcPlaces.Add( new ENpcData()
                          {
                              ENpcResidentId = (uint)bNpc.Key,
-                             TerritoryTypeId = territoryType.RowId,
+                             TerritoryTypeId = territoryType.Value.RowId,
                              Position = new Vector2( actualCoords[0], actualCoords[1])
                          } );
                     }

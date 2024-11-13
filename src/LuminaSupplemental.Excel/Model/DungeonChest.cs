@@ -10,7 +10,9 @@ using CsvHelper.Configuration.Attributes;
 using Lumina;
 using Lumina.Data;
 using Lumina.Excel;
-using Lumina.Excel.GeneratedSheets;
+
+using Lumina.Excel.Sheets;
+
 using LuminaSupplemental.Excel.Converters;
 
 namespace LuminaSupplemental.Excel.Model
@@ -22,7 +24,7 @@ namespace LuminaSupplemental.Excel.Model
         [Name("ContentFinderConditionId")] public uint ContentFinderConditionId { get; set; }
         [Name("Position"), TypeConverter(typeof(Vector2Converter))] public Vector2 Position { get; set; }
         
-        public LazyRow< ContentFinderCondition > ContentFinderCondition;
+        public RowRef< ContentFinderCondition > ContentFinderCondition;
 
         public DungeonChest(uint rowId, byte chestNo,uint contentFinderConditionId, Vector2 position )
         {
@@ -63,9 +65,9 @@ namespace LuminaSupplemental.Excel.Model
             return false;
         }
 
-        public virtual void PopulateData( GameData gameData, Language language )
+        public virtual void PopulateData( ExcelModule module, Language language )
         {
-            ContentFinderCondition = new LazyRow< ContentFinderCondition >( gameData, ContentFinderConditionId, language );
+            ContentFinderCondition = new RowRef< ContentFinderCondition >( module, ContentFinderConditionId);
         }
     }
 }

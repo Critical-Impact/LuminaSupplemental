@@ -4,7 +4,7 @@ using System.Linq;
 
 using Lumina;
 using Lumina.Excel;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 
 using LuminaSupplemental.Excel.Model;
 using LuminaSupplemental.SpaghettiGenerator.Generator;
@@ -16,14 +16,14 @@ public partial class ENpcPlaceStep : GeneratorStep
     private readonly ExcelSheet<Item> itemSheet;
     private readonly ExcelSheet<TerritoryType> territoryTypeSheet;
     private readonly GameData gameData;
-    private readonly Dictionary<string, Item> itemsByName;
+    private readonly Dictionary<string, uint> itemsByName;
 
     public override Type OutputType => typeof(ENpcPlace);
 
     public override string FileName => "ENpcPlace.csv";
 
     public override string Name => "Event NPC Place";
-    
+
 
     public ENpcPlaceStep(ExcelSheet<TerritoryType> territoryTypeSheet, GameData gameData)
     {

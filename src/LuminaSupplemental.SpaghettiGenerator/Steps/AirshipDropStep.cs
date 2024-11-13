@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 
 using Lumina.Excel;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 
 using LuminaSupplemental.Excel.Model;
 using LuminaSupplemental.SpaghettiGenerator.Generator;
@@ -19,9 +19,10 @@ public partial class AirshipDropStep : GeneratorStep
     private readonly DataCacher dataCacher;
     private readonly GubalApi gubalApi;
     private readonly ExcelSheet<AirshipExplorationPoint> airshipExplorationPointSheet;
+    private readonly ExcelSheet<Item> itemSheet;
     private readonly ILogger logger;
-    private readonly Dictionary<string,AirshipExplorationPoint> airshipsByName;
-    private readonly Dictionary<string,Item> itemsByName;
+    private readonly Dictionary<string,uint> airshipsByName;
+    private readonly Dictionary<string,uint> itemsByName;
 
     public override Type OutputType => typeof(AirshipDrop);
 
@@ -30,11 +31,12 @@ public partial class AirshipDropStep : GeneratorStep
     public override string Name => "Airship Drops";
 
 
-    public AirshipDropStep(DataCacher dataCacher, GubalApi gubalApi, ExcelSheet<AirshipExplorationPoint> airshipExplorationPointSheet, ILogger logger)
+    public AirshipDropStep(DataCacher dataCacher, GubalApi gubalApi, ExcelSheet<AirshipExplorationPoint> airshipExplorationPointSheet, ExcelSheet<Item> itemSheet, ILogger logger)
     {
         this.dataCacher = dataCacher;
         this.gubalApi = gubalApi;
         this.airshipExplorationPointSheet = airshipExplorationPointSheet;
+        this.itemSheet = itemSheet;
         this.logger = logger;
         var bannedItems = new HashSet< uint >()
         {
@@ -77,13 +79,13 @@ public partial class AirshipDropStep : GeneratorStep
             //Sectors are stored as numbers
             if (airshipsByName.ContainsKey(sector))
             {
-                var actualSector = airshipsByName[sector];
+                var actualSector = airshipExplorationPointSheet.GetRow(airshipsByName[sector]);
 
                 var items1List = items.Split(",");
                 foreach (var itemName in items1List)
                 {
                     var parseableItemName = itemName.Trim().ToParseable();
-                    var outputItem = itemsByName.ContainsKey(parseableItemName) ? itemsByName[parseableItemName] : null;
+                    Item? outputItem = this.itemsByName.TryGetValue(parseableItemName, out var value) ? itemSheet.GetRow(value) : null;
                     if (outputItem != null)
                     {
                         airshipDrops.Add(
@@ -91,7 +93,7 @@ public partial class AirshipDropStep : GeneratorStep
                             {
                                 RowId = (uint)(airshipDrops.Count + 1),
                                 AirshipExplorationPointId = actualSector.RowId,
-                                ItemId = outputItem.RowId
+                                ItemId = outputItem.Value.RowId
                             });
                     }
                     else

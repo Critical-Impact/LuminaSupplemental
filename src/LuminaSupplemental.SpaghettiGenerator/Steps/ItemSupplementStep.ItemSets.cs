@@ -11,7 +11,7 @@ public partial class ItemSupplementStep
     public List<ItemSupplement> ProcessItemSets()
     {
         var itemSupplements = new List<ItemSupplement>();
-        
+
         var cofferNames = new Dictionary<string[], string>
         {
             { new[] { "Crystarium", "Coffer" }, "Augmented Crystarium" },
@@ -73,12 +73,12 @@ public partial class ItemSupplementStep
             foreach (var coffer in coffers)
             {
                 var fullName = String.Join(" ", cofferName.Key);
-                if (coffer.Name == fullName)
+                if (coffer.Name.ExtractText() == fullName)
                 {
                     var items = itemSheet.Where(
                         c => !bannedItems.Contains(c.RowId) &&
                              c.Name.ToString().StartsWith(cofferName.Value) &&
-                             ((c.EquipSlotCategory.Value?.MainHand ?? 0) == 1 || (c.EquipSlotCategory.Value?.OffHand ?? 0) == 1));
+                             ((c.EquipSlotCategory.ValueNullable?.MainHand ?? 0) == 1 || (c.EquipSlotCategory.ValueNullable?.OffHand ?? 0) == 1));
                     foreach (var item in items)
                     {
                         itemSupplements.Add(new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot));
@@ -123,11 +123,11 @@ public partial class ItemSupplementStep
                         var items = itemSheet.Where(
                             c => !bannedItems.Contains(c.RowId) && c.Name.ToString().Contains(cofferName.Value) && c.Name.ToString().Contains(potentialItem) &&
                                  (
-                                     (c.EquipSlotCategory.Value?.Body ?? 0) == 1 ||
-                                     (c.EquipSlotCategory.Value?.Feet ?? 0) == 1 ||
-                                     (c.EquipSlotCategory.Value?.Head ?? 0) == 1 ||
-                                     (c.EquipSlotCategory.Value?.Gloves ?? 0) == 1 ||
-                                     (c.EquipSlotCategory.Value?.Legs ?? 0) == 1
+                                     (c.EquipSlotCategory.ValueNullable?.Body ?? 0) == 1 ||
+                                     (c.EquipSlotCategory.ValueNullable?.Feet ?? 0) == 1 ||
+                                     (c.EquipSlotCategory.ValueNullable?.Head ?? 0) == 1 ||
+                                     (c.EquipSlotCategory.ValueNullable?.Gloves ?? 0) == 1 ||
+                                     (c.EquipSlotCategory.ValueNullable?.Legs ?? 0) == 1
                                  ));
                         foreach (var item in items)
                         {
@@ -142,7 +142,7 @@ public partial class ItemSupplementStep
                     var items = itemSheet.Where(
                         c => !bannedItems.Contains(c.RowId) &&
                              c.Name.ToString().Contains(cofferName.Value) &&
-                             ((c.EquipSlotCategory.Value?.MainHand ?? 0) == 1 || (c.EquipSlotCategory.Value?.OffHand ?? 0) == 1));
+                             ((c.EquipSlotCategory.ValueNullable?.MainHand ?? 0) == 1 || (c.EquipSlotCategory.ValueNullable?.OffHand ?? 0) == 1));
                     foreach (var item in items)
                     {
                         itemSupplements.Add(new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot));
@@ -170,11 +170,11 @@ public partial class ItemSupplementStep
                                 c => !bannedItems.Contains(c.RowId) &&
                                      c.Name.ToString().Contains(cofferName.Value) && c.Name.ToString().Contains(armourType) &&
                                      (
-                                         (c.EquipSlotCategory.Value?.Body ?? 0) == 1 ||
-                                         (c.EquipSlotCategory.Value?.Feet ?? 0) == 1 ||
-                                         (c.EquipSlotCategory.Value?.Head ?? 0) == 1 ||
-                                         (c.EquipSlotCategory.Value?.Gloves ?? 0) == 1 ||
-                                         (c.EquipSlotCategory.Value?.Legs ?? 0) == 1
+                                         (c.EquipSlotCategory.ValueNullable?.Body ?? 0) == 1 ||
+                                         (c.EquipSlotCategory.ValueNullable?.Feet ?? 0) == 1 ||
+                                         (c.EquipSlotCategory.ValueNullable?.Head ?? 0) == 1 ||
+                                         (c.EquipSlotCategory.ValueNullable?.Gloves ?? 0) == 1 ||
+                                         (c.EquipSlotCategory.ValueNullable?.Legs ?? 0) == 1
                                      ));
                             foreach (var item in items)
                             {
@@ -189,7 +189,7 @@ public partial class ItemSupplementStep
                     var items = itemSheet.Where(
                         c => !bannedItems.Contains(c.RowId) &&
                              c.Name.ToString().StartsWith(cofferName.Value) && c.Name.ToString().Contains(" of ") &&
-                             (c.EquipSlotCategory.Value?.Head ?? 0) == 1);
+                             (c.EquipSlotCategory.ValueNullable?.Head ?? 0) == 1);
                     foreach (var item in items)
                     {
                         itemSupplements.Add(new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot));
@@ -201,7 +201,7 @@ public partial class ItemSupplementStep
                     var items = itemSheet.Where(
                         c => !bannedItems.Contains(c.RowId) &&
                              c.Name.ToString().StartsWith(cofferName.Value) && c.Name.ToString().Contains(" of ") &&
-                             (c.EquipSlotCategory.Value?.Body ?? 0) == 1);
+                             (c.EquipSlotCategory.ValueNullable?.Body ?? 0) == 1);
                     foreach (var item in items)
                     {
                         itemSupplements.Add(new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot));
@@ -213,7 +213,7 @@ public partial class ItemSupplementStep
                     var items = itemSheet.Where(
                         c => !bannedItems.Contains(c.RowId) &&
                              c.Name.ToString().StartsWith(cofferName.Value) && c.Name.ToString().Contains(" of ") &&
-                             (c.EquipSlotCategory.Value?.Gloves ?? 0) == 1);
+                             (c.EquipSlotCategory.ValueNullable?.Gloves ?? 0) == 1);
                     foreach (var item in items)
                     {
                         itemSupplements.Add(new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot));
@@ -225,7 +225,7 @@ public partial class ItemSupplementStep
                     var items = itemSheet.Where(
                         c => !bannedItems.Contains(c.RowId) &&
                              c.Name.ToString().StartsWith(cofferName.Value) && c.Name.ToString().Contains(" of ") &&
-                             (c.EquipSlotCategory.Value?.Legs ?? 0) == 1);
+                             (c.EquipSlotCategory.ValueNullable?.Legs ?? 0) == 1);
                     foreach (var item in items)
                     {
                         itemSupplements.Add(new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot));
@@ -237,7 +237,7 @@ public partial class ItemSupplementStep
                     var items = itemSheet.Where(
                         c => !bannedItems.Contains(c.RowId) &&
                              c.Name.ToString().StartsWith(cofferName.Value) && c.Name.ToString().Contains(" of ") &&
-                             (c.EquipSlotCategory.Value?.Feet ?? 0) == 1);
+                             (c.EquipSlotCategory.ValueNullable?.Feet ?? 0) == 1);
                     foreach (var item in items)
                     {
                         itemSupplements.Add(new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot));
@@ -249,7 +249,7 @@ public partial class ItemSupplementStep
                     var items = itemSheet.Where(
                         c => !bannedItems.Contains(c.RowId) &&
                              c.Name.ToString().StartsWith(cofferName.Value) && c.Name.ToString().Contains(" of ") &&
-                             (c.EquipSlotCategory.Value?.Ears ?? 0) == 1);
+                             (c.EquipSlotCategory.ValueNullable?.Ears ?? 0) == 1);
                     foreach (var item in items)
                     {
                         itemSupplements.Add(new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot));
@@ -261,7 +261,7 @@ public partial class ItemSupplementStep
                     var items = itemSheet.Where(
                         c => !bannedItems.Contains(c.RowId) &&
                              c.Name.ToString().StartsWith(cofferName.Value) && c.Name.ToString().Contains(" of ") &&
-                             (c.EquipSlotCategory.Value?.Neck ?? 0) == 1);
+                             (c.EquipSlotCategory.ValueNullable?.Neck ?? 0) == 1);
                     foreach (var item in items)
                     {
                         itemSupplements.Add(new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot));
@@ -273,7 +273,7 @@ public partial class ItemSupplementStep
                     var items = itemSheet.Where(
                         c => !bannedItems.Contains(c.RowId) &&
                              c.Name.ToString().StartsWith(cofferName.Value) && c.Name.ToString().Contains(" of ") &&
-                             (c.EquipSlotCategory.Value?.Wrists ?? 0) == 1);
+                             (c.EquipSlotCategory.ValueNullable?.Wrists ?? 0) == 1);
                     foreach (var item in items)
                     {
                         itemSupplements.Add(new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot));
@@ -285,7 +285,7 @@ public partial class ItemSupplementStep
                     var items = itemSheet.Where(
                         c => !bannedItems.Contains(c.RowId) &&
                              c.Name.ToString().StartsWith(cofferName.Value) && c.Name.ToString().Contains(" of ") &&
-                             (c.EquipSlotCategory.Value?.FingerL ?? 0) == 1);
+                             (c.EquipSlotCategory.ValueNullable?.FingerL ?? 0) == 1);
                     foreach (var item in items)
                     {
                         itemSupplements.Add(new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot));
@@ -313,11 +313,11 @@ public partial class ItemSupplementStep
                                 c => !bannedItems.Contains(c.RowId) && c.Name.ToString().Contains(cofferName.Value) &&
                                      c.Name.ToString().Contains(armourType) &&
                                      (
-                                         (c.EquipSlotCategory.Value?.Ears ?? 0) == 1 ||
-                                         (c.EquipSlotCategory.Value?.Neck ?? 0) == 1 ||
-                                         (c.EquipSlotCategory.Value?.FingerL ?? 0) == 1 ||
-                                         (c.EquipSlotCategory.Value?.FingerR ?? 0) == 1 ||
-                                         (c.EquipSlotCategory.Value?.Wrists ?? 0) == 1
+                                         (c.EquipSlotCategory.ValueNullable?.Ears ?? 0) == 1 ||
+                                         (c.EquipSlotCategory.ValueNullable?.Neck ?? 0) == 1 ||
+                                         (c.EquipSlotCategory.ValueNullable?.FingerL ?? 0) == 1 ||
+                                         (c.EquipSlotCategory.ValueNullable?.FingerR ?? 0) == 1 ||
+                                         (c.EquipSlotCategory.ValueNullable?.Wrists ?? 0) == 1
                                      ));
                             foreach (var item in items)
                             {

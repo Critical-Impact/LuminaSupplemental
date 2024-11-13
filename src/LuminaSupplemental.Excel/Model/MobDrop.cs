@@ -8,7 +8,8 @@ using CsvHelper.Configuration.Attributes;
 using Lumina;
 using Lumina.Data;
 using Lumina.Excel;
-using Lumina.Excel.GeneratedSheets;
+
+using Lumina.Excel.Sheets;
 
 namespace LuminaSupplemental.Excel.Model
 {
@@ -18,9 +19,9 @@ namespace LuminaSupplemental.Excel.Model
         [Name("ItemId")] public uint ItemId { get; set; }
         [Name("BNpcNameId")] public uint BNpcNameId { get; set; }
 
-        public LazyRow< BNpcName > BNpcName;
+        public RowRef< BNpcName > BNpcName;
         
-        public LazyRow< Item > Item;
+        public RowRef< Item > Item;
 
         public MobDrop(uint rowId, uint itemId, uint bNpcNameId )
         {
@@ -51,10 +52,10 @@ namespace LuminaSupplemental.Excel.Model
             return false;
         }
 
-        public virtual void PopulateData( GameData gameData, Language language )
+        public virtual void PopulateData( ExcelModule module, Language language )
         {
-            BNpcName = new LazyRow< BNpcName >( gameData, BNpcNameId, language );
-            Item = new LazyRow< Item >( gameData, ItemId, language );
+            BNpcName = new RowRef< BNpcName >( module, BNpcNameId);
+            Item = new RowRef< Item >( module, ItemId);
         }
     }
 }

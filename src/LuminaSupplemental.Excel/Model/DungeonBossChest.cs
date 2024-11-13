@@ -1,14 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Reflection;
-using CsvHelper;
 using CsvHelper.Configuration.Attributes;
-using Lumina;
 using Lumina.Data;
 using Lumina.Excel;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 
 namespace LuminaSupplemental.Excel.Model
 {
@@ -20,10 +14,10 @@ namespace LuminaSupplemental.Excel.Model
         [Name("Quantity")] public uint Quantity { get; set; }
         [Name("FightNo")] public uint FightNo { get; set; }
         [Name("CofferNo")] public uint CofferNo { get; set; }
-        
-        public LazyRow< Item > Item;
-        
-        public LazyRow< ContentFinderCondition > ContentFinderCondition;
+
+        public RowRef< Item > Item;
+
+        public RowRef< ContentFinderCondition > ContentFinderCondition;
 
         public DungeonBossChest(uint rowId, uint fightNo, uint itemId, uint contentFinderConditionId, uint quantity, uint cofferNo )
         {
@@ -37,7 +31,7 @@ namespace LuminaSupplemental.Excel.Model
 
         public DungeonBossChest()
         {
-            
+
         }
 
         public void FromCsv(string[] lineData)
@@ -60,10 +54,10 @@ namespace LuminaSupplemental.Excel.Model
             return false;
         }
 
-        public virtual void PopulateData( GameData gameData, Language language )
+        public virtual void PopulateData( ExcelModule module, Language language )
         {
-            Item = new LazyRow< Item >( gameData, ItemId, language );
-            ContentFinderCondition = new LazyRow< ContentFinderCondition >( gameData, ContentFinderConditionId, language );
+            Item = new RowRef< Item >( module, ItemId);
+            ContentFinderCondition = new RowRef< ContentFinderCondition >( module, ContentFinderConditionId);
         }
     }
 }

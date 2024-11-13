@@ -10,7 +10,9 @@ using CsvHelper.Configuration.Attributes;
 using Lumina;
 using Lumina.Data;
 using Lumina.Excel;
-using Lumina.Excel.GeneratedSheets;
+
+using Lumina.Excel.Sheets;
+
 using LuminaSupplemental.Excel.Converters;
 
 namespace LuminaSupplemental.Excel.Model
@@ -23,11 +25,11 @@ namespace LuminaSupplemental.Excel.Model
         [Name("MapId")] public uint MapId { get; set; }
         [Name("PlaceNameId")] public uint PlaceNameId { get; set; }
         [Name("Position"), TypeConverter(typeof(Vector2Converter))] public Vector2 Position { get; set; }
-        
-        public LazyRow<ENpcResident> ENpcResident;
-        public LazyRow<TerritoryType> TerritoryType;
-        public LazyRow<Map> Map;
-        public LazyRow<PlaceName> PlaceName;
+
+        public RowRef<ENpcResident> ENpcResident;
+        public RowRef<TerritoryType> TerritoryType;
+        public RowRef<Map> Map;
+        public RowRef<PlaceName> PlaceName;
 
         public ENpcPlace(uint rowId, uint eNpcResidentId, uint territoryTypeId, uint mapId, uint placeNameId, Vector2 position )
         {
@@ -41,7 +43,7 @@ namespace LuminaSupplemental.Excel.Model
 
         public ENpcPlace()
         {
-            
+
         }
 
         public void FromCsv(string[] lineData)
@@ -74,18 +76,18 @@ namespace LuminaSupplemental.Excel.Model
             return false;
         }
 
-        public virtual void PopulateData( GameData gameData, Language language )
+        public virtual void PopulateData( ExcelModule module, Language language )
         {
-            ENpcResident = new LazyRow< ENpcResident >( gameData, ENpcResidentId, language );
-            TerritoryType = new LazyRow< TerritoryType >( gameData, TerritoryTypeId, language );
-            Map = new LazyRow<Map>( gameData, MapId, language );
-            PlaceName = new LazyRow<PlaceName>( gameData, PlaceNameId, language );
+            ENpcResident = new RowRef< ENpcResident >( module, ENpcResidentId);
+            TerritoryType = new RowRef< TerritoryType >( module, TerritoryTypeId);
+            Map = new RowRef<Map>( module, MapId);
+            PlaceName = new RowRef<PlaceName>( module, PlaceNameId);
         }
-        
+
         public bool EqualRounded(ENpcPlace other)
         {
-            if (Map.Row.Equals(other.Map.Row) && PlaceName.Row.Equals(other.PlaceName.Row))
-            {   
+            if (Map.RowId.Equals(other.Map.RowId) && PlaceName.RowId.Equals(other.PlaceName.RowId))
+            {
                 var x = (int) Position.X;
                 var y = (int) Position.Y;
                 var otherX = (int) other.Position.X;

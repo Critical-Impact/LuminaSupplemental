@@ -8,7 +8,8 @@ using CsvHelper.Configuration.Attributes;
 using Lumina;
 using Lumina.Data;
 using Lumina.Excel;
-using Lumina.Excel.GeneratedSheets;
+
+using Lumina.Excel.Sheets;
 
 namespace LuminaSupplemental.Excel.Model
 {
@@ -18,9 +19,9 @@ namespace LuminaSupplemental.Excel.Model
         [Name("ItemId")] public uint ItemId { get; set; }
         [Name("FateId")] public uint FateId { get; set; }
 
-        public LazyRow<Fate> Fate;
+        public RowRef<Fate> Fate;
         
-        public LazyRow<Item> Item;
+        public RowRef<Item> Item;
         
         public FateItem(uint rowId, uint itemId, uint fateId )
         {
@@ -51,10 +52,10 @@ namespace LuminaSupplemental.Excel.Model
             return false;
         }
 
-        public virtual void PopulateData( GameData gameData, Language language )
+        public virtual void PopulateData( ExcelModule module, Language language )
         {
-            Fate = new LazyRow<Fate>( gameData, FateId, language );
-            Item = new LazyRow<Item>( gameData, ItemId, language );
+            Fate = new RowRef<Fate>( module, FateId);
+            Item = new RowRef<Item>( module, ItemId);
         }
     }
 }

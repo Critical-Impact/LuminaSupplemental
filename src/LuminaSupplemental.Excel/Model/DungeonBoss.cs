@@ -10,7 +10,8 @@ using CsvHelper.Configuration.Attributes;
 using Lumina;
 using Lumina.Data;
 using Lumina.Excel;
-using Lumina.Excel.GeneratedSheets;
+
+using Lumina.Excel.Sheets;
 
 namespace LuminaSupplemental.Excel.Model
 {
@@ -21,9 +22,9 @@ namespace LuminaSupplemental.Excel.Model
         [Name("ContentFinderConditionId")] public uint ContentFinderConditionId { get; set; }
         [Name("FightNo")] public uint FightNo { get; set; }
         
-        public LazyRow< BNpcName > BNpcName;
+        public RowRef< BNpcName > BNpcName;
         
-        public LazyRow< ContentFinderCondition > ContentFinderCondition;
+        public RowRef< ContentFinderCondition > ContentFinderCondition;
 
         public DungeonBoss()
         {
@@ -56,10 +57,10 @@ namespace LuminaSupplemental.Excel.Model
             return false;
         }
 
-        public virtual void PopulateData( GameData gameData, Language language )
+        public virtual void PopulateData( ExcelModule module, Language language )
         {
-            BNpcName = new LazyRow< BNpcName >( gameData, BNpcNameId, language );
-            ContentFinderCondition = new LazyRow< ContentFinderCondition >( gameData, ContentFinderConditionId, language );
+            BNpcName = new RowRef< BNpcName >( module, BNpcNameId);
+            ContentFinderCondition = new RowRef< ContentFinderCondition >( module, ContentFinderConditionId);
         }
     }
 }

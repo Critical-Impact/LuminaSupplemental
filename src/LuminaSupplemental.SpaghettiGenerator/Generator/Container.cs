@@ -84,16 +84,16 @@ public class Container
                 var appConfig = c.Resolve<AppConfig>();
                 return new GameData(appConfig.Basic.FFXIVGameDirectory, new LuminaOptions() { PanicOnSheetChecksumMismatch = false });
             }).SingleInstance();
-        
+
         var dataAccess = Assembly.GetExecutingAssembly();
-        
+
         builder.RegisterAssemblyTypes(dataAccess)
                .Where(t => t.Name.EndsWith("Step"))
                .Where(c => c is { IsAbstract: false, IsInterface: false })
                .Where(c => c.IsAssignableTo(typeof(IGeneratorStep)))
                .As<IGeneratorStep>()
                .AsImplementedInterfaces();
-        
+
         builder.RegisterAssemblyTypes(dataAccess)
                .Where(t => t.Name.EndsWith("Step"))
                .Where(c => c is { IsAbstract: false, IsInterface: false })
@@ -106,8 +106,7 @@ public class Container
             var gameData = context.Resolve<GameData>();
             var method = typeof(GameData)
                          .GetMethods()
-                         .FirstOrDefault(m => m.Name == "GetExcelSheet" && m.IsGenericMethod && m.GetParameters().Length == 0);
-            
+                         .FirstOrDefault(m => m.Name == "GetExcelSheet" && m.IsGenericMethod && m.GetParameters().Length == 2);
             if (method == null)
             {
                 throw new InvalidOperationException("No matching GetExcelSheet method found.");
@@ -115,9 +114,9 @@ public class Container
 
             // Make the method generic with the specific type
             var genericMethod = method.MakeGenericMethod(parameters);
-            return genericMethod.Invoke(gameData, null)!;
+            return genericMethod.Invoke(gameData, [null, null])!;
         }).As(typeof(ExcelSheet<>));
-        
+
 
         this.containerBuilder = builder;
     }

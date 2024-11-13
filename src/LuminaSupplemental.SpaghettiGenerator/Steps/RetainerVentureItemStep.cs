@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel;
+using Lumina.Excel.Sheets;
 
 using LuminaSupplemental.Excel.Model;
 using LuminaSupplemental.SpaghettiGenerator.Generator;
@@ -13,19 +14,23 @@ namespace LuminaSupplemental.SpaghettiGenerator.Steps;
 public partial class RetainerVentureItemStep : GeneratorStep
 {
     private readonly DataCacher dataCacher;
-    private readonly Dictionary<string,Item> itemsByName;
-    private readonly Dictionary<string,RetainerTaskRandom> retainerTaskRandomByName;
+    private readonly ExcelSheet<Item> itemSheet;
+    private readonly ExcelSheet<RetainerTaskRandom> retainerTaskRandomSheet;
+    private readonly Dictionary<string,uint> itemsByName;
+    private readonly Dictionary<string,uint> retainerTaskRandomByName;
 
     public override Type OutputType => typeof(RetainerVentureItem);
 
     public override string FileName => "RetainerVentureItem.csv";
 
     public override string Name => "Retainer Venture Items";
-    
 
-    public RetainerVentureItemStep(DataCacher dataCacher)
+
+    public RetainerVentureItemStep(DataCacher dataCacher, ExcelSheet<Item> itemSheet, ExcelSheet<RetainerTaskRandom> retainerTaskRandomSheet)
     {
         this.dataCacher = dataCacher;
+        this.itemSheet = itemSheet;
+        this.retainerTaskRandomSheet = retainerTaskRandomSheet;
         var bannedItems = new HashSet< uint >()
         {
             0,
@@ -48,34 +53,34 @@ public partial class RetainerVentureItemStep : GeneratorStep
 
         return [..items.Select(c => c)];
     }
-    
+
     private List<RetainerVentureItem> Process()
     {
         List<RetainerVentureItem> retainerVentureItems = new();
-        
+
         var reader = CSVFile.CSVReader.FromFile(Path.Combine( "ManualData","RetainerVentures.csv"));
 
         foreach( var line in reader.Lines() )
         {
             var ventureName = line[ 0 ];
             var items = line[1].Split( "," );
-                
+
             var parsedVentureName = ventureName.ToParseable();
             if( retainerTaskRandomByName.ContainsKey( parsedVentureName ) )
             {
-                var retainerTaskRandom = retainerTaskRandomByName[ parsedVentureName ];
+                var retainerTaskRandom = this.retainerTaskRandomSheet.GetRow(retainerTaskRandomByName[ parsedVentureName ]);
 
                 foreach( var itemName in items )
                 {
                     var parseableItemName = itemName.Trim().ToParseable();
-                    var outputItem = itemsByName.ContainsKey( parseableItemName ) ? itemsByName[ parseableItemName ] : null;
+                    Item? outputItem = itemsByName.ContainsKey( parseableItemName ) ? this.itemSheet.GetRow(itemsByName[ parseableItemName ]) : null;
                     if( outputItem != null )
                     {
                         retainerVentureItems.Add( new RetainerVentureItem()
                         {
                             RowId = (uint)(retainerVentureItems.Count + 1),
                             RetainerTaskRandomId = retainerTaskRandom.RowId,
-                            ItemId = outputItem.RowId
+                            ItemId = outputItem.Value.RowId
                         });
                     }
                     else
@@ -89,7 +94,7 @@ public partial class RetainerVentureItemStep : GeneratorStep
                 Console.WriteLine("Could not find the retainer task random with name " + ventureName);
             }
         }
-        
+
         return retainerVentureItems;
     }
 }

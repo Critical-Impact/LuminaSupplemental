@@ -9,7 +9,7 @@ using CsvHelper.TypeConversion;
 using Lumina;
 using Lumina.Data;
 using Lumina.Excel;
-using Lumina.Excel.GeneratedSheets;
+
 
 namespace LuminaSupplemental.Excel.Model
 {
@@ -51,7 +51,7 @@ namespace LuminaSupplemental.Excel.Model
             return false;
         }
 
-        public virtual void PopulateData( GameData gameData, Language language )
+        public virtual void PopulateData( ExcelModule module, Language language )
         {
         }
 

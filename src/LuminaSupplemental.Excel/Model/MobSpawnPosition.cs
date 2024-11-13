@@ -8,7 +8,9 @@ using CsvHelper.TypeConversion;
 using Lumina;
 using Lumina.Data;
 using Lumina.Excel;
-using Lumina.Excel.GeneratedSheets;
+
+using Lumina.Excel.Sheets;
+
 using LuminaSupplemental.Excel.Converters;
 
 namespace LuminaSupplemental.Excel.Model;
@@ -21,9 +23,9 @@ public class MobSpawnPosition : ICsv
     [Name("Position"), TypeConverter(typeof(Vector3Converter))] public Vector3 Position { get; set; }
     [Name("Subtype")] public byte Subtype { get; set; }
 
-    public LazyRow< BNpcBase > BNpcBase;
-    public LazyRow< BNpcName > BNpcName;
-    public LazyRow< TerritoryType > TerritoryType;
+    public RowRef< BNpcBase > BNpcBase;
+    public RowRef< BNpcName > BNpcName;
+    public RowRef< TerritoryType > TerritoryType;
 
     public MobSpawnPosition(uint bNpcBaseId, uint bNpcNameId, uint territoryTypeId, Vector3 position, byte subtype)
     {
@@ -79,10 +81,10 @@ public class MobSpawnPosition : ICsv
         return true;
     }
 
-    public virtual void PopulateData( GameData gameData, Language language )
+    public virtual void PopulateData( ExcelModule module, Language language )
     {
-        BNpcBase = new LazyRow< BNpcBase >( gameData, BNpcBaseId, language );
-        BNpcName = new LazyRow< BNpcName >( gameData, BNpcNameId, language );
-        TerritoryType = new LazyRow< TerritoryType >( gameData, TerritoryTypeId, language );
+        BNpcBase = new RowRef< BNpcBase >( module, BNpcBaseId);
+        BNpcName = new RowRef< BNpcName >( module, BNpcNameId);
+        TerritoryType = new RowRef< TerritoryType >( module, TerritoryTypeId);
     }
 }

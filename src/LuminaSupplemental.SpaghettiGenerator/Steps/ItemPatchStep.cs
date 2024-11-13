@@ -7,7 +7,7 @@ using System.Linq;
 using CSVFile;
 
 using Lumina.Excel;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 
 using LuminaSupplemental.Excel.Model;
 using LuminaSupplemental.SpaghettiGenerator.Generator;
@@ -26,7 +26,7 @@ public partial class ItemPatchStep : GeneratorStep
     public override string FileName => "ItemPatch.csv";
 
     public override string Name => "Item Patches";
-    
+
 
     public ItemPatchStep(ExcelSheet<Item> itemSheet)
     {
@@ -46,18 +46,18 @@ public partial class ItemPatchStep : GeneratorStep
 
         return [..items.Select(c => c)];
     }
-    
+
     private List<ItemPatch> Process()
     {
         List<ItemPatch> itemPatches = new();
         var patchText = File.ReadAllText( @"patches.json" );
         var patches = JsonConvert.DeserializeObject<PatchJson[]>(patchText)!.ToList();
         var knownItemIds = patches.Where( c => c.Type == "item" ).Select( c => c.Id ).Distinct().ToHashSet();
-        
+
         //Process extra data not in GT's jsons(no idea why)
-        
+
         var reader = CSVFile.CSVReader.FromFile(Path.Combine( "ManualData","ExtraPatchData.csv"), CSVSettings.CSV);
-        
+
         foreach( var line in reader.Lines() )
         {
             var sourceItemId = uint.Parse(line[ 0 ]);
@@ -91,7 +91,7 @@ public partial class ItemPatchStep : GeneratorStep
             {
                 firstItem = orderedPatch.Id;
             }
-            
+
 
             if( currentPatch != orderedPatch.Patch && lastItem != null)
             {
@@ -111,7 +111,7 @@ public partial class ItemPatchStep : GeneratorStep
         {
             itemPatches.Add( new ItemPatch((uint)(itemPatches.Count + 1), patch.Item2, patch.Item3, patch.Item1) );
         }
-        
+
         return itemPatches;
     }
 }

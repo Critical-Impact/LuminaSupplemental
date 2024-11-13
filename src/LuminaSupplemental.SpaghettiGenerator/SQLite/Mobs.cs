@@ -3,7 +3,9 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Lumina.Excel.GeneratedSheets;
+
+using Lumina.Excel.Sheets;
+
 
 namespace LuminaSupplemental.SpaghettiGenerator
 {
@@ -30,7 +32,7 @@ namespace LuminaSupplemental.SpaghettiGenerator
                 var realMobId = bnpcName.Key.ToString().Substring( bnpcName.Key.ToString().Length - 5, 5 ).Trim( '0' );
                 if( UInt32.TryParse( realMobId, out var parsedMobId ) )
                 {
-                    var actualNpc = bNpcNameSheet.GetRow( parsedMobId );
+                    var actualNpc = bNpcNameSheet.GetRowOrDefault( parsedMobId );
                     if( actualNpc != null )
                     {
                         dynamic data = JsonConvert.DeserializeObject( bnpcName.Value.data );
@@ -48,16 +50,16 @@ namespace LuminaSupplemental.SpaghettiGenerator
                             string key = (string)zone.Key;
                             if( UInt32.TryParse( key, out var parsedKey ) )
                             {
-                                var placeName = placeNameSheet.GetRow( parsedKey );
+                                var placeName = placeNameSheet.GetRowOrDefault( parsedKey );
                                 if( placeName != null )
                                 {
-                                    if( !_builder.PlaceNamesByMobId.TryGetValue( actualNpc.RowId, out var itemIds ) )
+                                    if( !_builder.PlaceNamesByMobId.TryGetValue( actualNpc.Value.RowId, out var itemIds ) )
                                     {
                                         itemIds = new HashSet< uint >();
-                                        _builder.PlaceNamesByMobId[ actualNpc.RowId ] = itemIds;
+                                        _builder.PlaceNamesByMobId[ actualNpc.Value.RowId ] = itemIds;
                                     }
 
-                                    itemIds.Add( placeName.RowId );
+                                    itemIds.Add( placeName.Value.RowId );
                                 }
                             }
                         }
@@ -97,13 +99,13 @@ namespace LuminaSupplemental.SpaghettiGenerator
                             var realMobId = mob.ToString().Substring( mob.ToString().Length - 5, 5 ).Trim( '0' );
                             if( UInt32.TryParse( realMobId, out var parsedMobId ) )
                             {
-                                var actualNpc = Service.GameData.GetExcelSheet< BNpcName >().GetRow(  parsedMobId );
+                                var actualNpc = Service.GameData.GetExcelSheet< BNpcName >()!.GetRowOrDefault(  parsedMobId );
                                 if( actualNpc != null )
                                 {
-                                    if( !_builder.ItemDropsByMobId.TryGetValue( actualNpc.RowId, out var itemIds ) )
+                                    if( !_builder.ItemDropsByMobId.TryGetValue( actualNpc.Value.RowId, out var itemIds ) )
                                     {
                                         itemIds = new HashSet< uint >();
-                                        _builder.ItemDropsByMobId[ actualNpc.RowId ] = itemIds;
+                                        _builder.ItemDropsByMobId[ actualNpc.Value.RowId ] = itemIds;
                                     }
 
                                     itemIds.Add( sItem.RowId );
