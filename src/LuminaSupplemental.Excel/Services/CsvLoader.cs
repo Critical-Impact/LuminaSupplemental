@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Text;
+
+using CSVFile;
 
 using CsvHelper;
 
@@ -16,19 +19,24 @@ namespace LuminaSupplemental.Excel.Services;
 
 public static class CsvLoader
 {
-    public static List< T > LoadCsv<T>(string filePath, out List<string> failedLines, GameData? gameData = null, Language? language = null) where T : ICsv, new()
+    public static List< T > LoadCsv<T>(string filePath, out List<string> failedLines, out List<Exception> exceptions, GameData? gameData = null, Language? language = null) where T : ICsv, new()
     {
         using var fileStream = new FileStream( filePath, FileMode.Open );
         using( StreamReader reader = new StreamReader( fileStream ) )
         {
             failedLines = new List< string >();
+            exceptions = new List< Exception >();
             var items = new List< T >();
+
             //Loading an empty file
             if( reader.EndOfStream )
             {
                 return items;
             }
-            var csvReader = CSVFile.CSVReader.FromString( reader.ReadToEnd() );
+
+            var fileContents = reader.ReadToEnd();
+            fileContents = fileContents.ReplaceLineEndings("\n"); // Works around the fact that apparently CI can change line endings
+            var csvReader = CSVFile.CSVReader.FromString( fileContents, new CSVSettings { Encoding = Encoding.UTF8, LineSeparator = "\n" } );
             foreach( var line in csvReader.Lines() )
             {
                 T item = new T();
@@ -43,6 +51,7 @@ public static class CsvLoader
                 }
                 catch( Exception e )
                 {
+                    exceptions.Add(e);
                     failedLines.Add( String.Join( ",",line ) );
                 }
             }
@@ -72,11 +81,12 @@ public static class CsvLoader
     public const string HouseVendorResourceName = "LuminaSupplemental.Excel.Generated.HouseVendor.csv";
     public const string FateItemResourceName = "LuminaSupplemental.Excel.Generated.FateItem.csv";
 
-    public static List< T > LoadResource<T>(string resourceName, out List<string> failedLines, GameData? gameData = null, Language? language = null) where T : ICsv, new()
+    public static List< T > LoadResource<T>(string resourceName, out List<string> failedLines, out List<Exception> exceptions, GameData? gameData = null, Language? language = null) where T : ICsv, new()
     {
         var assembly = Assembly.GetExecutingAssembly();
         using( Stream? stream = assembly.GetManifestResourceStream( resourceName ) )
         {
+            exceptions = new List< Exception >();
             failedLines = new List< string >();
             if( stream == null )
             {
@@ -84,7 +94,9 @@ public static class CsvLoader
             }
             using( StreamReader reader = new StreamReader( stream ) )
             {
-                var csvReader = CSVFile.CSVReader.FromString( reader.ReadToEnd() );
+                var file = reader.ReadToEnd();
+                file = file.ReplaceLineEndings("\n"); // Works around the fact that apparently CI can change line endings
+                var csvReader = CSVFile.CSVReader.FromString( file, new CSVSettings { Encoding = Encoding.UTF8, LineSeparator = "\n" } );
                 var items = new List< T >();
                 foreach( var line in csvReader.Lines() )
                 {
@@ -102,6 +114,7 @@ public static class CsvLoader
                     }
                     catch( Exception e )
                     {
+                        exceptions.Add(e);
                         failedLines.Add( String.Join( ",",line ) );
                     }
                 }
