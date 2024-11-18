@@ -43,7 +43,7 @@ public partial class SubmarineDropStep : GeneratorStep
             0,
             24225
         };
-        this.submarinesByName = this.dataCacher.ByName<SubmarineExploration>(item => item.Destination.ToString().ToParseable());
+        this.submarinesByName = this.dataCacher.ByName<SubmarineExploration>(item => item.Destination.ExtractText().ToParseable());
         this.itemsByName = this.dataCacher.ByName<Item>(item => item.Name.ToString().ToParseable(), item => !bannedItems.Contains(item.RowId));
     }
 
@@ -52,7 +52,7 @@ public partial class SubmarineDropStep : GeneratorStep
     {
         List<SubmarineDrop> items = new ();
         items.AddRange(this.Process());
-        items.AddRange(this.ProcessGubalData());
+        //items.AddRange(this.ProcessGubalData()); // No longer needed as the data from the CSV is up to date
         items = items.DistinctBy(c => (c.ItemId, c.SubmarineExplorationId)).ToList();
         for (var index = 0; index < items.Count; index++)
         {
@@ -63,6 +63,23 @@ public partial class SubmarineDropStep : GeneratorStep
         return [..items.Select(c => c)];
     }
 
+    private Dictionary<string, string> MateriaNames = new()
+    {
+        { "Direct Hit Rate", "Heavens' Eye Materia" },
+        { "Skill Speed", "Quickarm" },
+        { "Spell Speed", "Quicktongue" },
+        { "Tenacity", "Battledance" },
+        { "Control", "Craftsman's Command" },
+        { "Craftsmanship", "Craftsman's Competence" },
+        { "GP", "Gatherer's Grasp" },
+        { "Perception", "Gatherer's Guile" },
+        { "Determination", "Savage Might" },
+        { "Piety", "Piety" },
+        { "CP", "Craftsman's Cunning" },
+        { "Critical Hit", "Savage Aim" },
+        { "Gathering", "Gatherer's Guerdon" },
+    };
+
     private List<SubmarineDrop> Process()
     {
         List<SubmarineDrop> submarineDrops = new();
@@ -72,7 +89,8 @@ public partial class SubmarineDropStep : GeneratorStep
         foreach( var line in reader.Lines() )
         {
             var sector = line[ 0 ];
-            var items = line[ 3 ] + "," + line[ 4 ];
+            var items = line[ 3 ] + "," + line[ 4 ] + "," + line[ 5 ];
+            items = items.ReplaceLineEndings(",");
 
             sector = sector.ToParseable();
             if( submarinesByName.ContainsKey( sector ) )
@@ -80,8 +98,14 @@ public partial class SubmarineDropStep : GeneratorStep
                 var actualSector = this.submarineExplorationSheet.GetRow(submarinesByName[ sector ]);
 
                 var items1List = items.Split( "," );
-                foreach( var itemName in items1List )
+                foreach( var tempName in items1List )
                 {
+                    var itemName = tempName;
+                    if (MateriaNames.Any(c => itemName.Contains(c.Key + " ")))
+                    {
+                        var nameMap = MateriaNames.First(c => itemName.Contains(c.Key + " "));
+                        itemName = itemName.Replace(nameMap.Key, nameMap.Value + " Materia").Replace("Materia Materia", "Materia");//whyyyy
+                    }
                     var parseableItemName = itemName.Trim().ToParseable();
                     Item? outputItem = itemsByName.ContainsKey( parseableItemName ) ? this.itemSheet.GetRow(itemsByName[ parseableItemName ]) : null;
                     if( outputItem != null )

@@ -1,104 +1,856 @@
-Sector,Unlocked Via,Rank Required,Items1,Items2
-The Ivory Shoals,,1,"Bamboo Weave,   Red Moko Grass,   Empty Crystal","Birch Branch,   Scarlet Sap,   Unaspected Crystal,   Quickarm Materia III,   Heavens' Eye Materia II,   Water Crystal,   Wind Crystal,   Earth Crystal"
-Deep-sea Site 1,,1,"Bamboo Weave,   Red Moko Grass,   Empty Crystal,   Vivianite","Ferberite,   Gold Ore,   Battledance Materia II,   Battledance Materia III,   Quicktongue Materia II,   Quicktongue Materia III,   Earth Crystal,   Ice Crystal,   Unaspected Crystal,"
-Deep-sea Site 2,The Ivory Shoals,4,"Bamboo Weave,   Red Moko Grass,   Empty Crystal","Unaspected Crystal,   Birch Branch,   Scarlet Sap,   Craftsman's Command Materia II,   Craftsman's Command Materia III,   Craftsman's Competence Materia II,   Craftsman's Competence Materia III,   Wind Crystal,   Water Crystal"
-The Lightless Basin,Deep-sea Site 1,4,"Bamboo Weave,   Empty Crystal,   Vivianite,   Crimson Coral","Ferberite,   Gold Ore,   Unaspected Crystal,   Gatherer's Grasp Materia II,   Gatherer's Grasp Materia III,   Gatherer's Guile Materia II,   Gatherer's Guile Materia III,   Earth Crystal,   Ice Crystal"
-Deep-sea Site 3,Deep-sea Site 1,7,"Bamboo Weave,   Red Moko Grass,   Deep-red Crystal,   Empty Crystal,   Aurelia Polyp","Dark Chestnut Branch,   Birch Branch,   Unaspected Crystal,   Savage Might Materia II,   Savage Might Materia III,   Quickarm Materia III,   Water Crystal,   Wind Crystal"
-The Southern Rimilala Trench,Deep-sea Site 2,7,"Bamboo Weave,   Deep-green Crystal,   Empty Crystal,   Vivianite,   Crimson Coral","Gold Ore,   Platinum Ore,   Unaspected Crystal,   Piety Materia II,   Piety Materia III,   Quicktongue Materia II,   Quicktongue Materia III,   Ice Crystal,   Earth Crystal"
-The Umbrella Narrow,The Lightless Basin,10,"Bamboo Weave,   Red Moko Grass,   Deep-blue Crystal,   Empty Crystal,   Balsa Wood Scrap,   Aurelia Polyp","Dark Chestnut Branch,   Birch Branch,   Unaspected Crystal,   Craftsman's Command Materia II,   Craftsman's Command Materia III,   Craftsman's Cunning Materia II,   Craftsman's Cunning Materia III,   Wind Crystal,   Water Crystal"
-Offender's Rot,The Umbrella Narrow,14,"Bamboo Weave,   Red Clay,   Balsa Wood Scrap,   Deep-red Crystal,   Empty Crystal","Dark Chestnut Branch,   Birch Branch,   Unaspected Crystal,   Savage Aim Materia II,   Savage Aim Materia III,   Savage Might Materia III,   Lightning Crystal,   Water Crystal"
-Neolith Island,Deep-sea Site 3,17,"Bamboo Weave,   Red Clay,   Balsa Wood Scrap,   Colossus Slab,   Deep-red Crystal,   Empty Crystal","Gold Ore,   Platinum Ore,   Ferberite,   Unaspected Crystal,   Quickarm Materia II,   Quickarm Materia III,   Savage Aim Materia III,   Fire Crystal,   Ice Crystal"
-Unidentified Derelict,Deep-sea Site 3,20,"2nd Submersible Permission,   Extravagant Salvaged Ring,   Extravagant Salvaged Bracelet,   Extravagant Salvaged Earring,   Extravagant Salvaged Necklace,   Salvaged Bracelet,   Salvaged Earring,   Salvaged Necklace,   Salvaged Ring","Star Sapphire,   Sapphire,   Star Ruby,   Ruby,   Emerald,   Diamond,   Gold Ingot,   Platinum Ingot"
-The Cobalt Shoals,Neolith Island,20,"Bamboo Weave,   Balsa Wood Lumber,   Balsa Wood Scrap,   Deep-blue Crystal,   Empty Crystal,   Raw Celestine,   Aurelia Polyp","Dark Chestnut Branch,   Birch Branch,   Unaspected Crystal,   Craftsman's Command Materia III,   Craftsman's Command Materia IV,   Craftsman's Cunning Materia III,   Craftsman's Cunning Materia IV,   Water Shard,   Water Cluster"
-The Mystic Basin,Offender's Rot,24,"Balsa Wood Lumber,   Balsa Wood Scrap,   Deep-red Cluster,   Empty Crystal,   Black Clay,   Raw Celestine,   Faded Copy of Ambient Abyss","Ferberite,   Platinum Ore,   Savage Might Materia III,   Savage Aim Materia III,   Savage Aim Materia IV,   Earth Shard,   Earth Cluster"
-Deep-sea Site 4,Offender's Rot,27,"Extravagant Salvaged Earring,   Deep-red Cluster,   Balsa Wood Scrap,   Balsa Wood Lumber,   Deep-green Cluster,   Empty Crystal,   Vivianite,   Raw Celestine","Dark Chestnut Branch,   Birch Branch,   Quicktongue Materia III,   Quicktongue Materia IV,   Piety Materia III,   Piety Materia IV,   Ice Shard,   Ice Cluster"
-The Central Rimilala Trench,Unidentified Derelict,27,"Balsa Wood Lumber,   Balsa Wood Scrap,   Deep-red Cluster,   Deep-blue Cluster,   Raw Celestine,   Crimson Coral,   Magnanimous Mogcrown","Platinum Ore,   Gold Ore,   Ferberite,   Savage Might Materia III,   Savage Might Materia IV,   Quickarm Materia III,   Quickarm Materia IV,   Earth Shard,   Earth Cluster"
-The Wreckage of Discovery I,The Central Rimilala Trench,30,"3rd Submersible Permission,   Marine Wax Ester,   Extravagant Salvaged Earring,   Extravagant Salvaged Bracelet,   Extravagant Salvaged Necklace,   Extravagant Salvaged Ring,   Salvaged Earring,   Salvaged Bracelet,   Salvaged Necklace,   Salvaged Ring","Platinum Ingot,   Gold Ingot,   Diamond,   Emerald,   Ruby,   Sapphire,   Star Ruby,   Star Sapphire"
-Komura,The Cobalt Shoals,30,"Balsa Wood Lumber,   Red Moko Grass,   Synthetic Fiber,   Synthetic Resin,   Chemically Treated Chimera Hide,   Cassia Log,   Empty Crystal,   Deep-green Cluster,   Magnanimous Mogcrown","Birch Log,   Dark Chestnut Log,   Battledance Materia IV,   Heavens' Eye Materia IV"
-Kanayama,Komura,34,"Empty Crystal,   Deep-red Cluster,   Raw Celestine,   Synthetic Fiber,   Synthetic Resin,   Vivianite,   Balsa Wood Lumber,   Crystal Boule","Aurum Regis Sand,   Cloud Mica,   Hardsilver Sand,   Raw Larimar,   Titanium Ore,   Quickarm Materia IV,   Savage Might Materia IV"
-Concealed Bay,The Mystic Basin,37,"Combed Wool Rug,   Crystal Boule,   Plundered Treasure,   Salvaged Earring,   Salvaged Ring,   Salvaged Bracelet,   Marine Wax Ester","Dead Man's Chest,   Gold Ingot,   Platinum Ingot"
-Deep-sea Site 5,The Wreckage of Discovery I,37,"Balsa Wood Lumber,   Synthetic Resin,   Synthetic Fiber,   Deep-blue Cluster,   Empty Cluster,   Aurelia Polyp,   Crimson Coral,   Faded Copy of Ambient Abyss","Battledance Materia V,   Quickarm Materia V,   Quicktongue Materia IV,   Quicktongue Materia V,   Savage Might Materia IV,   Savage Might Materia V,   Savage Aim Materia IV,   Savage Aim Materia V,   Heavens' Eye Materia V"
-Purgatory,Deep-sea Site 5,40,"4th Submersible Permission,   Dinosaur Fossil,   Raw Celestine,   Vivianite,   Deep-green Cluster,   Aurelia Polyp","Gatherer's Grasp Materia V,   Gatherer's Guile Materia V,   Craftsman's Command Materia V,   Craftsman's Competence Materia V,   Piety Materia V"
-Deep-sea Site 6,Deep-sea Site 5,40,"Aetherochemical Fiber,   Cassia Log,   Deep-blue Cluster,   Empty Crystal,   Synthetic Resin","Beech Log,   Birch Log,   Dark Chestnut Log,   Old-growth Camphorwood Log,   Persimmon Log,   Spruce Log,   Zelkova Log,   Bamboo Stick"
-The Rimilala Shelf,Deep-sea Site 6,44,"Kamacite Ore,   Deep-green Cluster,   Empty Cluster,   Faded Copy of Ambient Abyss","Cobalt Ore,   Darksteel Ore,   Luminium Ore,   Molybdenum Ore,   Titanium Ore,   Mythrite Ore,   Battledance Materia V,   Piety Materia V,   Savage Might Materia V,   Water Cluster"
-Deep-sea Site 7,The Central Rimilala Trench,44,"Cassia Log,   Balsa Wood Lumber,   Deep-red Cluster,   Aetherochemical Fiber,   Abroader Otter","Clear Glass Lens,   Frosted Glass Lens,   Crystal Glass,   Polarized Glass,   Belah'dian Glass,   Tempered Glass,   Savage Aim Materia V,   Fire Cluster,   Ice Cluster"
-Glittersand Basin,Deep-sea Site 7,47,,"Astral Moraine,   Mythrite Sand,   Aurum Regis Sand,   Durium Sand,   Hardsilver Sand,   Palladium Sand,   Lumythrite Sand,   Dawnlight Aethersand,   Savage Aim Materia VI,   Heavens' Eye Materia VI,   Quicktongue Materia VI,   Battledance Materia VI"
-Flickering Dip,Purgatory,47,"Aetherochemical Fiber,   Kamacite Ore,   Synthetic Resin,   Marine Wax Ester,   Faded Copy of Ambient Abyss","Adamantite Ore,   Cloud Mica,   Limestone,   Marble,   Granite,   Siltstone,   Piety Materia V,   Battledance Materia V,   Quickarm Materia V,   Quicktongue Materia V"
-The Wreckage of the Headway,Flickering Dip,50,"Plundered Treasure,   Salvaged Coinage,   Extravagant Salvaged Bracelet,   Extravagant Salvaged Earring,   Extravagant Salvaged Ring","Dead Man's Chest,   Gold Ingot,   Gold Ore,   Rose Gold Ingot,   Wind Cluster"
-The Upwell,The Wreckage of the Headway,50,Aurelia Polyp,"Wool Top,   Clear Prism,   Glamour Prism,   Glamour Dispeller,   Grade 6 Dark Matter,   Grade 7 Dark Matter"
-The Rimilala Trench Bottom,The Upwell,50,Balsa Wood Lumber,"Craftsman's Command Materia VI,   Craftsman's Cunning Materia VI,   Gatherer's Guerdon Materia VI,   Gatherer's Guile Materia VI,   Piety Materia VI,   Earth Cluster,   Lightning Cluster"
-Stone Temple,The Upwell,50,"Plundered Treasure,   Undersea Spoils,   Magnanimous Mogcrown,   Crystal Boule","Dead Man's Chest,   Cut Stone,   Darksteel Ore,   Doman Iron Ore,   Gold Ingot,   Native Gold,   Gold Ore,   Platinum Ingot,   Scintillant Ingot"
-Sunken Vault,The Rimilala Trench Bottom,50,"Emerald Crystal Boule,   Crystal Boule,   Cerulean Crystal Boule,   Deep-green Cluster,   Deep-blue Cluster,   Deep-red Cluster","Rhodonite,   Star Spinel,   Triphane,   Unaspected Crystal,   Earth Crystal,   Fire Crystal,   Ice Crystal,   Lightning Crystal,   Water Crystal,   Wind Crystal"
-South Isle of Zozonan,Sunken Vault,50,"Cocobolo Lumber,   Pure Titanium Ore,   Synthetic Fiber,   Cloudsbreath","Hard Mudstone,   Hardsilver Sand,   Stiperstone,   Truegold Sand,   Heavens' Eye Materia VI,   Quickarm Materia VI,   Battledance Materia VI,   Earth Crystal,   Earth Shard"
-Wreckage of the Windwalker,South Isle of Zozonan,50,"Cocobolo Lumber,   Balsa Wood Scrap,   Cryptomeria Log,   Deep-blue Cluster,   Deep-red Cluster,   Crystal Boule","Persimmon Log,   Spruce Log,   Teak Log,   White Oak Log,   Wind Crystal,   Wind Shard"
-North Isle of Zozonan,Wreckage of the Windwalker,54,"Bamboo Weave,   Black Clay,   Pure Titanium Ore,   Red Clay","Platinum Ore,   Adamantite Ore,   Truegold Ore,   Truegold Sand,   Savage Aim Materia VI,   Savage Might Materia VI,   Heavens' Eye Materia VII,   Quicktongue Materia VI,   Water Crystal,   Water Shard"
-Sea of Ash 1,North Isle of Zozonan,54,"Cocobolo Lumber,   Cryptomeria Log,   Red Clay","Mahogany Log,   Miracle Apple Log,   Old-growth Camphorwood Log,   Teak Log,   Truegold Ore,   White Ash Log,   White Oak Log,   Piety Materia VII,   Fire Crystal,   Fire Shard"
-The Southern Charnel Trench,Sea of Ash 1,57,"Vivianite,   Crimson Coral,   Marine Wax Ester,   Sharksucker-class Insubmersible","Bluespirit Ore,   Cobalt Ore,   Manasilver Sand,   Mythrite Sand,   Smithsonite Ore,   Lightning Shard,   Lightning Crystal"
-Sea of Ash 2,North Isle of Zozonan,57,"Cocobolo Lumber,   Cassia Log,   Abroader Otter","Astral Moraine,   Cedar Log,   Dark Chestnut Log,   Sandteak Log,   White Ash Log,   Zelkova Log,   Miracle Apple Log,   Torreya Log,   Battledance Materia VII,   Ice Crystal,   Ice Shard"
-Sea of Ash 3,Sea of Ash 2,60,"Aetherochemical Fiber,   Synthetic Resin,   Raw Celestine,   Red Moko Grass,   Unaspected Crystal,   Emerald Crystal Boule,   Abroader Otter","Clear Glass Lens,   Crystal Glass,   Kudzu Cloth,   Polarized Glass,   Tempered Glass"
-Ascetic's Demise,Sea of Ash 3,60,"Salvaged Coinage,   Salvaged Ring,   Undersea Spoils,   Extravagant Salvaged Ring,   Extravagant Salvaged Bracelet,   Extravagant Salvaged Earring,   Extravagant Salvaged Necklace","Electrum Ingot,   Platinum Ingot,   Rhodonite,   Gold Ore"
-The Central Charnel Trench,Sea of Ash 3,60,"Cryptomeria Log,   Kamacite Ore,   Pure Titanium Ore,   Vivianite,   Sharksucker-class Insubmersible,   Cerulean Crystal Boule","Bluespirit Ore,   Titancopper Sand,   Manasilver Sand,   Ferberite,   Hardsilver Nugget,   Koppranickel Nugget,   Silver Ore,   Quickarm Materia VII"
-The Catacombs of the Father,The Central Charnel Trench,60,"Synthetic Fiber,   Ruby Crystal Boule,   Antique Vessels","Hard Mudstone,   Titanium Ore,   Rhodonite,   Star Ruby,   Volcanic Tuff,   Fire Cluster,   Lightning Cluster,   Water Cluster,   Ice Cluster,   Wind Cluster,   Earth Cluster"
-Sea of Ash 4,Ascetic's Demise,60,"Cryptomeria Log,   Cassia Log,   Sharksucker-class Insubmersible","Nagxian Silk,   Zelkova Log,   Beech Log,   Astral Oil,   Miracle Apple Log,   White Oak Log,   Savage Aim Materia VII,   Quickarm Materia VII,   Wind Crystal"
-The Midden Pit,Sea of Ash 4,63,"Ruby Crystal Boule,   Deep-blue Cluster,   Deep-green Cluster,   Unaspected Crystal,   Pure Titanium Ore","Truegold Ore,   Rhodonite,   Titancopper Ore,   Hard Mudstone,   Heavens' Eye Materia VII,   Quicktongue Materia VII,   Water Crystal"
-The Lone Glove,The Central Charnel Trench,63,"Cocobolo Lumber,   Pure Titanium Ore","Grade 7 Dark Matter,   Manasilver Sand,   Dimythrite Sand,   White Scorpion,   Truegold Sand,   Astral Moraine,   Battledance Materia VII,   Ice Crystal"
-Coldtoe Isle,The Catacombs of the Father,65,"Meerkat,   Cryptomeria Log,   Cocobolo Lumber","Grade 7 Dark Matter,   Lignum Vitae Log,   White Ash Log,   Black Scorpion,   White Oak Log,   Sandteak Log,   Old-growth Camphorwood Log,   Piety Materia VII,   Earth Crystal"
-Smuggler's Knot,Coldtoe Isle,65,"Salvaged Coinage,   Undersea Spoils,   Antique Vessels,   Golden Ewer","Tincture of Intelligence,   Grade 2 Tincture of Dexterity,   Grade 2 Tincture of Strength,   Rose Gold Ingot,   Gold Ingot,   Gold Ore,   Deepgold Ingot,   Savage Might Materia VII,   Lightning Crystal"
-The Open Robe,The Midden Pit,65,"Cryptomeria Log,   Cocobolo Lumber,   Silver Dasher,   Meerkat,   Emerald Crystal Boule","Torreya Log,   Lignum Vitae Log,   White Oak Log,   White Ash Log,   Sandteak Log,   Lightning Crystal,   Earth Crystal"
-Nald'thal's Pipe,The Southern Charnel Trench,66,"Pelagic Clay,   Abroader Otter,   Ruby Crystal Boule","Titanium Ore,   Stiperstone,   Titancopper Ore,   Fire Crystal"
-The Slipped Anchor,The Open Robe,67,"Golden Crystal Boule,   Crimson Coral,   Antique Vessels,   Sharksucker-class Insubmersible","Yellow Alumen,   Pixie Floss Boll,   Sea Swallow Skin,   Vampire Cup Vine,   Vampire Vine Sap,   Dwarven Cotton Boll,   Quicktongue Materia VII,   Lightning Crystal,   Wind Crystal"
-Glutton's Belly,Coldtoe Isle,69,"Salvaged Coinage,   Undersea Spoils,   Sintered Whetstone,   Aurelia Polyp","Mythrite Sand,   Dimythrite Sand,   Dimythrite Ore,   Mythrite Ore,   Battledance Materia VII,   Piety Materia VII,   Water Crystal"
-The Blue Hole,Sea of Ash 4,70,"Balsa Wood Scrap,   Cocobolo Lumber,   Synthetic Fiber,   Synthetic Resin,   Deep-blue Cluster,   Cerulean Crystal Boule,   Colossus Slab,   Golden Ewer","Savage Might Materia VII,   Heavens' Eye Materia VII,   Savage Aim Materia VII,   Lightning Crystal"
-The Isle of Sacrament,The Slipped Anchor,70,"Bamboo Weave,   Cryptomeria Log,   Cloudsbreath,   Abroader Otter","White Oak Log,   Miracle Apple Log"
-The Kraken's Tomb,The Isle of Sacrament,70,"Colossus Slab,   Sintered Whetstone,   Deep-blue Cluster,   Pelagic Clay","Truegold Sand,   Manasilver Sand"
-Sea of Jade 1,The Isle of Sacrament,70,"Aurelia Polyp,   Antique Vessels,   Balsa Wood Scrap,   Black Clay,   Pelagic Clay","Titancopper Sand,   Dimythrite Sand"
-Rogo-Tumu-Here's Haunt,Sea of Jade 1,72,"Silver Dasher,   Plundered Treasure,   Pure Titanium Ore,   Deep-red Cluster,   Deep-green Cluster,   Balsa Wood Lumber,   Synthetic Resin","Truegold Ore,   Bluespirit Ore"
-The Stone Barbs,Sea of Jade 1,72,"Meerkat,   Golden Ewer,   Red Clay,   Synthetic Fiber","White Ash Log,   Sandteak Log"
-Rogo-Tumu-Here's Repose,Rogo-Tumu-Here's Haunt,73,"Plundered Treasure,   Plum Paper Parasol,   Deep-blue Cluster,   Aetherochemical Fiber,   Pelagic Clay","Titancopper Ore,   Dimythrite Ore"
-Tangaroa's Prow,The Stone Barbs,74,"Hard to Miss Orchestrion Roll,   Marine Wax Ester,   Cocobolo Lumber,   Pelagic Clay","Truegold Sand,   Manasilver Sand"
-Sea of Jade 2,The Stone Barbs,75,"Gemseeker's Pack,   Undersea Spoils,   Empty Cluster,   Pelagic Clay","Lignum Vitae Log,   Sandteak Log"
-The Blind Sound,Tangaroa's Prow,75,"Synthetic Resin,   Deep-blue Cluster,   Tankard","Dimythrite Ore,   Manasilver Sand,   Dimythrite Sand"
-Sea of Jade 3,Tangaroa's Prow,75,"Antique Sink,   Marine Wax Ester,   Deep-red Cluster","Bluespirit Ore,   Titancopper Sand,   Titancopper Ore"
-Moergynn's Forge,The Blind Sound,76,"Cocobolo Lumber,   Pure Titanium Ore,   Nemesis Orchestrion Roll","Truegold Sand,   Gold Ore,   Truegold Ore"
-Tangaroa's Beacon,The Blind Sound,78,"Cloudsbreath,   Cryptomeria Log,   Parkside Tree,   Royal Lion","Sandteak Log,   Torreya Log,   White Ash Log"
-Sea of Jade 4,Sea of Jade 3,80,"Syldrion-class Insubmersible,   Sintered Whetstone,   Pelagic Clay","Lignum Vitae Log,   Miracle Apple Log,   White Oak Log"
-The Forest of Kelp,Sea of Jade 4,81,"Rusted Suit of Armor,   Pure Titanium Ore,   Pelagic Clay","White Oak Log,   Miracle Apple Log,   Lignum Vitae Log"
-Sea of Jade 5,Tangaroa's Beacon,83,"Royal Lion,   By Design Orchestrion Roll,   Golden Crystal Boule","Titancopper Ore,   Titancopper Sand,   Bluespirit Ore"
-Bladefall Chasm,The Forest of Kelp,85,"Parkside Tree,   Meerkat,   Plum Paper Parasol","Lignum Vitae Log,   Miracle Apple Log,   White Oak Log"
-Stormport,Tangaroa's Beacon,87,"Ancient Bone,   Cryptomeria Log,   Pelagic Clay","Dimythrite Ore,   Dimythrite Sand,   Manasilver Sand"
-Wyrm's Rest,Sea of Jade 4,88,"Syldrion-class Insubmersible,   Damaged Icebox,   Antique Sink","Torreya Log,   Sandteak Log,   White Ash Log"
-Sea of Jade 6,Stormport,89,"Portrait of Gestahl,   Nemesis Orchestrion Roll,   Hard to Miss Orchestrion Roll","Manasilver Sand,   Dimythrite Ore,   Dimythrite Sand"
-The Devil's Crypt,Wyrm's Rest,90,"Benben Stone,   Tankard,   Silver Dasher","Gold Ore,   Truegold Ore,   Truegold Sand"
-Mastbound's Bounty,The Devil's Crypt,90,"Pelagic Clay,   Sintered Whetstone,   By Design Orchestrion Roll,   Cocobolo Lumber","Palm Syrup,   Sideritis Leaves,   Coconut"
-Sirensong Sea 1,Mastbound's Bounty,90,"Meerkat,   Pelagic Clay,   Benben Stone,   Silver Dasher,   Damaged Icebox,   Driftseeds","Giant Popoto,   Alien Onion,   Sykon,   Pewter Ore"
-Sirensong Sea 2,Mastbound's Bounty,90,"Cocobolo Lumber,   Silver Dasher,   Meerkat,   Sintered Whetstone,   Driftseeds","Annite,   Pewter Ore,   Giant Popoto,   Alien Onion,   Chloroschist"
-Anthemoessa,Sirensong Sea 2,91,"False Classic Spectacles,   Gemseeker's Pack,   Cocobolo Lumber,   Silver Dasher","Chestnut Log,   Ironwood Log,   Integral Log,   Horse Chestnut Log"
-Magos Trench,Sirensong Sea 1,92,"Deep-sea Marble,   Benben Stone,   Parkside Tree,   Meerkat","Raw Ametrine,   Raw Star Quartz,   Raw Blue Zircon"
-Thrall's Unrest,Sirensong Sea 1,93,"Plum Paper Parasol,   Cerulean Crystal Boule,   Blue Blossom Parasol","Dark Rye,   Scarlet Moko Grass,   AR-Caean Cotton Boll"
-Crow's Drop,Sirensong Sea 2,95,"Basaltic Clay,   Cocobolo Lumber,   Driftseeds","Bismuth Ore,   Manganese Ore,   Phrygian Gold Ore"
-Sirensong Sea 3,Anthemoessa,95,"Sharksucker-class Insubmersible,   By Design Orchestrion Roll,   Weatherproof Cloth","Coconut,   Palm Syrup,   Sideritis Leaves"
-The Anthemoessa Undertow,Sirensong Sea 3,96,Aurelia Polyp,"Bismuth Ore,   Manganese Ore,   Phrygian Gold Ore"
-Sirensong Sea 4,Thrall's Unrest,97,"Weathered Pipe,   Deep-sea Marble,   Golden Crystal Boule","Raw Ametrine,   Raw Blue Zircon,   Raw Star Quartz"
-Seafoam Tide,Sirensong Sea 4,98,"Damaged Icebox,   Flagstone Steps,   Syldrion-class Insubmersible","Alien Onion,   Giant Popoto,   Sykon"
-The Beak,Sirensong Sea 4,99,"Driftseeds,   Flagstone Loft,   Basaltic Clay","Horse Chestnut Log,   Integral Log,   Ironwood Log"
-Seafarer's End,Sirensong Sea 3,100,"Damaged Highland Turret,   False Classic Spectacles,   Undersea Spoils","Annite,   Chloroschist,   Pewter Ore"
-Drifter's Decay,The Anthemoessa Undertow,101,"White Granite,   Charcoal Iron,   Blue Blossom Parasol,   False Classic Spectacles","Horse Chestnut Log,   Ironwood Log,   Integral Log"
-Lugat's Landing,Seafoam Tide,101,"Weatherproof Cloth,   Weathered Pipe,   Classical Water Jug","Coconut,   Palm Syrup,   Sykon,   Sideritis Leaves"
-The Frozen Spring,The Beak,102,"Wall-climbing Ivy,   Flagstone Steps,   Timeworn Thaumaturgic Instruments","Raw Ametrine,   Raw Zircon"
-Sirensong Sea 5,Drifter's Decay,103,"Damaged Highland Turret,   Ominous Plating,   Flagstone Loft","Bismuth Ore,   Phrygian Gold Ore,   Manganese Ore,"
-Tidewind Isle,Lugat's Landing,104,"Enigmatic Gear,   Damaged Icebox","Dark Rye,   Scarlet Moko Grass,   AR-Caean Cotton Boll,   Deep-sea Marble,"
-Bloodbreak,Lugat's Landing,104,"Suzusaurus,   By Design Orchestrion Roll","Portrait of Gestahl,   Pewter Ore,   Annite,   Chloroschist,"
-The Crystal Font,The Frozen Spring,105,"Dreams Aloft Orchestrion Roll,   Ancient Bone,   Basaltic Clay,","Giant Popoto,   Alien Onion,   Sykon"
-Weeping Trellis,The Crystal Font,105,"Flagstone Steps,   Deep-sea Marble,   Classic Tableware","Chlorochrist,   Pewter Ore,   Annite"
-The Forsaken Isle,Weeping Trellis,105,"Bag Of Driftseeds,   Blue Blossom Parasol,   Damaged Side Table","Coconuts,   Palm Syrup,   Sideritis Leaves"
-Fortune's Ford,Weeping Trellis,105,"Dreams Aloft,   Classical Water Jug,   Mossy Log","Horse Chestnut Logs,   Ironwood Logs,   Integral Logs"
-Lilac Sea 1,The Forsaken Isle,106,"Wall-climbing Ivy,   Timeworn Thaumaturgic Instruments,   Raw Log Half Partition","Sykon,   Giant popoto,   Alien Onion"
-Runner's Reach,Fortune's Ford,107,"Weatherproof cloth,   Weathered pipe,   Iroko lumber","Dark Rye,   Scarlet Moko Grass,   AR-Caean Cotton Bolls"
-Bellflower Flood,The Forsaken Isle,108,"Enigmatic Gear,   Ominous Plating,   Weathered Fitting","Manganese Ore,   Phrygian Gold Ore,   Bismuth Ore"
-Lilac Sea 2,Fortune's Ford,110,"Basaltic Clay,   Suzusaurus,   Goggle-eyed Dogu","Raw Blue Zircon,   Raw Star Quartz,   Raw Ametrine"
-Lilac Sea 3,Lilac Sea 2,111,"Basaltic Clay, False Classic Spectacles, Deep-sea Umbrite","Raw Ametrine, Raw Blue Zircon, Raw Star Quartz"
-Northwest Bellflower,Lilac Sea 1,112,"Damaged Side Table, Flagstone Steps, Minute Mindflayer Sprinkler","Bismuth Ore, Manganese Ore, Phrygian Gold Ore"
-Corolla Isle,Bellflower Flood,113,"Mossy Log, Raw Log Half Partition, Wood Slice Loft","Coconut, Palm Syrup, Sideritis Leaves"
-Southeast Bellflower,Lilac Sea 2,114,"Classic Tableware, Wall-climbing Ivy, Alzadaal's Treasure Rug","Bismuth Ore, Manganese Ore, Phrygian Gold Ore"
-The Floral Reef,Corolla Isle,115,"Flagstone Loft, Iroko Lumber, Pennons Aloft Orchestrion Roll","Horse Chestnut Log, Integral Log, Ironwood Log"
-Wingsreach,Southeast Bellflower,115,"Goggle-eyed Dogu, White Granite, From Fear to Fortitude Orchestrion Roll","AR-Caean Cotton Boll, Dark Rye, Scarlet Moko Grass"
+Sector,Unlocked Via,Rank Required,Items1,Items2,Item3
+The Ivory Shoals,,1,"Direct Hit Rate II
+Red Moko Grass
+Scarlet Sap
+Skill Speed II
+Water Crystal
+Wind Crystal","Bamboo Weave
+Birch Branch
+Direct Hit Rate III
+Empty Crystal
+Skill Speed III",Unaspected Crystal
+Deep-sea Site 1,,1,"Earth Crystal
+Ferberite
+Ice Crystal
+Spell Speed II
+Tenacity II
+Vivianite","Bamboo Weave
+Empty Crystal
+Gold Ore
+Spell Speed III
+Tenacity III",Unaspected Crystal
+Deep-sea Site 2,The Ivory Shoals,4,"Control II
+Craftsmanship II
+Red Moko Grass
+Scarlet Sap
+Water Crystal
+Wind Crystal","Bamboo Weave
+Birch Branch
+Control III
+Craftsmanship III
+Empty Crystal",Unaspected Crystal
+The Lightless Basin,Deep-sea Site 1,4,"Earth Crystal
+Ferberite
+GP II
+Ice Crystal
+Perception II
+Vivianite","Bamboo Weave
+Empty Crystal
+Gold Ore
+GP III
+Perception III","Crimson Coral
+Unaspected Crystal"
+Deep-sea Site 3,Deep-sea Site 1,7,"Birch Branch
+Determination II
+Red Moko Grass
+Skill Speed II
+Water Crystal
+Wind Crystal","Bamboo Weave
+Dark Chestnut Branch
+Deep-red Crystal
+Determination III
+Empty Crystal
+Skill Speed III","Aurelia Polyp
+Unaspected Crystal"
+The Southern Rimilala Trench,Deep-sea Site 2,7,"Earth Crystal
+Gold Ore
+Ice Crystal
+Piety II
+Spell Speed II
+Vivianite","Bamboo Weave
+Deep-green Crystal
+Empty Crystal
+Piety III
+Platinum Ore
+Spell Speed III","Crimson Coral
+Unaspected Crystal"
+The Umbrella Narrow,The Lightless Basin,10,"Bamboo Weave
+Birch Branch
+Control II
+CP II
+Deep-blue Crystal
+Red Moko Grass
+Water Crystal
+Wind Crystal","Balsa Wood Scrap
+Control III
+CP III
+Dark Chestnut Branch
+Empty Crystal","Aurelia Polyp
+Unaspected Crystal"
+Offender's Rot,The Umbrella Narrow,14,"Bamboo Weave
+Critical Hit III
+Deep-red Crystal
+Determination III
+Lightning Crystal
+Water Crystal","Balsa Wood Scrap
+Birch Branch
+Dark Chestnut Branch
+Empty Crystal
+Scarlet Sap","Red Clay
+Unaspected Crystal"
+Neolith Island,Deep-sea Site 3,17,"Bamboo Weave
+Critical Hit III
+Deep-red Crystal
+Fire Crystal
+Ice Crystal
+Skill Speed III","Balsa Wood Scrap
+Empty Crystal
+Ferberite
+Gold Ore
+Platinum Ore","Colossus Slab
+Red Clay
+Unaspected Crystal"
+Unidentified Derelict,Deep-sea Site 3,20,"Diamond
+Emerald
+Ruby
+Sapphire
+Star Ruby
+Star Sapphire","Gold Ingot
+Platinum Ingot
+Salvaged Bracelet
+Salvaged Earring
+Salvaged Necklace
+Salvaged Ring","Extravagant Salvaged Bracelet
+Extravagant Salvaged Earring
+Extravagant Salvaged Necklace
+Extravagant Salvaged Ring"
+The Cobalt Shoals,Neolith Island,20,"Bamboo Weave
+Birch Branch
+Control III
+CP III
+Deep-blue Crystal
+Raw Celestine
+Water Cluster
+Water Shard","Balsa Wood Scrap
+Dark Chestnut Branch
+Empty Crystal
+Control IV
+CP IV","Aurelia Polyp
+Unaspected Crystal"
+The Mystic Basin,Offender's Rot,24,"Balsa Wood Scrap
+Critical Hit III
+Deep-red Cluster
+Determination III
+Earth Cluster
+Earth Shard
+Ferberite
+Raw Celestine","Balsa Wood Lumber
+Critical Hit IV
+Determination IV
+Empty Crystal
+Platinum Ore","Black Clay
+Faded Copy of Ambient Abyss"
+Deep-sea Site 4,Offender's Rot,27,"Balsa Wood Scrap
+Birch Branch
+Deep-green Cluster
+Ice Cluster
+Ice Shard
+Piety III
+Raw Celestine
+Spell Speed III
+Vivianite","Balsa Wood Lumber
+Dark Chestnut Branch
+Empty Crystal
+Piety IV
+Spell Speed IV","Extravagant Salvaged Earring
+Unaspected Crystal"
+The Central Rimilala Trench,Unidentified Derelict,27,"Balsa Wood Scrap
+Deep-blue Crystal
+Determination III
+Earth Cluster
+Earth Shard
+Ferberite
+Raw Celestine
+Skill Speed III","Balsa Wood Lumber
+Determination IV
+Gold Ore
+Platinum Ore
+Skill Speed IV","Crimson Coral
+Magnanimous Mogcrown"
+The Wreckage of Discovery I,The Central Rimilala Trench,30,"Diamond
+Emerald
+Ruby
+Sapphire
+Star Ruby
+Star Sapphire","Marine Wax Ester
+Platinum Ingot
+Salvaged Bracelet
+Salvaged Earring
+Salvaged Necklace
+Salvaged Ring","Extravagant Salvaged Bracelet
+Extravagant Salvaged Earring
+Extravagant Salvaged Necklace
+Extravagant Salvaged Ring"
+Komura,The Cobalt Shoals,30,"Balsa Wood Lumber
+Birch Log
+Deep-green Cluster
+Direct Hit Rate IV
+Red Moko Grass
+Tenacity IV","Cassia Log
+Chemically Treated Chimera Hide
+Dark Chestnut Log
+Empty Crystal
+Synthetic Fiber","Magnanimous Mogcrown
+Synthetic Resin"
+Kanayama,Komura,34,"Balsa Wood Lumber
+Deep-red Cluster
+Determination IV
+Raw Celestine
+Skill Speed IV
+Vivianite","Aurum Regis Sand
+Cloud Mica
+Empty Crystal
+Hardsilver Sand
+Raw Larimar
+Synthetic Fiber
+Titanium Ore","Crystal Boule
+Synthetic Resin"
+Concealed Bay,The Mystic Basin,37,"Gold Ingot
+Platinum Ingot","Combed Wool Rug
+Dead Man's Chest
+Marine Wax Ester
+Plundered Treasure
+Salvaged Bracelet
+Salvaged Earring
+Salvaged Necklace
+Salvaged Ring","Crystal Boule
+Extravagant Salvaged Bracelet
+Extravagant Salvaged Earring
+Extravagant Salvaged Necklace
+Extravagant Salvaged Ring"
+Deep-sea Site 5,The Wreckage of Discovery I,37,"Balsa Wood Lumber
+Critical Hit IV
+Deep-blue Cluster
+Spell Speed IV","Critical Hit V
+Determination V
+Direct Hit Rate V
+Empty Cluster
+Skill Speed V
+Spell Speed V
+Synthetic Fiber
+Tenacity V","Aurelia Polyp
+Crimson Coral
+Faded Copy of Ambient Abyss
+Synthetic Resin"
+Purgatory,Deep-sea Site 5,40,"Dinosaur Fossil
+Raw Celestine
+Vivianite","Critical Hit V
+Determination V
+Direct Hit Rate V
+Piety V
+Skill Speed V
+Spell Speed V","Control V
+CP V
+Craftsmanship V
+Gathering V
+GP V
+Perception V"
+Deep-sea Site 6,Deep-sea Site 5,40,"Birch Log
+Cassia Log
+Dark Chestnut Log
+Deep-blue Cluster
+Spruce Log","Aetherochemical Fiber
+Bamboo Stick
+Beech Log
+Empty Crystal
+Persimmon Log
+Zelkova Log","Aurelia Polyp
+Old-growth Camphorwood Log
+Synthetic Resin"
+The Rimilala Shelf,Deep-sea Site 6,44,"Cobalt Ore
+Deep-green Cluster
+Mythrite Ore
+Water Cluster","Determination V
+Darksteel Ore
+Empty Cluster
+Luminium Ore
+Molybdenum Ore
+Piety V
+Tenacity V
+Titanium Ore","Faded Copy of Ambient Abyss
+Kamacite Ore"
+Deep-sea Site 7,The Central Rimilala Trench,44,"Cassia Log
+Clear Glass Lens
+Deep-red Cluster
+Fire Cluster
+Ice Cluster","Aetherochemical Fiber
+Balsa Wood Lumber
+Critical Hit V
+Crystal Glass
+Direct Hit Rate V
+Tempered Glass","Abroader Otter
+Belah'dian Glass
+Frosted Glass Lens
+Polarized Glass"
+Glittersand Basin,Deep-sea Site 7,47,"Aurum Regis Sand
+Hardsilver Sand
+Lumythrite Sand
+Mythrite Sand","Critical Hit VI
+Determination VI
+Direct Hit Rate VI
+Durium Sand
+Palladium Sand
+Skill Speed VI
+Spell Speed VI
+Tenacity VI","Astral Moraine
+Dawnlight Aethersand
+Dusklight Aethersand"
+Flickering Dip,Purgatory,47,"Adamantite Ore
+Cloud Mica
+Granite
+Limestone
+Marble
+Siltstone","Aetherochemical Fiber
+Kamacite Ore
+Marine Wax Ester
+Piety V
+Skill Speed V
+Spell Speed V
+Tenacity V","Crimson Coral
+Faded Copy of Ambient Abyss
+Synthetic Resin"
+The Wreckage of the Headway,Flickering Dip,50,"Gold Ingot
+Gold Ore
+Rose Gold Ingot
+Wind Cluster","Dead Man's Chest
+Plundered Treasure
+Salvaged Bracelet
+Salvaged Earring
+Salvaged Necklace
+Salvaged Ring","Extravagant Salvaged Bracelet
+Extravagant Salvaged Earring
+Extravagant Salvaged Necklace
+Extravagant Salvaged Ring
+Salvaged Coinage"
+The Upwell,The Wreckage of the Headway,50,"Clear Prism
+Glamour Dispeller
+Grade 6 Dark Matter","Critical Hit V
+Dark Matter Cluster
+Determination V
+Direct Hit Rate V
+Glamour Dispeller
+Glamour Prism
+Grade 7 Dark Matter
+Wool Top","Aurelia Polyp
+Glamour Prism
+Grade 7 Dark Matter"
+The Rimilala Trench Bottom,The Upwell,50,"Balsa Wood Lumber
+Earth Cluster
+Lightning Cluster","Critical Hit VI
+Determination VI
+Direct Hit Rate VI
+Piety VI
+Skill Speed VI
+Spell Speed VI","Control VI
+CP VI
+Craftsmanship VI
+Gathering VI
+GP VI
+Perception VI"
+Stone Temple,The Upwell,50,"Cut Stone
+Gold Ingot
+Gold Ore
+Native Gold
+Platinum Ingot","Darksteel Ore
+Dead Man's Chest
+Doman Iron Ore
+Magnanimous Mogcrown
+Plundered Treasure
+Scintillant Ingot","Crystal Boule
+Undersea Spoils"
+Sunken Vault,The Rimilala Trench Bottom,50,"Deep-blue Cluster
+Deep-green Cluster
+Deep-red Cluster
+Earth Crystal
+Fire Crystal
+Ice Crystal
+Lightning Crystal
+Water Crystal
+Wind Cluster","Rhodonite
+Star Spinel
+Triphane
+Unaspected Crystal","Cerulean Crystal Boule
+Crystal Boule
+Emerald Crystal Boule"
+South Isle of Zozonan,Sunken Vault,50,"Earth Crystal
+Earth Shard
+Hardsilver Sand
+Stiperstone
+Synthetic Fiber","Cloudsbreath
+Direct Hit Rate VI
+Hard Mudstone
+Skill Speed VI
+Tenacity VI
+Truegold Sand","Cocobolo Lumber
+Pure Titanium Ore"
+Wreckage of the Windwalker,South Isle of Zozonan,50,"Balsa Wood Scrap
+Persimmon Log
+Wind Crystal
+Wind Shard","Crystal Boule
+Deep-blue Cluster
+Deep-red Cluster
+Spruce Log
+Teak Log
+White Oak Log","Cocobolo Lumber
+Cryptomeria Log"
+North Isle of Zozonan,Wreckage of the Windwalker,54,"Bamboo Weave
+Truegold Sand
+Water Crystal
+Water Shard","Adamantite Ore
+Critical Hit VI
+Determination VI
+Platinum Ore
+Pure Titanium Ore
+Truegold Ore
+Spell Speed VI","Black Clay
+Determination VII
+Direct Hit Rate VII
+Red Clay"
+Sea of Ash 1,North Isle of Zozonan,54,"Fire Crystal
+Fire Shard
+Mahogany Log
+White Oak Log","Cocobolo Lumber
+Cryptomeria Log
+Miracle Apple Log
+Old-growth Camphorwood Log
+Teak Log
+Truegold Ore
+White Ash Log","Black Clay
+Critical Hit VII
+Piety VII
+Red Clay"
+The Southern Charnel Trench,Sea of Ash 1,57,"Cobalt Ore
+Lightning Crystal
+Lightning Shard
+Mythrite Sand
+Vivianite","Bluespirit Ore
+Manasilver Sand
+Marine Wax Ester
+Smithsonite Ore","Crimson Coral
+Sharksucker-class Insubmersible
+Spell Speed VII"
+Sea of Ash 2,North Isle of Zozonan,57,"Cassia Log
+Cedar Log
+Dark Chestnut Log
+Zelkova Log","Astral Moraine
+Cocobolo Lumber
+Miracle Apple Log
+Sandteak Log
+White Ash Log","Abroader Otter
+Tenacity VII
+Torreya Log"
+Sea of Ash 3,Sea of Ash 2,60,"Aetherochemical Fiber
+Clear Glass Lens
+Raw Celestine
+Red Moko Grass","Crystal Glass
+Emerald Crystal Boule
+Kudzu Cloth
+Tempered Glass
+Unaspected Crystal","Abroader Otter
+Polarized Glass
+Synthetic Resin"
+Ascetic's Demise,Sea of Ash 3,60,"Electrum Ingot
+Gold Ore
+Platinum Ingot","Extravagant Salvaged Bracelet
+Extravagant Salvaged Earring
+Extravagant Salvaged Necklace
+Extravagant Salvaged Ring
+Rhodonite
+Salvaged Bracelet
+Salvaged Earring
+Salvaged Necklace
+Salvaged Ring","Salvaged Coinage
+Undersea Spoils"
+The Central Charnel Trench,Sea of Ash 3,60,"Ferberite
+Hardsilver Nugget
+Silver Ore
+Vivianite","Bluespirit Ore
+Cryptomeria Log
+Kamacite Ore
+Koppranickel Nugget
+Manasilver Sand
+Pure Titanium Ore
+Titancopper Sand","Cerulean Crystal Boule
+Sharksucker-class Insubmersible
+Skill Speed VII"
+The Catacombs of the Father,The Central Charnel Trench,60,"Hard Mudstone
+Synthetic Fiber
+Titanium Ore","Fire Cluster
+Ice Cluster
+Lightning Cluster
+Star Ruby
+Titancopper Ore
+Volcanic Tuff
+Water Cluster
+Wind Cluster","Antique Vessels
+Rhodonite
+Ruby Crystal Boule"
+Sea of Ash 4,Ascetic's Demise,60,"Beech Log
+Cassia Log
+Wind Crystal","Astral Oil
+Cryptomeria Log
+Miracle Apple Log
+Nagxian Silk
+White Oak Log
+Zelkova Log","Critical Hit VII
+Sharksucker-class Insubmersible
+Skill Speed VII"
+The Midden Pit,Sea of Ash 4,63,"Hard Mudstone
+Truegold Ore
+Water Crystal","Deep-blue Cluster
+Deep-green Cluster
+Pure Titanium Ore
+Rhodonite
+Titancopper Ore
+Unaspected Crystal","Direct Hit Rate VII
+Ruby Crystal Boule
+Spell Speed VII"
+The Lone Glove,The Central Charnel Trench,63,"Truegold Sand
+Ice Crystal
+White Scorpion","Astral Moraine
+Cocobolo Lumber
+Dimythrite Sand
+Grade 7 Dark Matter
+Manasilver Sand
+Titancopper Sand","Meerkat
+Pure Titanium Ore
+Tenacity VII"
+Coldtoe Isle,The Catacombs of the Father,65,"Black Scorpion
+Earth Crystal
+White Oak Log","Cocobolo Lumber
+Grade 7 Dark Matter
+Lignum Vitae Log
+Old-growth Camphorwood Log
+Sandteak Log
+White Ash Log","Cryptomeria Log
+Meerkat
+Piety VII"
+Smuggler's Knot,Coldtoe Isle,65,"Gold Ingot
+Gold Ore
+Lightning Crystal
+Rose Gold Ingot","Deepgold Ingot
+Grade 2 Tincture of Dexterity
+Grade 2 Tincture of Intelligence
+Grade 2 Tincture of Strength
+Salvaged Coinage
+Stonegold Ingot
+Undersea Spoils","Antique Vessels
+Determination VII
+Golden Ewer"
+The Open Robe,The Midden Pit,65,"Earth Crystal
+Torreya Log
+White Oak Log","Cocobolo Lumber
+Cryptomeria Log
+Lignum Vitae Log
+Sandteak Log
+White Ash Log","Emerald Crystal Boule
+Meerkat
+Silver Dasher"
+Nald'thal's Pipe,The Southern Charnel Trench,66,"Fire Crystal
+Stiperstone
+Titancopper Ore
+Titanium Ore","Abroader Otter
+Pelagic Clay
+Ruby Crystal Boule",Pelagic Clay
+The Slipped Anchor,The Open Robe,67,"Pixie Floss Boll
+Wind Crystal
+Yellow Alumen","Crimson Coral
+Dwarven Cotton Boll
+Sea Swallow Skin
+Vampire Cup Vine
+Vampire Vine Sap","Antique Vessels
+Golden Crystal Boule
+Sharksucker-class Insubmersible
+Skill Speed VII
+Spell Speed VII"
+Glutton's Belly,Coldtoe Isle,69,"Dimythrite Sand
+Mythrite Sand
+Water Crystal","Dimythrite Ore
+Mythrite Ore
+Salvaged Coinage
+Undersea Spoils","Aurelia Polyp
+Piety VII
+Sintered Whetstone
+Tenacity VII"
+The Blue Hole,Sea of Ash 4,70,"Balsa Wood Scrap
+Lightning Crystal
+Synthetic Fiber","Cocobolo Lumber
+Critical Hit VII
+Deep-blue Cluster
+Determination VII
+Direct Hit Rate VII
+Synthetic Resin","Cerulean Crystal Boule
+Colossus Slab
+Golden Ewer"
+The Isle of Sacrament,The Slipped Anchor,70,"Miracle Apple Log
+White Oak Log","Bamboo Weave
+Cloudsbreath
+Cryptomeria Log",Abroader Otter
+The Kraken's Tomb,The Isle of Sacrament,70,"Manasilver Sand
+Truegold Sand","Deep-blue Cluster
+Pelagic Clay
+Sintered Whetstone",Colossus Slab
+Sea of Jade 1,The Isle of Sacrament,70,"Dimythrite Sand
+Titancopper Sand","Antique Vessels
+Balsa Wood Scrap
+Black Clay",Aurelia Polyp
+Rogo-Tumu-Here's Haunt,Sea of Jade 1,72,"Bluespirit Ore
+Deep-green Cluster
+Deep-red Cluster
+Truegold Ore","Balsa Wood Lumber
+Pure Titanium Ore
+Synthetic Resin",Silver Dasher
+The Stone Barbs,Sea of Jade 1,72,"Sandteak Log
+White Ash Log","Golden Ewer
+Red Clay
+Synthetic Fiber",Meerkat
+Rogo-Tumu-Here's Repose,Rogo-Tumu-Here's Haunt,73,"Deep-blue Cluster
+Dimythrite Ore
+Titancopper Ore","Aetherochemical Fiber
+Pelagic Clay
+Plundered Treasure",Plum Paper Parasol
+Tangaroa's Prow,The Stone Barbs,74,"Manasilver Sand
+Truegold Sand","Cocobolo Lumber
+Marine Wax Ester
+Pelagic Clay",Hard to Miss Orchestrion Roll
+Sea of Jade 2,The Stone Barbs,75,"Lignum Vitae Log
+Sandteak Log","Empty Cluster
+Pelagic Clay
+Undersea Spoils",Gemseeker's Pack
+The Blind Sound,Tangaroa's Prow,75,"Dimythrite Ore
+Dimythrite Sand
+Manasilver Sand","Deep-blue Cluster
+Synthetic Resin",Tankard
+Sea of Jade 3,Tangaroa's Prow,75,"Bluespirit Ore
+Titancopper Ore
+Titancopper Sand","Deep-red Cluster
+Marine Wax Ester",Antique Sink
+Moergynn's Forge,The Blind Sound,76,"Gold Ore
+Truegold Ore
+Truegold Sand","Cocobolo Lumber
+Pure Titanium Ore",Nemesis Orchestrion Roll
+Tangaroa's Beacon,The Blind Sound,78,"Sandteak Log
+Torreya Log
+White Ash Log","Cloudsbreath
+Cryptomeria Log","Parkside Tree
+Royal Lion"
+Sea of Jade 4,Sea of Jade 3,80,"Lignum Vitae Log
+Miracle Apple Log
+White Oak Log","Pelagic Clay
+Sintered Whetstone",Syldrion-class Insubmersible
+The Forest of Kelp,Sea of Jade 4,81,"Lignum Vitae Log
+Miracle Apple Log
+White Oak Log","Pelagic Clay
+Pure Titanium Ore",Rusted Suit of Armor
+Sea of Jade 5,Tangaroa's Beacon,83,"Bluespirit Ore
+Titancopper Ore
+Titancopper Sand","Golden Crystal Boule
+Royal Lion",By Design Orchestrion Roll
+Bladefall Chasm,The Forest of Kelp,85,"Lignum Vitae Log
+Miracle Apple Log
+White Oak Log","Meerkat
+Plum Paper Parasol",Parkside Tree
+Stormport,Tangaroa's Beacon,87,"Dimythrite Ore
+Dimythrite Sand
+Manasilver Sand","Cryptomeria Log
+Pelagic Clay",Ancient Bone
+Wyrm's Rest,Sea of Jade 4,88,"Sandteak Log
+Torreya Log
+White Ash Log","Antique Sink
+Syldrion-class Insubmersible",Damaged Icebox
+Sea of Jade 6,Stormport,89,"Dimythrite Ore
+Dimythrite Sand
+Manasilver Sand","Hard to Miss Orchestrion Roll
+Nemesis Orchestrion Roll",Portrait of Gestahl
+The Devil's Crypt,Wyrm's Rest,90,"Gold Ore
+Truegold Ore
+Truegold Sand","Silver Dasher
+Tankard",Benben Stone
+Mastbound's Bounty,The Devil's Crypt,90,"Coconut
+Palm Syrup
+Sideritis Leaves","Pelagic Clay
+Sintered Whetstone",By Design Orchestrion Roll
+Sirensong Sea 1,Mastbound's Bounty,90,"Alien Onion
+Giant Popoto
+Sykon","Meerkat
+Pelagic Clay",Damaged Icebox
+Sirensong Sea 2,Mastbound's Bounty,90,"Annite
+Chloroschist
+Pewter Ore","Cocobolo Lumber
+Silver Dasher",Driftseeds
+Anthemoessa,Sirensong Sea 2,91,"Horse Chestnut Log
+Integral Log
+Ironwood Log","Cocobolo Lumber
+Gemseeker's Pack",The Faces We Wear - Classic Spectacles
+Magos Trench,Sirensong Sea 1,92,"Raw Ametrine
+Raw Blue Zircon
+Raw Star Quartz","Benben Stone
+Parkside Tree",Deep-sea Marble
+Thrall's Unrest,Sirensong Sea 1,93,"AR-Caean Cotton Boll
+Dark Rye
+Scarlet Moko Grass","Cerulean Crystal Boule
+Plum Paper Parasol",Blue Blossom Parasol
+Crow's Drop,Sirensong Sea 2,95,"Bismuth Ore
+Manganese Ore
+Phrygian Gold Ore",Basaltic Clay,Basaltic Clay
+Sirensong Sea 3,Anthemoessa,95,"Coconut
+Palm Syrup
+Sideritis Leaves","By Design Orchestrion Roll
+Sharksucker-class Insubmersible",Weatherproof Cloth
+The Anthemoessa Undertow,Sirensong Sea 3,96,"Bismuth Ore
+Manganese Ore
+Phrygian Gold Ore","Aurelia Polyp
+Blue Blossom Parasol",Wall-climbing Ivy
+Sirensong Sea 4,Thrall's Unrest,97,"Raw Ametrine
+Raw Blue Zircon
+Raw Star Quartz","Deep-sea Marble
+Golden Crystal Boule",Weathered Pipe
+Seafoam Tide,Sirensong Sea 4,98,"Alien Onion
+Giant Popoto
+Sykon","Damaged Icebox
+Syldrion-class Insubmersible",Flagstone Steps
+The Beak,Sirensong Sea 4,99,"Horse Chestnut Log
+Integral Log
+Ironwood Log","Basaltic Clay
+Driftseeds",Flagstone Loft
+Seafarer's End,Sirensong Sea 3,100,"Annite
+Chloroschist
+Pewter Ore","The Faces We Wear - Classic Spectacles
+Undersea Spoils",Damaged Highland Turret
+Drifter's Decay,The Anthemoessa Undertow,101,"Horse Chestnut Log
+Integral Log
+Ironwood Log","Blue Blossom Parasol
+The Faces We Wear - Classic Spectacles","Charcoal Iron
+White Granite"
+Lugat's Landing,Seafoam Tide,101,"Coconut
+Palm Syrup
+Sideritis Leaves","Weathered Pipe
+Weatherproof Cloth",Classical Water Jug
+The Frozen Spring,The Beak,102,"Raw Ametrine
+Raw Blue Zircon
+Raw Star Quartz","Flagstone Steps
+Wall-climbing Ivy",Timeworn Thaumaturgic Instruments
+Sirensong Sea 5,Drifter's Decay,103,"Bismuth Ore
+Manganese Ore
+Phrygian Gold Ore","Damaged Highland Turret
+Flagstone Loft",Ominous Plating
+Tidewind Isle,Lugat's Landing,104,"AR-Caean Cotton Boll
+Dark Rye
+Scarlet Moko Grass","Damaged Icebox
+Deep-sea Marble",Enigmatic Gear
+Bloodbreak,Lugat's Landing,104,"Annite
+Chloroschist
+Pewter Ore","By Design Orchestrion Roll
+Portrait of Gestahl",Suzusaurus
+The Crystal Font,The Frozen Spring,105,"Alien Onion
+Giant Popoto
+Sykon","Ancient Bone
+Basaltic Clay",Dreams Aloft Orchestrion Roll
+Weeping Trellis,The Crystal Font,105,"Annite
+Chloroschist
+Pewter Ore","Deep-sea Marble
+Flagstone Steps",Classic Tableware
+The Forsaken Isle,Weeping Trellis,105,"Coconut
+Palm Syrup
+Sideritis Leaves","Blue Blossom Parasol
+Driftseeds",Damaged Side Table
+Fortune's Ford,Weeping Trellis,105,"Horse Chestnut Log
+Integral Log
+Ironwood Log","Classical Water Jug
+Dreams Aloft Orchestrion Roll",Mossy Log
+Lilac Sea 1,The Forsaken Isle,106,"Alien Onion
+Giant Popoto
+Sykon","Timeworn Thaumaturgic Instruments
+Wall-climbing Ivy",Raw Log Half Partition
+Runner's Reach,Fortune's Ford,107,"AR-Caean Cotton Boll
+Dark Rye
+Scarlet Moko Grass","Weathered Pipe
+Weatherproof Cloth",Iroko Lumber
+Bellflower Flood,The Forsaken Isle,108,"Bismuth Ore
+Manganese Ore
+Phrygian Gold Ore","Enigmatic Gear
+Ominous Plating",Weathered Fitting
+Lilac Sea 2,Fortune's Ford,110,"Raw Ametrine
+Raw Blue Zircon
+Raw Star Quartz","Basaltic Clay
+Suzusaurus",Goggle-eyed Dogu
+Lilac Sea 3,Lilac Sea 2,111,"Raw Ametrine
+Raw Blue Zircon
+Raw Star Quartz","Basaltic Clay
+The Faces We Wear - Classic Spectacles",Deep-sea Umbrite
+Northwest Bellflower,Lilac Sea 1,112,"Bismuth Ore
+Manganese Ore
+Phrygian Gold Ore","Damaged Side Table
+Flagstone Steps",Minute Mindflayer Sprinkler
+Corolla Isle,Bellflower Flood,113,"Coconut
+Palm Syrup
+Sideritis Leaves","Mossy Log
+Raw Log Half Partition",Wood Slice Loft
+Southeast Bellflower,Lilac Sea 2,114,"Bismuth Ore
+Manganese Ore
+Phrygian Gold Ore","Classic Tableware
+Wall-climbing Ivy",Alzadaal's Treasure Rug
+The Floral Reef,Corolla Isle,115,"Horse Chestnut Log
+Integral Log
+Ironwood Log","Flagstone Loft
+Iroko Lumber",Pennons Aloft Orchestrion Roll
+Wingsreach,Southeast Bellflower,115,"AR-Caean Cotton Boll
+Dark Rye
+Scarlet Moko Grass","Goggle-eyed Dogu
+White Granite",From Fear to Fortitude Orchestrion Roll
+The Floating Standard,The Floral Reef,116,"Turali Corn
+Turali Pineapple
+Ut'ohmu Tomato","Basaltic Clay
+Minute Mindflayer Sprinkler",Bluecap Mushroom Lamp
+The Fluttering Bay,Wingsreach,117,"Lar Ore
+Mountain Chromite Ore
+Ruthenium Ore","Suzusaurus
+Weathered Fitting",Stuffed Punutiy
+Lilac Sea 4,Northwest Bellflower,118,"Ceiba Log
+Dark Mahogany Log
+Ginseng Log","Damaged Icebox
+Flagstone Steps",Stuffed Axolotl Eft
+Proudkeel,The Floral Reef,119,"Mesquite Beans
+White Pepper
+Yyasulani Garlic","Damaged Side Table
+Flagstone Loft",High-Density Fiberboard
+East Dodie's Abyss,The Fluttering Bay,119,"Raw Black Star
+Raw Ihuykanite
+Raw Pink Beryl","Alzadaal's Treasure Rug
+Pennons Aloft Orchestrion Roll",Subterranean Drop Orchestrion Roll
+Lilac Sea 5,The Floating Standard,120,"Mountain Flax
+Sarcenet
+Snow Cotton","Mossy Log
+Wood Slice Loft",Fluffy-wuffy Stuffed Drippy
+West Dodie's Abyss,Proudkeel,120,"Cobalt Tungsten Ore
+Magnesia Powder
+Titanium Gold Ore","Deep-sea Umbrite
+From Fear to Fortitude Orchestrion Roll",Tinkerer's Treasure Trove Orchestrion Roll
+The Indigo Shallows,West Dodie's Abyss,120,"Mountain Rock Salt
+Royal Maple Sap
+Turali Corn","Fluffy-wuffy Stuffed Drippy
+Royal Maple Syrup
+The Faces We Wear - Classic Spectacles
+Turali Corn Oil",Nature's Bounty Orchestrion Roll
+Voyagers' Reprieve,The Indigo Shallows,120,"Cobalt Tungsten Ore
+Mountain Chromite Ore
+Ruthenium Ore","Blue Blossom Parasol
+Bluecap Mushroom Lamp
+Cobalt Tungsten Ingot
+Mountain Chromite Ingot
+Ruthenium Ingot",Aromatic Wood Strips
+North Delphinium Seashelf,The Indigo Shallows,120,"Mountain Flax
+Sarcenet
+Snow Cotton","Mountain Linen
+Sarcenet Cloth
+Snow Cotton Cloth
+Stuffed Punutiy
+Wall-Climbing Ivy",Toco Toquito
+Rainbringer Rift,Voyagers' Reprieve,121,"Raw Blac kStar
+Raw Ihuykanite
+Raw Pink Beryl",Subterranean Drop Orchestrion Roll,Laboratory Counter
+South Indigo Deep 1,North Delphinium Seashelf,122,"Br'aax Hide
+Hammerhead Crocodile Skin
+Silver Lobo Hide","",Weathered Porthole
+The Central Blue,Voyagers' Reprieve,123,"","",""
+South Indigo Deep 2,North Delphinium Seashelf,125,"","",""
