@@ -15,7 +15,7 @@ namespace LuminaSupplemental.SpaghettiGenerator.Steps.Parsers;
 public class StoreParser {
     private readonly AppConfig appConfig;
 
-    public static Dictionary<uint, List<uint>> StoreItems = new();
+    public static Dictionary<uint, Dictionary<uint, Product>> StoreItems = new();
     public static Dictionary<uint, Product> StoreProducts = new();
 
     public static string UpdateStatus = string.Empty;
@@ -121,11 +121,11 @@ public class StoreParser {
 
                         foreach (var matchedItem in matchingItems) {
                             if (!StoreItems.ContainsKey(matchedItem.RowId)) {
-                                StoreItems.Add(matchedItem.RowId, new List<uint>());
+                                StoreItems.Add(matchedItem.RowId, new Dictionary<uint, Product>());
                             }
 
-                            if (!StoreItems[matchedItem.RowId].Contains(p.ID)) {
-                                StoreItems[matchedItem.RowId].Add(p.ID);
+                            if (!StoreItems[matchedItem.RowId].ContainsKey(p.ID)) {
+                                StoreItems[matchedItem.RowId][p.ID] = p;
                             }
                         }
                     }

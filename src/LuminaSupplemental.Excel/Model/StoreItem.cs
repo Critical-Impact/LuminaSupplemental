@@ -19,21 +19,24 @@ namespace LuminaSupplemental.Excel.Model
         [Name("RowId")] public uint RowId { get; set; }
         [Name("ItemId")] public uint ItemId { get; set; }
         [Name("FittingShopItemSetId")] public uint FittingShopItemSetId { get; set; }
-        
+
+        [Name("PriceCentsUSD")] public uint PriceCentsUSD { get; set; }
+
         public RowRef< Item > Item;
-        
+
         public RowRef< FittingShopItemSet > FittingShopItemSet;
 
-        public StoreItem(uint rowId, uint itemId, uint fittingShopItemSetId )
+        public StoreItem(uint rowId, uint itemId, uint fittingShopItemSetId, uint priceCentsUSD )
         {
             RowId = rowId;
             ItemId = itemId;
             FittingShopItemSetId = fittingShopItemSetId;
+            PriceCentsUSD = priceCentsUSD;
         }
 
         public StoreItem()
         {
-            
+
         }
 
         public void FromCsv(string[] lineData)
@@ -41,6 +44,7 @@ namespace LuminaSupplemental.Excel.Model
             RowId = uint.Parse( lineData[ 0 ] );
             ItemId = uint.Parse( lineData[ 1 ] );
             FittingShopItemSetId = uint.Parse( lineData[ 2 ] );
+            PriceCentsUSD = uint.Parse( lineData[ 3 ] );
         }
 
         public string[] ToCsv()
