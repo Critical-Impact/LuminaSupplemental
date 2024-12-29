@@ -125,11 +125,18 @@ namespace LuminaSupplemental.SpaghettiGenerator.Model
 
     public enum Condition { DropsAtAFixedRate, MustFirstCompleteTheQuestTripleTriadTrial, ThisItemCanOnlyBeObtainedOncePerWeek };
 
-    public enum TokenName { AllaganTomestoneOfAphorism, AllaganTomestoneOfAstronomy, AllaganTomestoneOfPoetics, AllaganTomestoneofCausality };
+    public enum TokenName { 
+        AllaganTomestoneOfAphorism,
+        AllaganTomestoneOfAstronomy,
+        AllaganTomestoneOfPoetics,
+        AllaganTomestoneofCausality,
+        AllaganTomestoneofAesthetics,
+        AllaganTomestoneofHeliometry 
+    };
 
     public enum IlvlEnum { Empty };
 
-    public enum Version { ARealmReborn, Endwalker, Heavensward, Shadowbringers, Stormblood };
+    public enum Version { ARealmReborn, Endwalker, Heavensward, Shadowbringers, Stormblood, Dawntrail };
 
     public partial struct IlvlUnion
     {
@@ -429,6 +436,10 @@ namespace LuminaSupplemental.SpaghettiGenerator.Model
                     return TokenName.AllaganTomestoneOfPoetics;
                 case "Allagan Tomestone of Causality":
                     return TokenName.AllaganTomestoneofCausality;
+                case "Allagan Tomestone of Aesthetics":
+                    return TokenName.AllaganTomestoneofAesthetics;
+                case "Allagan Tomestone of Heliometry":
+                    return TokenName.AllaganTomestoneofHeliometry;
             }
             throw new Exception("Cannot unmarshal type TokenName");
         }
@@ -451,6 +462,15 @@ namespace LuminaSupplemental.SpaghettiGenerator.Model
                     return;
                 case TokenName.AllaganTomestoneOfPoetics:
                     serializer.Serialize(writer, "Allagan Tomestone of Poetics");
+                    return;
+                case TokenName.AllaganTomestoneofCausality:
+                    serializer.Serialize(writer, "Allagan Tomestone of Causality");
+                    return;
+                case TokenName.AllaganTomestoneofAesthetics:
+                    serializer.Serialize(writer, "Allagan Tomestone of Aesthetics");
+                    return;
+                case TokenName.AllaganTomestoneofHeliometry:
+                    serializer.Serialize(writer, "Allagan Tomestone of Heliometry");
                     return;
             }
             throw new Exception("Cannot marshal type TokenName");
@@ -560,6 +580,8 @@ namespace LuminaSupplemental.SpaghettiGenerator.Model
                     return Version.Shadowbringers;
                 case "Stormblood":
                     return Version.Stormblood;
+                case "Dawntrail":
+                    return Version.Dawntrail;
             }
             throw new Exception("Cannot unmarshal type Version");
         }
@@ -588,6 +610,9 @@ namespace LuminaSupplemental.SpaghettiGenerator.Model
                     return;
                 case Version.Stormblood:
                     serializer.Serialize(writer, "Stormblood");
+                    return;
+                case Version.Dawntrail:
+                    serializer.Serialize(writer, "Dawntrail");
                     return;
             }
             throw new Exception("Cannot marshal type Version");
