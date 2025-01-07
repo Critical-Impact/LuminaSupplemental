@@ -62,6 +62,9 @@
       <None Update="config.ini">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+      <None Update="ManualData\Gardening\crossbreeding.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
@@ -99,6 +102,7 @@
 
     <ItemGroup>
       <Folder Include="DB" />
+      <Folder Include="ManualData\Gardening\" />
     </ItemGroup>
 
     <Target Condition="$([MSBuild]::IsOSPlatform('Windows'))" Name="CopyGenerated" AfterTargets="Build">

@@ -6,8 +6,8 @@
         <PackageProjectUrl>https://github.com/Critical-Impact/LuminaSupplemental</PackageProjectUrl>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <RepositoryUrl>https://github.com/Critical-Impact/LuminaSupplemental</RepositoryUrl>
-        <PackageVersion>2.1.7</PackageVersion>
-        <FileVersion>2.1.7</FileVersion>
+        <PackageVersion>2.1.8</PackageVersion>
+        <FileVersion>2.1.8</FileVersion>
         <Description>Supplemental data for lumina and dalamud plugins.</Description>
     </PropertyGroup>
 
@@ -79,5 +79,6 @@
       <EmbeddedResource Include="Generated\StoreItem.csv" />
       <EmbeddedResource Include="Generated\HouseVendor.csv" />
       <EmbeddedResource Include="Generated\FateItem.csv" />
+      <EmbeddedResource Include="Generated\GardeningCrossbreed.csv" />
     </ItemGroup>
 </Project>
