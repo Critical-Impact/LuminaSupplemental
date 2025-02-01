@@ -34,9 +34,10 @@ public static class CsvLoader
                 return items;
             }
 
+            FileInfo f = new FileInfo(filePath);
             var fileContents = reader.ReadToEnd();
             fileContents = fileContents.ReplaceLineEndings("\n"); // Works around the fact that apparently CI can change line endings
-            var csvReader = CSVFile.CSVReader.FromString( fileContents, new CSVSettings { Encoding = Encoding.UTF8, LineSeparator = "\n" } );
+            var csvReader = CSVFile.CSVReader.FromString( fileContents, new CSVSettings { Encoding = Encoding.UTF8, LineSeparator = "\n", BufferSize = (int)f.Length} ); //BufferSize fixes a infinite loop
             foreach( var line in csvReader.Lines() )
             {
                 T item = new T();

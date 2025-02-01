@@ -6,8 +6,8 @@
         <PackageProjectUrl>https://github.com/Critical-Impact/LuminaSupplemental</PackageProjectUrl>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <RepositoryUrl>https://github.com/Critical-Impact/LuminaSupplemental</RepositoryUrl>
-        <PackageVersion>2.1.8</PackageVersion>
-        <FileVersion>2.1.8</FileVersion>
+        <PackageVersion>2.1.9</PackageVersion>
+        <FileVersion>2.1.9</FileVersion>
         <Description>Supplemental data for lumina and dalamud plugins.</Description>
     </PropertyGroup>
 
@@ -53,7 +53,7 @@
 
 
     <ItemGroup>
-      <PackageReference Include="CSVFile" Version="3.1.0" />
+      <PackageReference Include="CSVFile" Version="3.2.0" />
       <PackageReference Include="CsvHelper" Version="30.0.1" />
     </ItemGroup>
 

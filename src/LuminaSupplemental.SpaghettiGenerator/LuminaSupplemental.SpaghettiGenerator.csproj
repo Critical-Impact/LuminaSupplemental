@@ -19,7 +19,7 @@
       <Content Include="../GarlandTools/Supplemental/patches.json" CopyToOutputDirectory="Always" />
       <Content Include="../ffxiv-lodestone-item-id/lodestone-item-id.txt" CopyToOutputDirectory="Always" />
       <PackageReference Include="Autofac" Version="8.0.0" />
-      <PackageReference Include="CSVFile" Version="3.1.0" />
+      <PackageReference Include="CSVFile" Version="3.2.0" />
       <PackageReference Include="CsvHelper" Version="30.0.1" />
       <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
