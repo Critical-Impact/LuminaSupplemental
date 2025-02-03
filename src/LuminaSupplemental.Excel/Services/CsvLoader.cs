@@ -6,58 +6,52 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 
-using CSVFile;
-
 using CsvHelper;
 
 using Lumina;
 using Lumina.Data;
 
 using LuminaSupplemental.Excel.Model;
+using Sylvan.Data.Csv;
+
+using CsvDataReader = Sylvan.Data.Csv.CsvDataReader;
 
 namespace LuminaSupplemental.Excel.Services;
 
 public static class CsvLoader
 {
-    public static List< T > LoadCsv<T>(string filePath, out List<string> failedLines, out List<Exception> exceptions, GameData? gameData = null, Language? language = null) where T : ICsv, new()
+    public static List< T > LoadCsv<T>(string filePath, bool includesHeaders, out List<string> failedLines, out List<Exception> exceptions, GameData? gameData = null, Language? language = null) where T : ICsv, new()
     {
-        using var fileStream = new FileStream( filePath, FileMode.Open );
-        using( StreamReader reader = new StreamReader( fileStream ) )
+        failedLines = new List< string >();
+        exceptions = new List< Exception >();
+        var items = new List< T >();
+
+        using CsvDataReader dr = CsvDataReader.Create(filePath, new CsvDataReaderOptions(){HasHeaders = includesHeaders});
+        while (dr.Read())
         {
-            failedLines = new List< string >();
-            exceptions = new List< Exception >();
-            var items = new List< T >();
-
-            //Loading an empty file
-            if( reader.EndOfStream )
+            string[] fields = new string[dr.FieldCount];
+            
+            for(int i = 0; i < dr.FieldCount; i++)
             {
-                return items;
+                fields[i] = dr.GetString(i);
             }
-
-            FileInfo f = new FileInfo(filePath);
-            var fileContents = reader.ReadToEnd();
-            fileContents = fileContents.ReplaceLineEndings("\n"); // Works around the fact that apparently CI can change line endings
-            var csvReader = CSVFile.CSVReader.FromString( fileContents, new CSVSettings { Encoding = Encoding.UTF8, LineSeparator = "\n", BufferSize = (int)f.Length} ); //BufferSize fixes a infinite loop
-            foreach( var line in csvReader.Lines() )
+            T item = new T();
+            try
             {
-                T item = new T();
-                try
+                item.FromCsv( fields );
+                if( gameData != null && language != null )
                 {
-                    item.FromCsv( line );
-                    if( gameData != null && language != null )
-                    {
-                        item.PopulateData( gameData.Excel, language.Value );
-                    }
-                    items.Add( item );
+                    item.PopulateData( gameData.Excel, language.Value );
                 }
-                catch( Exception e )
-                {
-                    exceptions.Add(e);
-                    failedLines.Add( String.Join( ",",line ) );
-                }
+                items.Add( item );
             }
-            return items;
+            catch( Exception e )
+            {
+                exceptions.Add(e);
+                failedLines.Add( String.Join( ",",fields ) );
+            }
         }
+        return items;
     }
 
     public const string DungeonBossResourceName = "LuminaSupplemental.Excel.Generated.DungeonBoss.csv";
@@ -83,7 +77,7 @@ public static class CsvLoader
     public const string FateItemResourceName = "LuminaSupplemental.Excel.Generated.FateItem.csv";
     public const string GardeningCrossbreedResourceName = "LuminaSupplemental.Excel.Generated.GardeningCrossbreed.csv";
 
-    public static List< T > LoadResource<T>(string resourceName, out List<string> failedLines, out List<Exception> exceptions, GameData? gameData = null, Language? language = null) where T : ICsv, new()
+    public static List< T > LoadResource<T>(string resourceName, bool includesHeaders, out List<string> failedLines, out List<Exception> exceptions, GameData? gameData = null, Language? language = null) where T : ICsv, new()
     {
         var assembly = Assembly.GetExecutingAssembly();
         using( Stream? stream = assembly.GetManifestResourceStream( resourceName ) )
@@ -96,16 +90,21 @@ public static class CsvLoader
             }
             using( StreamReader reader = new StreamReader( stream ) )
             {
-                var file = reader.ReadToEnd();
-                file = file.ReplaceLineEndings("\n"); // Works around the fact that apparently CI can change line endings
-                var csvReader = CSVFile.CSVReader.FromString( file, new CSVSettings { Encoding = Encoding.UTF8, LineSeparator = "\n" } );
                 var items = new List< T >();
-                foreach( var line in csvReader.Lines() )
+
+                using CsvDataReader dr = CsvDataReader.Create(reader, new CsvDataReaderOptions(){HasHeaders = includesHeaders});
+                while (dr.Read())
                 {
+                    string[] fields = new string[dr.FieldCount];
+                
+                    for(int i = 0; i < dr.FieldCount; i++)
+                    {
+                        fields[i] = dr.GetString(i);
+                    }
                     T item = new T();
                     try
                     {
-                        item.FromCsv( line );
+                        item.FromCsv( fields );
 
                         if( gameData != null && language != null )
                         {
@@ -117,7 +116,7 @@ public static class CsvLoader
                     catch( Exception e )
                     {
                         exceptions.Add(e);
-                        failedLines.Add( String.Join( ",",line ) );
+                        failedLines.Add( String.Join( ",",fields ) );
                     }
                 }
 
