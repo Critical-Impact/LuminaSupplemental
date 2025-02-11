@@ -38,9 +38,9 @@ namespace LuminaSupplemental.Excel.Model
 
         public void FromCsv(string[] lineData)
         {
-            ItemId = uint.Parse( lineData[ 1 ] );
-            SourceItemId = uint.Parse( lineData[ 2 ] );
-            if( Enum.TryParse<ItemSupplementSource>( lineData[ 3 ], out var itemSupplementSource ) )
+            ItemId = uint.Parse( lineData[ 0 ] );
+            SourceItemId = uint.Parse( lineData[ 1 ] );
+            if( Enum.TryParse<ItemSupplementSource>( lineData[ 2 ], out var itemSupplementSource ) )
             {
                 ItemSupplementSource = itemSupplementSource;
             }
