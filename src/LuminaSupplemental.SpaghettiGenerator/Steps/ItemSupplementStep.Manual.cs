@@ -20,7 +20,7 @@ public partial class ItemSupplementStep
             var sourceItemId = uint.Parse(line[0]);
             var outputItemId = uint.Parse(line[1]);
             var source = Enum.Parse<ItemSupplementSource>(line[2]);
-            itemSupplements.Add(new ItemSupplement((uint)(itemSupplements.Count + 1), outputItemId, sourceItemId, source));
+            itemSupplements.Add(new ItemSupplement(outputItemId, sourceItemId, source));
         }
 
         reader = CSVFile.CSVReader.FromFile(Path.Combine("ManualData", "ItemsScraped.csv"), CSVSettings.CSV);
@@ -37,7 +37,7 @@ public partial class ItemSupplementStep
             {
                 var sourceItem = this.itemSheet.GetRow(itemsByName[sourceItemName]);
                 var rewardItem = this.itemSheet.GetRow(itemsByName[rewardItemName]);
-                itemSupplements.Add(new ItemSupplement((uint)(itemSupplements.Count + 1), rewardItem.RowId, sourceItem.RowId, ItemSupplementSource.Loot));
+                itemSupplements.Add(new ItemSupplement(rewardItem.RowId, sourceItem.RowId, ItemSupplementSource.Loot));
             }
             else if (itemsByName.ContainsKey(sourceItemName))
             {

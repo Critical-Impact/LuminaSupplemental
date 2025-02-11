@@ -16,18 +16,16 @@ namespace LuminaSupplemental.Excel.Model
 {
     public class ItemSupplement : ICsv
     {
-        [Name("RowId")] public uint RowId { get; set; }
         [Name("ItemId")] public uint ItemId { get; set; }
         [Name("SourceItemId")] public uint SourceItemId { get; set; }
         [Name("ItemSupplementSource"), TypeConverter(typeof( EnumConverter ))] public ItemSupplementSource ItemSupplementSource { get; set; }
-        
+
         public RowRef< Item > Item;
-        
+
         public RowRef< Item > SourceItem;
 
-        public ItemSupplement(uint rowId, uint itemId, uint sourceItemId, ItemSupplementSource itemSupplementSource )
+        public ItemSupplement(uint itemId, uint sourceItemId, ItemSupplementSource itemSupplementSource )
         {
-            RowId = rowId;
             ItemId = itemId;
             SourceItemId = sourceItemId;
             ItemSupplementSource = itemSupplementSource;
@@ -35,12 +33,11 @@ namespace LuminaSupplemental.Excel.Model
 
         public ItemSupplement()
         {
-            
+
         }
 
         public void FromCsv(string[] lineData)
         {
-            RowId = uint.Parse( lineData[ 0 ] );
             ItemId = uint.Parse( lineData[ 1 ] );
             SourceItemId = uint.Parse( lineData[ 2 ] );
             if( Enum.TryParse<ItemSupplementSource>( lineData[ 3 ], out var itemSupplementSource ) )

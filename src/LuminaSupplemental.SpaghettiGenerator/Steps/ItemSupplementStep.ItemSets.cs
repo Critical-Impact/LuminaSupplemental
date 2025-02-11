@@ -81,7 +81,7 @@ public partial class ItemSupplementStep
                              ((c.EquipSlotCategory.ValueNullable?.MainHand ?? 0) == 1 || (c.EquipSlotCategory.ValueNullable?.OffHand ?? 0) == 1));
                     foreach (var item in items)
                     {
-                        itemSupplements.Add(new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot));
+                        itemSupplements.Add(new ItemSupplement(item.RowId, coffer.RowId, ItemSupplementSource.Loot));
                     }
                 }
 
@@ -131,7 +131,7 @@ public partial class ItemSupplementStep
                                  ));
                         foreach (var item in items)
                         {
-                            itemSupplements.Add(new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot));
+                            itemSupplements.Add(new ItemSupplement(item.RowId, coffer.RowId, ItemSupplementSource.Loot));
                         }
                     }
                 }
@@ -145,7 +145,7 @@ public partial class ItemSupplementStep
                              ((c.EquipSlotCategory.ValueNullable?.MainHand ?? 0) == 1 || (c.EquipSlotCategory.ValueNullable?.OffHand ?? 0) == 1));
                     foreach (var item in items)
                     {
-                        itemSupplements.Add(new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot));
+                        itemSupplements.Add(new ItemSupplement(item.RowId, coffer.RowId, ItemSupplementSource.Loot));
                     }
                 }
 
@@ -178,7 +178,7 @@ public partial class ItemSupplementStep
                                      ));
                             foreach (var item in items)
                             {
-                                itemSupplements.Add(new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot));
+                                itemSupplements.Add(new ItemSupplement(item.RowId, coffer.RowId, ItemSupplementSource.Loot));
                             }
                         }
                     }
@@ -192,7 +192,7 @@ public partial class ItemSupplementStep
                              (c.EquipSlotCategory.ValueNullable?.Head ?? 0) == 1);
                     foreach (var item in items)
                     {
-                        itemSupplements.Add(new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot));
+                        itemSupplements.Add(new ItemSupplement(item.RowId, coffer.RowId, ItemSupplementSource.Loot));
                     }
                 }
 
@@ -204,7 +204,7 @@ public partial class ItemSupplementStep
                              (c.EquipSlotCategory.ValueNullable?.Body ?? 0) == 1);
                     foreach (var item in items)
                     {
-                        itemSupplements.Add(new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot));
+                        itemSupplements.Add(new ItemSupplement(item.RowId, coffer.RowId, ItemSupplementSource.Loot));
                     }
                 }
 
@@ -216,7 +216,7 @@ public partial class ItemSupplementStep
                              (c.EquipSlotCategory.ValueNullable?.Gloves ?? 0) == 1);
                     foreach (var item in items)
                     {
-                        itemSupplements.Add(new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot));
+                        itemSupplements.Add(new ItemSupplement(item.RowId, coffer.RowId, ItemSupplementSource.Loot));
                     }
                 }
 
@@ -228,7 +228,7 @@ public partial class ItemSupplementStep
                              (c.EquipSlotCategory.ValueNullable?.Legs ?? 0) == 1);
                     foreach (var item in items)
                     {
-                        itemSupplements.Add(new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot));
+                        itemSupplements.Add(new ItemSupplement(item.RowId, coffer.RowId, ItemSupplementSource.Loot));
                     }
                 }
 
@@ -240,7 +240,7 @@ public partial class ItemSupplementStep
                              (c.EquipSlotCategory.ValueNullable?.Feet ?? 0) == 1);
                     foreach (var item in items)
                     {
-                        itemSupplements.Add(new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot));
+                        itemSupplements.Add(new ItemSupplement(item.RowId, coffer.RowId, ItemSupplementSource.Loot));
                     }
                 }
 
@@ -252,7 +252,7 @@ public partial class ItemSupplementStep
                              (c.EquipSlotCategory.ValueNullable?.Ears ?? 0) == 1);
                     foreach (var item in items)
                     {
-                        itemSupplements.Add(new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot));
+                        itemSupplements.Add(new ItemSupplement(item.RowId, coffer.RowId, ItemSupplementSource.Loot));
                     }
                 }
 
@@ -264,7 +264,7 @@ public partial class ItemSupplementStep
                              (c.EquipSlotCategory.ValueNullable?.Neck ?? 0) == 1);
                     foreach (var item in items)
                     {
-                        itemSupplements.Add(new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot));
+                        itemSupplements.Add(new ItemSupplement(item.RowId, coffer.RowId, ItemSupplementSource.Loot));
                     }
                 }
 
@@ -276,7 +276,7 @@ public partial class ItemSupplementStep
                              (c.EquipSlotCategory.ValueNullable?.Wrists ?? 0) == 1);
                     foreach (var item in items)
                     {
-                        itemSupplements.Add(new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot));
+                        itemSupplements.Add(new ItemSupplement(item.RowId, coffer.RowId, ItemSupplementSource.Loot));
                     }
                 }
 
@@ -288,7 +288,7 @@ public partial class ItemSupplementStep
                              (c.EquipSlotCategory.ValueNullable?.FingerL ?? 0) == 1);
                     foreach (var item in items)
                     {
-                        itemSupplements.Add(new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot));
+                        itemSupplements.Add(new ItemSupplement(item.RowId, coffer.RowId, ItemSupplementSource.Loot));
                     }
                 }
 
@@ -321,7 +321,7 @@ public partial class ItemSupplementStep
                                      ));
                             foreach (var item in items)
                             {
-                                itemSupplements.Add(new ItemSupplement((uint)itemSupplements.Count + 1, item.RowId, coffer.RowId, ItemSupplementSource.Loot));
+                                itemSupplements.Add(new ItemSupplement(item.RowId, coffer.RowId, ItemSupplementSource.Loot));
                             }
                         }
                     }

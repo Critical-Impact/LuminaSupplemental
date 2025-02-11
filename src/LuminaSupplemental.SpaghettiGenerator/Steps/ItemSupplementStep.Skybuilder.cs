@@ -24,7 +24,6 @@ public partial class ItemSupplementStep
                         ItemSupplementSource = ItemSupplementSource.SkybuilderHandIn,
                         SourceItemId = sourceItem.RowId,
                         ItemId = item.RowId,
-                        RowId = (uint)itemSupplements.Count + 1
                     });
             }
             else

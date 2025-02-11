@@ -125,7 +125,7 @@ public static class CsvLoader
         }
     }
 
-    public static bool ToCsv<T>( List<T> items, string filePath ) where T : ICsv, new()
+    public static bool ToCsv<T>( List<T> items, string filePath ) where T : ICsv
     {
         try
         {
@@ -147,7 +147,7 @@ public static class CsvLoader
             return false;
         }
     }
-    public static bool ToCsvRaw<T>( List<T> items, string filePath ) where T : ICsv, new()
+    public static bool ToCsvRaw<T>( List<T> items, string filePath ) where T : ICsv
     {
         try
         {
