@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -22,8 +23,8 @@ public partial class ENpcPlaceStep
         {
             var eNpcResidentId = uint.Parse( lineData[ 1 ] );
             var territoryTypeId = uint.Parse( lineData[ 2 ] );
-            var positionData = lineData[3].Split(";").Select(c => float.Parse(c, CultureInfo.InvariantCulture)).ToList();
-            var position = new Vector2(positionData[0], positionData[1]);
+            var positionData = lineData[3].Split(";").Select(c => double.Parse(c, CultureInfo.InvariantCulture)).ToList();
+            var position = new Vector2((float)Math.Round(positionData[0], 1), (float)Math.Round(positionData[1], 1));
             var territoryType = this.territoryTypeSheet.GetRowOrDefault( territoryTypeId );
             if(territoryType == null) continue;
             var map = territoryType.Value.Map.ValueNullable;
