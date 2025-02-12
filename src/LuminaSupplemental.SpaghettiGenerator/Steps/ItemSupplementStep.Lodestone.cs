@@ -36,8 +36,8 @@ public partial class ItemSupplementStep
         //This is very shit code but parsing 30k HTML files is slow and I'll do everything I can to speed it up
         foreach (var itemId in itemIdMap.AsParallel())
         {
-            var actualItemId = itemId.Key;
-            var cacheFile = Path.Combine(storeProductCacheDirectory, $"{actualItemId - 1}.html");
+            var sourceItemId = itemId.Key;
+            var cacheFile = Path.Combine(storeProductCacheDirectory, $"{sourceItemId - 1}.html");
             if (File.Exists(cacheFile))
             {
                 string html = File.ReadAllText(cacheFile);
@@ -48,7 +48,7 @@ public partial class ItemSupplementStep
                     continue;
                 }
 
-                string divPattern = @"<li\b[^>]*>.*<strong>(.*?)</strong>.*<\/li>";
+                string divPattern = @"<li\b[^>]*>.*?<strong>(.*?)</strong>.*?<\/li>";
                 var matches = Regex.Matches(html, divPattern, RegexOptions.Singleline);
                 foreach (Match match in matches)
                 {
@@ -57,8 +57,9 @@ public partial class ItemSupplementStep
                         var name = match.Groups[1].Value.ToParseable();
                         if (itemsByName.ContainsKey(name) && itemsByName.ContainsKey(name))
                         {
-                            var sourceItem = this.itemSheet.GetRow(itemsByName[name]);
-                            itemSupplements.Add(new ItemSupplement((uint)actualItemId, sourceItem.RowId, ItemSupplementSource.Loot));
+                            var item = this.itemSheet.GetRow(itemsByName[name]);
+
+                            itemSupplements.Add(new ItemSupplement(item.RowId, (uint)sourceItemId, ItemSupplementSource.Loot));
                         }
                     }
                 }
