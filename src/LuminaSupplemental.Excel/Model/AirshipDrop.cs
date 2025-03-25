@@ -14,7 +14,6 @@ namespace LuminaSupplemental.Excel.Model
 {
     public class AirshipDrop : ICsv
     {
-        [Name("RowId")] public uint RowId { get; set; }
         [Name("ItemId")] public uint ItemId { get; set; }
         [Name("AirshipExplorationPointId")] public uint AirshipExplorationPointId { get; set; }
 
@@ -22,9 +21,8 @@ namespace LuminaSupplemental.Excel.Model
 
         public RowRef< Item > Item;
 
-        public AirshipDrop(uint rowId, uint itemId, uint airshipExplorationPointId )
+        public AirshipDrop(uint itemId, uint airshipExplorationPointId )
         {
-            RowId = rowId;
             ItemId = itemId;
             AirshipExplorationPointId = airshipExplorationPointId;
         }
@@ -36,9 +34,8 @@ namespace LuminaSupplemental.Excel.Model
 
         public void FromCsv(string[] lineData)
         {
-            RowId = uint.Parse( lineData[ 0 ] );
-            ItemId = uint.Parse( lineData[ 1 ] );
-            AirshipExplorationPointId = uint.Parse( lineData[ 2 ] );
+            ItemId = uint.Parse( lineData[ 0 ] );
+            AirshipExplorationPointId = uint.Parse( lineData[ 1 ] );
         }
 
         public string[] ToCsv()

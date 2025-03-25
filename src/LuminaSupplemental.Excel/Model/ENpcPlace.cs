@@ -19,7 +19,6 @@ namespace LuminaSupplemental.Excel.Model
 {
     public class ENpcPlace : ICsv
     {
-        [Name("RowId")] public uint RowId { get; set; }
         [Name("ENpcResidentId")] public uint ENpcResidentId { get; set; }
         [Name("TerritoryTypeId")] public uint TerritoryTypeId { get; set; }
         [Name("MapId")] public uint MapId { get; set; }
@@ -31,9 +30,8 @@ namespace LuminaSupplemental.Excel.Model
         public RowRef<Map> Map;
         public RowRef<PlaceName> PlaceName;
 
-        public ENpcPlace(uint rowId, uint eNpcResidentId, uint territoryTypeId, uint mapId, uint placeNameId, Vector2 position )
+        public ENpcPlace(uint eNpcResidentId, uint territoryTypeId, uint mapId, uint placeNameId, Vector2 position )
         {
-            RowId = rowId;
             ENpcResidentId = eNpcResidentId;
             TerritoryTypeId = territoryTypeId;
             MapId = mapId;
@@ -48,12 +46,11 @@ namespace LuminaSupplemental.Excel.Model
 
         public void FromCsv(string[] lineData)
         {
-            RowId = uint.Parse( lineData[ 0 ] );
-            ENpcResidentId = uint.Parse( lineData[ 1 ] );
-            TerritoryTypeId = uint.Parse( lineData[ 2 ] );
-            MapId = uint.Parse( lineData[ 3 ] );
-            PlaceNameId = uint.Parse( lineData[ 4 ] );
-            var positionData = lineData[5].Split(";").Select(c => float.Parse(c, CultureInfo.InvariantCulture)).ToList();
+            ENpcResidentId = uint.Parse( lineData[ 0 ] );
+            TerritoryTypeId = uint.Parse( lineData[ 1 ] );
+            MapId = uint.Parse( lineData[ 2 ] );
+            PlaceNameId = uint.Parse( lineData[ 3 ] );
+            var positionData = lineData[4].Split(";").Select(c => float.Parse(c, CultureInfo.InvariantCulture)).ToList();
             Position = new Vector2(positionData[0], positionData[1]);
         }
 
@@ -61,7 +58,6 @@ namespace LuminaSupplemental.Excel.Model
         {
             List<String> data = new List<string>()
             {
-                RowId.ToString(),
                 ENpcResidentId.ToString(),
                 TerritoryTypeId.ToString(),
                 MapId.ToString(),

@@ -17,34 +17,30 @@ namespace LuminaSupplemental.Excel.Model
 {
     public class HouseVendor : ICsv
     {
-        [Name("RowId")] public uint RowId { get; set; }
         [Name("ENpcResidentId")] public uint ENpcResidentId { get; set; }
         [Name("Parent")] public uint ParentId { get; set; }
 
-        public HouseVendor(uint rowId, uint eNpcResidentId, uint parentId )
+        public HouseVendor(uint eNpcResidentId, uint parentId )
         {
-            RowId = rowId;
             ENpcResidentId = eNpcResidentId;
             ParentId = parentId;
         }
 
         public HouseVendor()
         {
-            
+
         }
 
         public void FromCsv(string[] lineData)
         {
-            RowId = uint.Parse( lineData[ 0 ] );
-            ENpcResidentId = uint.Parse( lineData[ 1 ] );
-            ParentId = uint.Parse( lineData[ 2 ] );
+            ENpcResidentId = uint.Parse( lineData[ 0 ] );
+            ParentId = uint.Parse( lineData[ 1 ] );
         }
 
         public string[] ToCsv()
         {
             List<String> data = new List<string>()
             {
-                RowId.ToString(),
                 ENpcResidentId.ToString(),
                 ParentId.ToString()
             };

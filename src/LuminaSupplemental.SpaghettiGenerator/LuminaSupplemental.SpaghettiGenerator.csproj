@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net8.0-windows</TargetFramework>
+        <TargetFramework>net9.0-windows</TargetFramework>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
@@ -16,7 +16,8 @@
     <ItemGroup>
       <Content Include="../GarlandTools/Supplemental/FFXIV Data - Items.tsv" CopyToOutputDirectory="Always" />
       <Content Include="../GarlandTools/Supplemental/FFXIV Data - Duties.json" CopyToOutputDirectory="Always" />
-      <Content Include="../GarlandTools/Supplemental/patches.json" CopyToOutputDirectory="Always" />
+      <Content Include="../ffxiv-datamining-patches/patchdata/Item.json" CopyToOutputDirectory="Always" />
+      <Content Include="../ffxiv-datamining-patches/patchlist.json" CopyToOutputDirectory="Always" />
       <Content Include="../ffxiv-lodestone-item-id/lodestone-item-id.txt" CopyToOutputDirectory="Always" />
       <PackageReference Include="Autofac" Version="8.0.0" />
       <PackageReference Include="CSVFile" Version="3.2.0" />
@@ -44,9 +45,6 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Remove="ManualData\ExtraPatchData.csv" />
-      <Content Include="ManualData\ExtraPatchData.csv">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
       <None Update="ManualData\RetainerVentures.csv">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>

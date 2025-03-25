@@ -32,7 +32,7 @@ public partial class ENpcPlaceStep
             var placeName = territoryType.Value.PlaceName.ValueNullable;
             if(placeName == null) continue;
 
-            var eNpcPlace = new ENpcPlace( 0, eNpcResidentId, territoryTypeId,map.Value.RowId,
+            var eNpcPlace = new ENpcPlace( eNpcResidentId, territoryTypeId,map.Value.RowId,
                                            placeName.Value.RowId, position );
             eNpcPlace.PopulateData( this.gameData.Excel, Language.English );
             manualData.Add( eNpcPlace );
@@ -53,7 +53,6 @@ public partial class ENpcPlaceStep
             {
                 if (!npcLevelLookup[npc.ENpcResidentId].Any(c => c.EqualRounded(npc)))
                 {
-                    npc.RowId = rowId;
                     npcLevelLookup[npc.ENpcResidentId].Add(npc);
                     rowId++;
                 }

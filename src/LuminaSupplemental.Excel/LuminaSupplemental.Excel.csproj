@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0-windows</TargetFramework>
+        <TargetFramework>net9.0-windows</TargetFramework>
         <Authors>Critical-Impact</Authors>
         <PackageProjectUrl>https://github.com/Critical-Impact/LuminaSupplemental</PackageProjectUrl>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <RepositoryUrl>https://github.com/Critical-Impact/LuminaSupplemental</RepositoryUrl>
-        <PackageVersion>2.2.4</PackageVersion>
-        <FileVersion>2.2.4</FileVersion>
+        <PackageVersion>2.3.0</PackageVersion>
+        <FileVersion>2.3.0</FileVersion>
         <Description>Supplemental data for lumina and dalamud plugins.</Description>
     </PropertyGroup>
 

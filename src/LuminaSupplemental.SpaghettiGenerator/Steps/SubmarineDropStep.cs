@@ -54,13 +54,8 @@ public partial class SubmarineDropStep : GeneratorStep
         items.AddRange(this.Process());
         //items.AddRange(this.ProcessGubalData()); // No longer needed as the data from the CSV is up to date
         items = items.DistinctBy(c => (c.ItemId, c.SubmarineExplorationId)).ToList();
-        for (var index = 0; index < items.Count; index++)
-        {
-            var item = items[index];
-            item.RowId = (uint)(index + 1);
-        }
 
-        return [..items.Select(c => c)];
+        return [..items.Select(c => c).OrderBy(c => c.SubmarineExplorationId).ThenBy(c => c.ItemId)];
     }
 
     private Dictionary<string, string> MateriaNames = new()
@@ -112,7 +107,6 @@ public partial class SubmarineDropStep : GeneratorStep
                     {
                         submarineDrops.Add( new SubmarineDrop()
                         {
-                            RowId = (uint)(submarineDrops.Count + 1),
                             SubmarineExplorationId = actualSector.RowId,
                             ItemId = outputItem.Value.RowId
                         });

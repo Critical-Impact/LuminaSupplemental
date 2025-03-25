@@ -54,13 +54,7 @@ public partial class AirshipDropStep : GeneratorStep
         items.AddRange(this.Process());
         items.AddRange(this.ProcessGubalData());
         items = items.DistinctBy(c => (c.ItemId, c.AirshipExplorationPointId)).ToList();
-        for (var index = 0; index < items.Count; index++)
-        {
-            var item = items[index];
-            item.RowId = (uint)(index + 1);
-        }
-
-        return [..items.Select(c => c)];
+        return [..items.Select(c => c).OrderBy(c => c.AirshipExplorationPointId)];
     }
 
     private List<AirshipDrop> Process()
@@ -91,7 +85,6 @@ public partial class AirshipDropStep : GeneratorStep
                         airshipDrops.Add(
                             new AirshipDrop()
                             {
-                                RowId = (uint)(airshipDrops.Count + 1),
                                 AirshipExplorationPointId = actualSector.RowId,
                                 ItemId = outputItem.Value.RowId
                             });

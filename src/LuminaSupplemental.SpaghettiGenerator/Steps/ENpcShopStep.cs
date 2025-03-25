@@ -17,7 +17,7 @@ public partial class ENpcShopStep : GeneratorStep
     public override string FileName => "ENpcShop.csv";
 
     public override string Name => "Shop Names";
-    
+
 
     public ENpcShopStep()
     {
@@ -28,19 +28,14 @@ public partial class ENpcShopStep : GeneratorStep
     {
         List<ENpcShop> items = new ();
         items.AddRange(this.ProcessEventShops());
-        for (var index = 0; index < items.Count; index++)
-        {
-            var item = items[index];
-            item.RowId = (uint)(index + 1);
-        }
 
-        return [..items.Select(c => c)];
+        return [..items.Select(c => c).OrderBy(c => c.ENpcResidentId).ThenBy(c => c.ShopId)];
     }
-    
+
     private List<ENpcShop> ProcessEventShops()
     {
         List<ENpcShop> eNpcShops = new();
-        
+
         var shops = new Dictionary< uint, uint >()
         {
             {1769635, 1016289},
@@ -48,7 +43,7 @@ public partial class ENpcShopStep : GeneratorStep
             {1769869, 1017338},
             {1769743, 1018655},
             {1769744, 1018655},
-                
+
             {1769820, 1025047},
             {1769821, 1025047},
             {1769822, 1025047},
@@ -64,12 +59,12 @@ public partial class ENpcShopStep : GeneratorStep
             {1769832, 1025047},
             {1769833, 1025047},
             {1769834, 1025047},
-                
+
             {1769871, 1025848},
             {1769870, 1025848},
-                
+
             {262919, 1025763},
-                
+
             {1769957, 1027998},
             {1769958, 1027538},
             {1769959, 1027385},
@@ -78,18 +73,17 @@ public partial class ENpcShopStep : GeneratorStep
             {1769962, 1027665},
             {1769963, 1027709},
             {1769964, 1027766},
-                
+
             {1770282, 1033921},
-                
+
             {1770087, 1034007},
             //Support this later{1770087, 1036895},
         };
-            
+
         foreach( var shopName in shops )
         {
             eNpcShops.Add( new ENpcShop()
             {
-                RowId = (uint)( eNpcShops.Count + 1 ),
                 ShopId = shopName.Key,
                 ENpcResidentId = shopName.Value
             } );

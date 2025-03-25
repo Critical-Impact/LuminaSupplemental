@@ -24,7 +24,7 @@ public partial class FateItemStep : GeneratorStep
     public override string FileName => "FateItem.csv";
 
     public override string Name => "Fate Items";
-    
+
 
     public FateItemStep(GubalApi gubalApi, ExcelSheet<Fate> fateSheet, ILogger logger)
     {
@@ -39,13 +39,8 @@ public partial class FateItemStep : GeneratorStep
         List<FateItem> items = new List<FateItem>();
         items.AddRange(this.ProcessGubalData());
         items = items.DistinctBy(c => (c.ItemId, c.FateId)).ToList();
-        for (var index = 0; index < items.Count; index++)
-        {
-            var item = items[index];
-            item.RowId = (uint)(index + 1);
-        }
 
-        return [..items.Select(c => c)];
+        return [..items.Select(c => c).OrderBy(c => c.FateId).ThenBy(c => c.ItemId)];
     }
 
 }

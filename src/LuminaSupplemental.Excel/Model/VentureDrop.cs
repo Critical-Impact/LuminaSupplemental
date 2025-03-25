@@ -15,26 +15,23 @@ namespace LuminaSupplemental.Excel.Model
 {
     public class VentureDrop : ICsv
     {
-        [Name("RowId")] public uint RowId { get; set; }
         [Name("ItemId")] public uint ItemId { get; set; }
         [Name("RetainerTaskRandomId")] public uint RetainerTaskRandomId { get; set; }
-        
+
         public RowRef< Item > Item;
-        
+
         public RowRef< RetainerTaskRandom > RetainerTaskRandom;
 
-        public VentureDrop(uint rowId, uint itemId, uint retainerTaskRandomId )
+        public VentureDrop(uint itemId, uint retainerTaskRandomId )
         {
-            RowId = rowId;
             ItemId = itemId;
             RetainerTaskRandomId = retainerTaskRandomId;
         }
 
         public void FromCsv(string[] lineData)
         {
-            RowId = uint.Parse( lineData[ 0 ] );
-            ItemId = uint.Parse( lineData[ 1 ] );
-            RetainerTaskRandomId = uint.Parse( lineData[ 2 ] );
+            ItemId = uint.Parse( lineData[ 0 ] );
+            RetainerTaskRandomId = uint.Parse( lineData[ 1 ] );
         }
 
         public string[] ToCsv()

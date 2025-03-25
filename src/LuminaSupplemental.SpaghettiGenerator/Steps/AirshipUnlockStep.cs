@@ -41,13 +41,7 @@ public partial class AirshipUnlockStep : GeneratorStep
     {
         List<AirshipUnlock> items = new ();
         items.AddRange(this.Process());
-        for (var index = 0; index < items.Count; index++)
-        {
-            var item = items[index];
-            item.RowId = (uint)(index + 1);
-        }
-
-        return [..items.Select(c => c)];
+        return [..items.Select(c => c).OrderBy(c => c.AirshipExplorationPointId).ThenBy(c => c.AirshipExplorationPointUnlockId)];
     }
 
     private List<AirshipUnlock> Process()
@@ -81,7 +75,6 @@ public partial class AirshipUnlockStep : GeneratorStep
                 airshipUnlocks.Add(
                     new AirshipUnlock()
                     {
-                        RowId = (uint)(airshipUnlocks.Count + 1),
                         AirshipExplorationPointId = actualSector.RowId,
                         AirshipExplorationPointUnlockId = actualUnlockSector?.RowId ?? 0,
                         SurveillanceRequired = actualSurveillanceRequired,

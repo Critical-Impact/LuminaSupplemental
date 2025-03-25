@@ -36,12 +36,7 @@ public partial class ENpcPlaceStep : GeneratorStep
     {
         List<ENpcPlace> items = new ();
         items.AddRange(this.ProcessManualData());
-        for (var index = 0; index < items.Count; index++)
-        {
-            var item = items[index];
-            item.RowId = (uint)(index + 1);
-        }
 
-        return [..items.Select(c => c)];
+        return [..items.Select(c => c).OrderBy(c => c.ENpcResidentId).ThenBy(c => c.TerritoryTypeId)];
     }
 }

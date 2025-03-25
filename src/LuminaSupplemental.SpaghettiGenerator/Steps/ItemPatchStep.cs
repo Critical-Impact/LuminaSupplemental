@@ -10,6 +10,7 @@ using Lumina.Excel;
 using Lumina.Excel.Sheets;
 
 using LuminaSupplemental.Excel.Model;
+using LuminaSupplemental.SpaghettiGenerator.Extensions;
 using LuminaSupplemental.SpaghettiGenerator.Generator;
 using LuminaSupplemental.SpaghettiGenerator.Model;
 
@@ -38,44 +39,24 @@ public partial class ItemPatchStep : GeneratorStep
     {
         List<ItemPatch> items = new ();
         items.AddRange(this.Process());
-        for (var index = 0; index < items.Count; index++)
-        {
-            var item = items[index];
-            item.RowId = (uint)(index + 1);
-        }
 
-        return [..items.Select(c => c)];
+        return [..items.Select(c => c).OrderBy(c => c.PatchNo).ThenBy(c => c.StartItemId).ThenBy(c => c.EndItemId)];
     }
+
+
 
     private List<ItemPatch> Process()
     {
         List<ItemPatch> itemPatches = new();
-        var patchText = File.ReadAllText( @"patches.json" );
-        var patches = JsonConvert.DeserializeObject<PatchJson[]>(patchText)!.ToList();
-        var knownItemIds = patches.Where( c => c.Type == "item" ).Select( c => c.Id ).Distinct().ToHashSet();
+        var patchText = File.ReadAllText( @"Item.json" );
+        var patchListText = File.ReadAllText( @"patchlist.json" );
+        var patchList = JsonConvert.DeserializeObject<List<PatchListItem>>(patchListText)!;
+        var patchMap = patchList.ToDictionary(c => c.ID, c => decimal.Parse(c.Version.GetNumbers()));
 
-        //Process extra data not in GT's jsons(no idea why)
+        var unmappedIds = JsonConvert.DeserializeObject<Dictionary<uint, uint>>(patchText);
+        var unsortedIds = unmappedIds!.ToDictionary(c => c.Key, c => patchMap.TryGetValue(c.Value, out var v) ? v : c.Value);
 
-        var reader = CSVFile.CSVReader.FromFile(Path.Combine( "ManualData","ExtraPatchData.csv"), CSVSettings.CSV);
-
-        foreach( var line in reader.Lines() )
-        {
-            var sourceItemId = uint.Parse(line[ 0 ]);
-            if( knownItemIds.Contains( sourceItemId ) )
-            {
-                continue;
-            }
-            var patchId = decimal.Parse(line[ 1 ], CultureInfo.InvariantCulture);
-            patches.Add( new PatchJson() {Patch = patchId, Id = sourceItemId, Type = "item"} );
-        }
-        var patchWhereItemKnown = patches.Select( c => c.Id ).Distinct().ToHashSet();
-        var unknownPatchItems = itemSheet.Where( c => !patchWhereItemKnown.Contains( c.RowId ) ).ToList();
-        foreach( var unknownPatchItem in unknownPatchItems )
-        {
-            patches.Add( new PatchJson() {Patch = new(9.9), Id = unknownPatchItem.RowId, Type = "item"} );
-            Console.WriteLine(unknownPatchItem.RowId);
-        }
-        var orderedPatches = patches.Where( c => c.Type == "item" ).OrderBy( c => c.Id );
+        var orderedPatches = unsortedIds.OrderBy( c => c.Key );
         decimal? currentPatch = null;
         uint? firstItem = null;
         uint? lastItem = null;
@@ -84,23 +65,23 @@ public partial class ItemPatchStep : GeneratorStep
         {
             if( currentPatch == null )
             {
-                currentPatch = orderedPatch.Patch;
+                currentPatch = orderedPatch.Value;
             }
 
             if( firstItem == null )
             {
-                firstItem = orderedPatch.Id;
+                firstItem = orderedPatch.Key;
             }
 
 
-            if( currentPatch != orderedPatch.Patch && lastItem != null)
+            if( currentPatch != orderedPatch.Value && lastItem != null)
             {
                 patchData.Add( (currentPatch.Value, firstItem.Value, lastItem.Value) );
-                firstItem = orderedPatch.Id;
-                currentPatch = orderedPatch.Patch;
+                firstItem = orderedPatch.Key;
+                currentPatch = orderedPatch.Value;
             }
 
-            lastItem = orderedPatch.Id;
+            lastItem = orderedPatch.Key;
 
         }
         if( currentPatch != null && firstItem != null && lastItem != null)
@@ -109,7 +90,7 @@ public partial class ItemPatchStep : GeneratorStep
         }
         foreach( var patch in patchData )
         {
-            itemPatches.Add( new ItemPatch((uint)(itemPatches.Count + 1), patch.Item2, patch.Item3, patch.Item1) );
+            itemPatches.Add( new ItemPatch(patch.Item2, patch.Item3, patch.Item1) );
         }
 
         return itemPatches;

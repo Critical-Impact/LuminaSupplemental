@@ -40,11 +40,6 @@ public partial class MobDropStep : GeneratorStep
         items.AddRange(this.ProcessLodestoneDrops());
         items.AddRange(this.ProcessGubalData());
         items = items.DistinctBy(c => (c.ItemId, c.BNpcNameId)).ToList();
-        for (var index = 0; index < items.Count; index++)
-        {
-            var item = items[index];
-            item.RowId = (uint)(index + 1);
-        }
-        return [..items.Select(c => c)];
+        return [..items.Select(c => c).OrderBy(c => c.BNpcNameId).ThenBy(c => c.ItemId)];
     }
 }

@@ -15,31 +15,28 @@ namespace LuminaSupplemental.Excel.Model
 {
     public class SubmarineDrop : ICsv
     {
-        [Name("RowId")] public uint RowId { get; set; }
         [Name("ItemId")] public uint ItemId { get; set; }
         [Name("SubmarineExplorationId")] public uint SubmarineExplorationId { get; set; }
-        
+
         public RowRef< SubmarineExploration > SubmarineExploration;
-        
+
         public RowRef< Item > Item;
 
-        public SubmarineDrop(uint rowId, uint itemId, uint submarineExplorationId )
+        public SubmarineDrop(uint itemId, uint submarineExplorationId )
         {
-            RowId = rowId;
             ItemId = itemId;
             SubmarineExplorationId = submarineExplorationId;
         }
 
         public SubmarineDrop()
         {
-            
+
         }
 
         public void FromCsv(string[] lineData)
         {
-            RowId = uint.Parse( lineData[ 0 ] );
-            ItemId = uint.Parse( lineData[ 1 ] );
-            SubmarineExplorationId = uint.Parse( lineData[ 2 ] );
+            ItemId = uint.Parse( lineData[ 0 ] );
+            SubmarineExplorationId = uint.Parse( lineData[ 1 ] );
         }
 
         public string[] ToCsv()

@@ -6,6 +6,7 @@ using System.IO;
 using CsvHelper;
 
 using LuminaSupplemental.Excel.Model;
+using LuminaSupplemental.SpaghettiGenerator.Steps;
 
 using Serilog;
 
@@ -41,7 +42,7 @@ public class Generator
         }
         this.logger.Information("Deleted existing CSV files.");
 
-        
+
         this.logger.Information("Starting downloads.");
         foreach (var step in this.downloadSteps)
         {
@@ -62,6 +63,7 @@ public class Generator
                 this.logger.Information($"[{step.Name}] Skipping generation step as condition was not met.");
                 continue;
             }
+
             this.logger.Information($"[{step.Name}] Generating data");
             var items = step.Run();
             this.logger.Information($"[{step.Name}] Finished generating data");
@@ -71,7 +73,7 @@ public class Generator
         }
         this.logger.Information("Generation complete.");
     }
-    
+
     public void WriteFile(Type outputType, List< ICsv > items, string outputPath )
     {
         using var fileStream5 = new FileStream( outputPath, FileMode.Create );

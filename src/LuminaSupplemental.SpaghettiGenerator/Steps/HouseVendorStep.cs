@@ -32,13 +32,7 @@ public partial class HouseVendorStep : GeneratorStep
     {
         List<HouseVendor> items = new ();
         items.AddRange(this.Process());
-        for (var index = 0; index < items.Count; index++)
-        {
-            var item = items[index];
-            item.RowId = (uint)(index + 1);
-        }
-
-        return [..items.Select(c => c)];
+        return [..items.Select(c => c).OrderBy(c => c.ENpcResidentId)];
     }
 
     private List<HouseVendor> Process()
@@ -65,11 +59,11 @@ public partial class HouseVendorStep : GeneratorStep
         {
             var parentId = item.Value.First();
             var children = item.Value.Skip( 1 );
-            var houseVendor = new HouseVendor((uint)(houseVendors.Count + 1), parentId, 0);
+            var houseVendor = new HouseVendor( parentId, 0);
             houseVendors.Add( houseVendor );
             foreach( var child in children )
             {
-                var childVendor = new HouseVendor((uint)(houseVendors.Count + 1), child, parentId);
+                var childVendor = new HouseVendor(child, parentId);
                 houseVendors.Add( childVendor );
             }
         }

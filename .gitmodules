@@ -4,3 +4,6 @@
 [submodule "src/ffxiv-lodestone-item-id"]
 	path = src/ffxiv-lodestone-item-id
 	url = https://github.com/Asvel/ffxiv-lodestone-item-id.git
+[submodule "src/ffxiv-datamining-patches"]
+	path = src/ffxiv-datamining-patches
+	url = https://github.com/xivapi/ffxiv-datamining-patches.git

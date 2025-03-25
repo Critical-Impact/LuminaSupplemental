@@ -43,13 +43,7 @@ public partial class SubmarineUnlockStep : GeneratorStep
     {
         List<SubmarineUnlock> items = new ();
         items.AddRange(this.Process());
-        for (var index = 0; index < items.Count; index++)
-        {
-            var item = items[index];
-            item.RowId = (uint)(index + 1);
-        }
-
-        return [..items.Select(c => c)];
+        return [..items.Select(c => c).OrderBy(c => c.SubmarineExplorationId).ThenBy(c => c.SubmarineExplorationUnlockId)];
     }
 
     private List<SubmarineUnlock> Process()
@@ -78,7 +72,6 @@ public partial class SubmarineUnlockStep : GeneratorStep
 
                 submarineUnlocks.Add(new SubmarineUnlock()
                 {
-                    RowId = (uint)( submarineUnlocks.Count + 1 ),
                     SubmarineExplorationId = actualSector.RowId,
                     SubmarineExplorationUnlockId = actualUnlockSector?.RowId ?? 0,
                     RankRequired = rankRequired

@@ -45,13 +45,8 @@ public partial class RetainerVentureItemStep : GeneratorStep
     {
         List<RetainerVentureItem> items = new ();
         items.AddRange(this.Process());
-        for (var index = 0; index < items.Count; index++)
-        {
-            var item = items[index];
-            item.RowId = (uint)(index + 1);
-        }
 
-        return [..items.Select(c => c)];
+        return [..items.Select(c => c).OrderBy(c => c.RetainerTaskRandomId).ThenBy(c => c.ItemId)];
     }
 
     private List<RetainerVentureItem> Process()
@@ -78,7 +73,6 @@ public partial class RetainerVentureItemStep : GeneratorStep
                     {
                         retainerVentureItems.Add( new RetainerVentureItem()
                         {
-                            RowId = (uint)(retainerVentureItems.Count + 1),
                             RetainerTaskRandomId = retainerTaskRandom.RowId,
                             ItemId = outputItem.Value.RowId
                         });

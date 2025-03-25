@@ -51,13 +51,8 @@ public partial class StoreItemStep : GeneratorStep
     {
         List<StoreItem> items = new ();
         items.AddRange(this.Process());
-        for (var index = 0; index < items.Count; index++)
-        {
-            var item = items[index];
-            item.RowId = (uint)(index + 1);
-        }
 
-        return [..items.Select(c => c)];
+        return [..items.Select(c => c).OrderBy(c => c.ItemId).ThenBy(c => c.FittingShopItemSetId)];
     }
 
     private List<StoreItem> Process()
@@ -86,7 +81,6 @@ public partial class StoreItemStep : GeneratorStep
                     var outputItem = this.itemSheet.GetRow(itemsByName[ parsedItemName ]);
                     storeItems.Add( new StoreItem()
                     {
-                        RowId = (uint)(storeItems.Count + 1),
                         FittingShopItemSetId = fittingShopItemSet?.RowId ?? 0,
                         ItemId = outputItem.RowId,
                         PriceCentsUSD = product.Value.PriceText.Contains(".") ? (uint)(float.Parse(product.Value.PriceText.Replace("$", "").Replace("USD", "")) * 100) : uint.Parse(product.Value.PriceText)

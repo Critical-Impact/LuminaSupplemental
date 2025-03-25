@@ -15,31 +15,28 @@ namespace LuminaSupplemental.Excel.Model
 {
     public class FateItem : ICsv
     {
-        [Name("RowId")] public uint RowId { get; set; }
         [Name("ItemId")] public uint ItemId { get; set; }
         [Name("FateId")] public uint FateId { get; set; }
 
         public RowRef<Fate> Fate;
-        
+
         public RowRef<Item> Item;
-        
-        public FateItem(uint rowId, uint itemId, uint fateId )
+
+        public FateItem(uint itemId, uint fateId )
         {
-            RowId = rowId;
             ItemId = itemId;
             FateId = fateId;
         }
 
         public FateItem()
         {
-            
+
         }
 
         public void FromCsv(string[] lineData)
         {
-            RowId = uint.Parse( lineData[ 0 ] );
-            ItemId = uint.Parse( lineData[ 1 ] );
-            FateId = uint.Parse( lineData[ 2 ] );
+            ItemId = uint.Parse( lineData[ 0 ] );
+            FateId = uint.Parse( lineData[ 1 ] );
         }
 
         public string[] ToCsv()

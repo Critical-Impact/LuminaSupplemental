@@ -34,13 +34,8 @@ public partial class ShopNameStep : GeneratorStep
     {
         List<ShopName> items = new ();
         items.AddRange(this.ProcessShopNames());
-        for (var index = 0; index < items.Count; index++)
-        {
-            var item = items[index];
-            item.RowId = (uint)(index + 1);
-        }
 
-        return [..items.Select(c => c)];
+        return [..items.Select(c => c).OrderBy(c => c.ShopId)];
     }
 
     public List<ShopName> ProcessShopNames()
@@ -66,7 +61,6 @@ public partial class ShopNameStep : GeneratorStep
                         shopNames.Add(
                             new ShopName()
                             {
-                                RowId = (uint)(shopNames.Count + 1),
                                 ShopId = argument,
                                 Name = shopName
                             });
@@ -114,7 +108,6 @@ public partial class ShopNameStep : GeneratorStep
         {
             shopNames.Add( new ShopName()
             {
-                RowId = (uint)( shopNames.Count + 1 ),
                 ShopId = shopName.Key,
                 Name = shopName.Value
             } );
