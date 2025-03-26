@@ -40,6 +40,8 @@ jobs:
       # Install the .NET SDK indicated in the global.json file
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
 
       # Create the NuGet package in the folder from the environment variable NuGetDirectory
       - run: |
@@ -60,6 +62,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
       - name: Run tests
         run: |
           $env:DALAMUD_HOME = "${{ env.DALAMUD_HOME }}"
@@ -82,6 +86,8 @@ jobs:
       # Install the .NET SDK indicated in the global.json file
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
 
       # Publish all NuGet packages to NuGet.org
       # Use --skip-duplicate to prevent errors if a package with the same version already exists.
