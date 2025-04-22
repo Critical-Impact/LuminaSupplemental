@@ -1,5 +1,7 @@
 # Lumina Supplemental
 
+[![NuGet](https://img.shields.io/nuget/v/LuminaSupplemental.Excel.svg)](https://www.nuget.org/packages/LuminaSupplemental.Excel)
+
 Lumina Supplemental is an additional library that provides additional data that the game's data sheets do not provide.
 
 While this is not an exhaustive list(as more gets added all the time), it provides
