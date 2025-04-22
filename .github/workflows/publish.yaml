@@ -67,4 +67,4 @@ jobs:
       - name: Run tests
         run: |
           $env:DALAMUD_HOME = "${{ env.DALAMUD_HOME }}"
-          dotnet test --configuration Release
+          dotnet test --configuration Release src
