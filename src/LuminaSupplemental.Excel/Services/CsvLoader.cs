@@ -30,7 +30,7 @@ public static class CsvLoader
         while (dr.Read())
         {
             string[] fields = new string[dr.FieldCount];
-            
+
             for(int i = 0; i < dr.FieldCount; i++)
             {
                 fields[i] = dr.GetString(i);
@@ -76,6 +76,7 @@ public static class CsvLoader
     public const string HouseVendorResourceName = "LuminaSupplemental.Excel.Generated.HouseVendor.csv";
     public const string FateItemResourceName = "LuminaSupplemental.Excel.Generated.FateItem.csv";
     public const string GardeningCrossbreedResourceName = "LuminaSupplemental.Excel.Generated.GardeningCrossbreed.csv";
+    public const string FestivalNameResourceName = "LuminaSupplemental.Excel.Generated.FestivalName.csv";
 
     public static List< T > LoadResource<T>(string resourceName, bool includesHeaders, out List<string> failedLines, out List<Exception> exceptions, GameData? gameData = null, Language? language = null) where T : ICsv, new()
     {
@@ -96,7 +97,7 @@ public static class CsvLoader
                 while (dr.Read())
                 {
                     string[] fields = new string[dr.FieldCount];
-                
+
                     for(int i = 0; i < dr.FieldCount; i++)
                     {
                         fields[i] = dr.GetString(i);

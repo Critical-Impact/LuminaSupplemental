@@ -63,6 +63,10 @@
       <None Update="ManualData\Gardening\crossbreeding.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Remove="ManualData\FestivalName.csv" />
+      <Content Include="ManualData\FestivalName.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>
