@@ -58,6 +58,7 @@ public partial class ItemSupplementStep : GeneratorStep
         items.AddRange(this.ProcessManualItems());
         items.AddRange(this.ProcessSkybuilderItems());
         items.AddRange(this.ProcessGubalData());
+        items.AddRange(this.AutoMatchMissingCoffers(items));
         items = items.DistinctBy(c => (c.ItemId, c.SourceItemId, c.ItemSupplementSource)).OrderBy(c => c.ItemId).ThenBy(c => c.SourceItemId).ToList();
 
         return [..items.Select(c => c)];

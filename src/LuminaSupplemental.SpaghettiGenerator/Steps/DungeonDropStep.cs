@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using CSVFile;
@@ -59,10 +60,14 @@ public partial class DungeonDropStep : GeneratorStep
     {
         List<DungeonDrop> dungeonDrops = new();
 
-        var reader = CSVFile.CSVReader.FromFile(@"FFXIV Data - Items.tsv", CSVSettings.TSV);
+        var reader = CSVFile.CSVReader.FromFile(Path.Join("ManualData", "FFXIV Data - Items.tsv"), CSVSettings.TSV);
 
         foreach (var line in reader.Lines())
         {
+            if (line.Length < 2)
+            {
+                continue;
+            }
             var outputItemId = line[0];
             var method = line[1];
             if (method == "")
@@ -72,7 +77,7 @@ public partial class DungeonDropStep : GeneratorStep
             var sources = new List<string>();
             for (var i = 2; i < 13; i++)
             {
-                if (line[i] != "")
+                if (i >= 0 && i < line.Length && line[i] != "")
                 {
                     sources.Add(line[i]);
                 }

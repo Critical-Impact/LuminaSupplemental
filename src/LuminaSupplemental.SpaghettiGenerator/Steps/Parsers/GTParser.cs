@@ -55,7 +55,7 @@ public class GTParser
         var dungeonBossCount = 1u;
         var dungeonBossChestCount = 1u;
 
-        var dutyText = File.ReadAllText(@"FFXIV Data - Duties.json");
+        var dutyText = File.ReadAllText(Path.Join("ManualData", "FFXIV Data - Duties.json"));
         JsonConverter[] converters =
         {
             new CategoryConverter(), new ConditionConverter(), new VersionConverter(), new ChestEnumConverter(), new ChestNameConverter(),

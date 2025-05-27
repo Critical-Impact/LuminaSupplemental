@@ -13,6 +13,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed+
 
+## [2.3.3] - 2025-05-27
+
+### Added
+
+- More coffers will be automatically matched
+
+### Changes
+
+- Initial 7.25 data update
+
 ## [2.3.2] - 2025-04-26
 
 ### Added
