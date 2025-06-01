@@ -1553,7 +1553,7 @@
                 "chest": "silver",
                 "boss": [
                     {
-                        "url": "/lodestone/playguide/db/npc/enemy/e34c3c74ec7/",
+                        "url": "/lodestone/playguide/db/npc/enemy/c7b9929ad20/",
                         "name": "Teratotaur"
                     }
                 ],
@@ -1574,7 +1574,7 @@
                 "chest": "silver",
                 "boss": [
                     {
-                        "url": "/lodestone/playguide/db/npc/enemy/f93f961506e/",
+                        "url": "/lodestone/playguide/db/npc/enemy/01a5528f8ae/",
                         "name": "Temple Guardian"
                     }
                 ],
@@ -1596,7 +1596,7 @@
                 "chest": "gold",
                 "boss": [
                     {
-                        "url": "/lodestone/playguide/db/npc/enemy/6683be5f041/",
+                        "url": "/lodestone/playguide/db/npc/enemy/24b3ee73000/",
                         "name": "Adjudicator"
                     }
                 ],
@@ -25150,8 +25150,8 @@
                 ],
                 "token": [
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
-                        "amount": "15"
+                        "name": "Allagan Tomestone of Heliometry",
+                        "amount": "10"
                     }
                 ]
             },
@@ -25189,8 +25189,8 @@
                 ],
                 "token": [
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
-                        "amount": "25"
+                        "name": "Allagan Tomestone of Heliometry",
+                        "amount": "15"
                     }
                 ]
             },
@@ -25223,12 +25223,12 @@
                 ],
                 "token": [
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
-                        "amount": "40"
+                        "name": "Allagan Tomestone of Heliometry",
+                        "amount": "25"
                     },
                     {
-                        "name": "Allagan Tomestone of Heliometry",
-                        "amount": "50"
+                        "name": "Allagan Tomestone of Mathematics",
+                        "amount": "20"
                     }
                 ]
             }
@@ -25362,8 +25362,8 @@
                 ],
                 "token": [
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
-                        "amount": "15"
+                        "name": "Allagan Tomestone of Heliometry",
+                        "amount": "10"
                     }
                 ]
             },
@@ -25401,8 +25401,8 @@
                 ],
                 "token": [
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
-                        "amount": "25"
+                        "name": "Allagan Tomestone of Heliometry",
+                        "amount": "15"
                     }
                 ]
             },
@@ -25436,12 +25436,12 @@
                 ],
                 "token": [
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
-                        "amount": "40"
+                        "name": "Allagan Tomestone of Heliometry",
+                        "amount": "25"
                     },
                     {
-                        "name": "Allagan Tomestone of Heliometry",
-                        "amount": "50"
+                        "name": "Allagan Tomestone of Mathematics",
+                        "amount": "20"
                     }
                 ]
             }
@@ -25575,8 +25575,8 @@
                 ],
                 "token": [
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
-                        "amount": "15"
+                        "name": "Allagan Tomestone of Heliometry",
+                        "amount": "10"
                     }
                 ]
             },
@@ -25614,8 +25614,8 @@
                 ],
                 "token": [
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
-                        "amount": "25"
+                        "name": "Allagan Tomestone of Heliometry",
+                        "amount": "15"
                     }
                 ]
             },
@@ -25650,12 +25650,12 @@
                 ],
                 "token": [
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
-                        "amount": "40"
+                        "name": "Allagan Tomestone of Heliometry",
+                        "amount": "25"
                     },
                     {
-                        "name": "Allagan Tomestone of Heliometry",
-                        "amount": "50"
+                        "name": "Allagan Tomestone of Mathematics",
+                        "amount": "20"
                     }
                 ]
             }
@@ -25855,7 +25855,7 @@
                 ],
                 "token": [
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "15"
                     }
                 ]
@@ -25901,7 +25901,7 @@
                 ],
                 "token": [
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "25"
                     }
                 ]
@@ -25916,7 +25916,12 @@
                 ],
                 "drops": [
                     {
-                        "name": "???"
+                        "name": "Overseer Kanilokka Card",
+                        "url": "/lodestone/playguide/db/item/ba49748fc89/",
+                        "condition": [
+                            "* Must first complete the quest \"Triple Triad Trial.\"",
+                            "* Drops at a fixed rate."
+                        ]
                     }
                 ],
                 "treasures": [
@@ -25944,11 +25949,305 @@
                 ],
                 "token": [
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "40"
                     },
                     {
+                        "name": "Allagan Tomestone of Mathematics",
+                        "amount": "50"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "category": "dungeon",
+        "version": "Dawntrail",
+        "name": "The Underkeep",
+        "url": "/lodestone/playguide/db/duty/25a4d40f3f1/",
+        "lvl": "100",
+        "ilvl": "705",
+        "chests": [
+            {
+                "name": "Treasure Coffer 1",
+                "coord": "Map Coordinates\n\t\t\t\t\t\tX: 10.8 Y: 10.9",
+                "coords": {
+                    "x": "10.8",
+                    "y": "10.9"
+                },
+                "items": [
+                    "Underkeep Gauntlets of Fending",
+                    "Underkeep Gloves of Maiming",
+                    "Underkeep Gloves of Striking",
+                    "Underkeep Gloves of Scouting",
+                    "Underkeep Gloves of Aiming",
+                    "Underkeep Gloves of Casting",
+                    "Underkeep Gloves of Healing",
+                    "Underkeep Wristband of Fending",
+                    "Underkeep Wristband of Slaying",
+                    "Underkeep Wristband of Aiming",
+                    "Underkeep Wristband of Casting",
+                    "Underkeep Wristband of Healing",
+                    "Underkeep Ring of Fending",
+                    "Underkeep Ring of Slaying",
+                    "Underkeep Ring of Aiming",
+                    "Underkeep Ring of Casting",
+                    "Underkeep Ring of Healing",
+                    "Savage Aim Materia XI",
+                    "Savage Might Materia XI",
+                    "Heavens' Eye Materia XI",
+                    "Quickarm Materia XI",
+                    "Quicktongue Materia XI",
+                    "Battledance Materia XI",
+                    "Piety Materia XI"
+                ]
+            },
+            {
+                "name": "Treasure Coffer 2",
+                "coord": "Map Coordinates\n\t\t\t\t\t\tX: 13.4 Y: 9.6",
+                "coords": {
+                    "x": "13.4",
+                    "y": "9.6"
+                },
+                "items": [
+                    "Underkeep Sabatons of Fending",
+                    "Underkeep Sabatons of Maiming",
+                    "Underkeep Thighboots of Striking",
+                    "Underkeep Sabatons of Scouting",
+                    "Underkeep Thighboots of Aiming",
+                    "Underkeep Sabatons of Casting",
+                    "Underkeep Sabatons of Healing",
+                    "Underkeep Earrings of Fending",
+                    "Underkeep Earrings of Slaying",
+                    "Underkeep Earrings of Aiming",
+                    "Underkeep Earrings of Casting",
+                    "Underkeep Earrings of Healing",
+                    "Underkeep Neckband of Fending",
+                    "Underkeep Neckband of Slaying",
+                    "Underkeep Neckband of Aiming",
+                    "Underkeep Neckband of Casting",
+                    "Underkeep Neckband of Healing",
+                    "Savage Aim Materia XI",
+                    "Savage Might Materia XI",
+                    "Heavens' Eye Materia XI",
+                    "Quickarm Materia XI",
+                    "Quicktongue Materia XI",
+                    "Battledance Materia XI",
+                    "Piety Materia XI"
+                ]
+            },
+            {
+                "name": "Treasure Coffer 3",
+                "coord": "Map Coordinates\n\t\t\t\t\t\tX: 11.1 Y: 11.7",
+                "coords": {
+                    "x": "11.1",
+                    "y": "11.7"
+                },
+                "items": [
+                    "Underkeep Helm of Fending",
+                    "Underkeep Helm of Maiming",
+                    "Underkeep Headgear of Striking",
+                    "Underkeep Headgear of Scouting",
+                    "Underkeep Helm of Aiming",
+                    "Underkeep Helm of Casting",
+                    "Underkeep Helm of Healing",
+                    "Underkeep Wristband of Fending",
+                    "Underkeep Wristband of Slaying",
+                    "Underkeep Wristband of Aiming",
+                    "Underkeep Wristband of Casting",
+                    "Underkeep Wristband of Healing",
+                    "Underkeep Ring of Fending",
+                    "Underkeep Ring of Slaying",
+                    "Underkeep Ring of Aiming",
+                    "Underkeep Ring of Casting",
+                    "Underkeep Ring of Healing",
+                    "Savage Aim Materia XI",
+                    "Savage Might Materia XI",
+                    "Heavens' Eye Materia XI",
+                    "Quickarm Materia XI",
+                    "Quicktongue Materia XI",
+                    "Battledance Materia XI",
+                    "Piety Materia XI"
+                ]
+            },
+            {
+                "name": "Treasure Coffer 4",
+                "coord": "Map Coordinates\n\t\t\t\t\t\tX: 11.4 Y: 11.1",
+                "coords": {
+                    "x": "11.4",
+                    "y": "11.1"
+                },
+                "items": [
+                    "Underkeep Trousers of Fending",
+                    "Underkeep Pantaloons of Maiming",
+                    "Underkeep Breeches of Striking",
+                    "Underkeep Pantaloons of Scouting",
+                    "Underkeep Breeches of Aiming",
+                    "Underkeep Pantaloons of Casting",
+                    "Underkeep Pantaloons of Healing",
+                    "Underkeep Earrings of Fending",
+                    "Underkeep Earrings of Slaying",
+                    "Underkeep Earrings of Aiming",
+                    "Underkeep Earrings of Casting",
+                    "Underkeep Earrings of Healing",
+                    "Underkeep Neckband of Fending",
+                    "Underkeep Neckband of Slaying",
+                    "Underkeep Neckband of Aiming",
+                    "Underkeep Neckband of Casting",
+                    "Underkeep Neckband of Healing",
+                    "Savage Aim Materia XI",
+                    "Savage Might Materia XI",
+                    "Heavens' Eye Materia XI",
+                    "Quickarm Materia XI",
+                    "Quicktongue Materia XI",
+                    "Battledance Materia XI",
+                    "Piety Materia XI"
+                ]
+            }
+        ],
+        "fights": [
+            {
+                "chest": "silver",
+                "boss": [
+                    {
+                        "url": "/lodestone/playguide/db/npc/enemy/cec68754731/",
+                        "name": "Gargant"
+                    }
+                ],
+                "treasures": [
+                    {
+                        "name": "Treasure Coffer",
+                        "items": [
+                            "Underkeep Helm of Fending",
+                            "Underkeep Helm of Maiming",
+                            "Underkeep Headgear of Striking",
+                            "Underkeep Headgear of Scouting",
+                            "Underkeep Helm of Aiming",
+                            "Underkeep Helm of Casting",
+                            "Underkeep Helm of Healing",
+                            "Underkeep Surcoat of Fending",
+                            "Underkeep Surcoat of Maiming",
+                            "Underkeep Coat of Striking",
+                            "Underkeep Jacket of Scouting",
+                            "Underkeep Jacket of Aiming",
+                            "Underkeep Coat of Casting",
+                            "Underkeep Coat of Healing",
+                            "Underkeep Wristband of Fending",
+                            "Underkeep Wristband of Slaying",
+                            "Underkeep Wristband of Aiming",
+                            "Underkeep Wristband of Casting",
+                            "Underkeep Wristband of Healing",
+                            "Underkeep Ring of Fending",
+                            "Underkeep Ring of Slaying",
+                            "Underkeep Ring of Aiming",
+                            "Underkeep Ring of Casting",
+                            "Underkeep Ring of Healing",
+                            "Savage Aim Materia XI",
+                            "Savage Might Materia XI",
+                            "Heavens' Eye Materia XI",
+                            "Quickarm Materia XI",
+                            "Quicktongue Materia XI",
+                            "Battledance Materia XI",
+                            "Piety Materia XI"
+                        ]
+                    }
+                ],
+                "token": [
+                    {
                         "name": "Allagan Tomestone of Heliometry",
+                        "amount": "15"
+                    }
+                ]
+            },
+            {
+                "chest": "silver",
+                "boss": [
+                    {
+                        "url": "/lodestone/playguide/db/npc/enemy/95c6edd0f01/",
+                        "name": "Soldier S0"
+                    }
+                ],
+                "treasures": [
+                    {
+                        "name": "Treasure Coffer",
+                        "items": [
+                            "Underkeep Gauntlets of Fending",
+                            "Underkeep Gloves of Maiming",
+                            "Underkeep Gloves of Striking",
+                            "Underkeep Gloves of Scouting",
+                            "Underkeep Gloves of Aiming",
+                            "Underkeep Gloves of Casting",
+                            "Underkeep Gloves of Healing",
+                            "Underkeep Sabatons of Fending",
+                            "Underkeep Sabatons of Maiming",
+                            "Underkeep Thighboots of Striking",
+                            "Underkeep Sabatons of Scouting",
+                            "Underkeep Thighboots of Aiming",
+                            "Underkeep Sabatons of Casting",
+                            "Underkeep Sabatons of Healing",
+                            "Underkeep Earrings of Fending",
+                            "Underkeep Earrings of Slaying",
+                            "Underkeep Earrings of Aiming",
+                            "Underkeep Earrings of Casting",
+                            "Underkeep Earrings of Healing",
+                            "Underkeep Neckband of Fending",
+                            "Underkeep Neckband of Slaying",
+                            "Underkeep Neckband of Aiming",
+                            "Underkeep Neckband of Casting",
+                            "Underkeep Neckband of Healing"
+                        ]
+                    }
+                ],
+                "token": [
+                    {
+                        "name": "Allagan Tomestone of Heliometry",
+                        "amount": "25"
+                    }
+                ]
+            },
+            {
+                "chest": "gold",
+                "boss": [
+                    {
+                        "url": "/lodestone/playguide/db/npc/enemy/2b504920030/",
+                        "name": "Valia Pira"
+                    }
+                ],
+                "drops": [
+                    {
+                        "name": "???"
+                    }
+                ],
+                "treasures": [
+                    {
+                        "name": "Treasure Coffer",
+                        "items": [
+                            "Underkeep Surcoat of Fending",
+                            "Underkeep Surcoat of Maiming",
+                            "Underkeep Coat of Striking",
+                            "Underkeep Jacket of Scouting",
+                            "Underkeep Jacket of Aiming",
+                            "Underkeep Coat of Casting",
+                            "Underkeep Coat of Healing",
+                            "Underkeep Trousers of Fending",
+                            "Underkeep Pantaloons of Maiming",
+                            "Underkeep Breeches of Striking",
+                            "Underkeep Pantaloons of Scouting",
+                            "Underkeep Breeches of Aiming",
+                            "Underkeep Pantaloons of Casting",
+                            "Underkeep Pantaloons of Healing",
+                            "Royal Hound",
+                            "Find the Princess (Dawntrail) Orchestrion Roll"
+                        ]
+                    }
+                ],
+                "token": [
+                    {
+                        "name": "Allagan Tomestone of Heliometry",
+                        "amount": "40"
+                    },
+                    {
+                        "name": "Allagan Tomestone of Mathematics",
                         "amount": "50"
                     }
                 ]
@@ -30054,8 +30353,8 @@
     {
         "category": "trial",
         "version": "Dawntrail",
-        "name": "The Jade Stoa (Unreal)",
-        "url": "/lodestone/playguide/db/duty/944ebdbd874/",
+        "name": "Hells' Kier (Unreal)",
+        "url": "/lodestone/playguide/db/duty/20d8ba2f097/",
         "lvl": "100",
         "ilvl": "690",
         "fights": [
@@ -30063,17 +30362,17 @@
                 "chest": "gold",
                 "boss": [
                     {
-                        "url": "/lodestone/playguide/db/npc/enemy/ee3c038a199/",
-                        "name": "Byakko"
+                        "url": "/lodestone/playguide/db/npc/enemy/7987ddd6f8a/",
+                        "name": "Suzaku"
                     }
                 ],
                 "token": [
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "20"
                     },
                     {
-                        "name": "Allagan Tomestone of Heliometry",
+                        "name": "Allagan Tomestone of Mathematics",
                         "amount": "10"
                     }
                 ]
@@ -30166,11 +30465,45 @@
                 ],
                 "token": [
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "10"
                     },
                     {
+                        "name": "Allagan Tomestone of Mathematics",
+                        "amount": "5"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "category": "trial",
+        "version": "Dawntrail",
+        "name": "Recollection",
+        "url": "/lodestone/playguide/db/duty/7b8ecdbd6af/",
+        "lvl": "100",
+        "ilvl": "715",
+        "fights": [
+            {
+                "chest": "gold",
+                "boss": [
+                    {
+                        "url": "/lodestone/playguide/db/npc/enemy/6a93802aad3/",
+                        "name": "Zelenia"
+                    }
+                ],
+                "drops": [
+                    {
+                        "name": "???"
+                    }
+                ],
+                "token": [
+                    {
                         "name": "Allagan Tomestone of Heliometry",
+                        "amount": "12"
+                    },
+                    {
+                        "name": "Allagan Tomestone of Mathematics",
                         "amount": "6"
                     }
                 ]
@@ -30241,11 +30574,11 @@
                 ],
                 "token": [
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "15"
                     },
                     {
-                        "name": "Allagan Tomestone of Heliometry",
+                        "name": "Allagan Tomestone of Mathematics",
                         "amount": "8"
                     }
                 ]
@@ -30314,11 +30647,11 @@
                 ],
                 "token": [
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "15"
                     },
                     {
-                        "name": "Allagan Tomestone of Heliometry",
+                        "name": "Allagan Tomestone of Mathematics",
                         "amount": "8"
                     }
                 ]
@@ -30389,12 +30722,82 @@
                 ],
                 "token": [
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "20"
                     },
                     {
-                        "name": "Allagan Tomestone of Heliometry",
+                        "name": "Allagan Tomestone of Mathematics",
                         "amount": "10"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "category": "trial",
+        "version": "Dawntrail",
+        "name": "Recollection (Extreme)",
+        "url": "/lodestone/playguide/db/duty/f68051c8d60/",
+        "lvl": "100",
+        "ilvl": "730",
+        "fights": [
+            {
+                "chest": "gold",
+                "boss": [
+                    {
+                        "url": "/lodestone/playguide/db/npc/enemy/e23634635ca/",
+                        "name": "Zelenia"
+                    }
+                ],
+                "drops": [
+                    {
+                        "name": "???"
+                    },
+                    {
+                        "name": "Knight Totem",
+                        "url": "/lodestone/playguide/db/item/69397d943c2/"
+                    }
+                ],
+                "treasures": [
+                    {
+                        "name": "Treasure Coffer",
+                        "items": [
+                            "Queensknight Bardiche",
+                            "Queensknight Faussar",
+                            "Queensknight Gunblade",
+                            "Queensknight Spear",
+                            "Queensknight Scythe",
+                            "Queensknight Baghnakhs",
+                            "Queensknight Blade",
+                            "Queensknight Knives",
+                            "Queensknight Twinfangs",
+                            "Queensknight Compound Bow",
+                            "Queensknight Pistol",
+                            "Queensknight War Quoits",
+                            "Queensknight Scepter",
+                            "Book of Chivalry",
+                            "Queensknight Foil",
+                            "Queensknight Flat Brush",
+                            "Queensknight Cane",
+                            "Word of the Knighthood",
+                            "Queensknight Astrometer",
+                            "Queensknight Syrinxi",
+                            "Knight Core",
+                            "Queensknight Weapon Coffer (IL 745)",
+                            "Paladin's Queensknight Arms (IL 745)",
+                            "Wings of the Knighthood",
+                            "Faded Copy of Roses of May (Dawntrail)"
+                        ]
+                    }
+                ],
+                "token": [
+                    {
+                        "name": "Allagan Tomestone of Heliometry",
+                        "amount": "25"
+                    },
+                    {
+                        "name": "Allagan Tomestone of Mathematics",
+                        "amount": "13"
                     }
                 ]
             }
@@ -31984,7 +32387,7 @@
                         "amount": "10"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "8"
                     }
                 ]
@@ -32028,7 +32431,7 @@
                         "amount": "20"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "12"
                     }
                 ]
@@ -32068,7 +32471,7 @@
                         "amount": "30"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "18"
                     }
                 ]
@@ -32139,11 +32542,11 @@
                         "amount": "40"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "22"
                     },
                     {
-                        "name": "Allagan Tomestone of Heliometry",
+                        "name": "Allagan Tomestone of Mathematics",
                         "amount": "8"
                     }
                 ]
@@ -32193,7 +32596,7 @@
                         "amount": "10"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "8"
                     }
                 ]
@@ -32233,7 +32636,7 @@
                         "amount": "20"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "12"
                     }
                 ]
@@ -32273,7 +32676,7 @@
                         "amount": "30"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "18"
                     }
                 ]
@@ -32335,11 +32738,11 @@
                         "amount": "40"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "22"
                     },
                     {
-                        "name": "Allagan Tomestone of Heliometry",
+                        "name": "Allagan Tomestone of Mathematics",
                         "amount": "8"
                     }
                 ]
@@ -32389,7 +32792,7 @@
                         "amount": "10"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "10"
                     }
                 ]
@@ -32429,7 +32832,7 @@
                         "amount": "20"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "15"
                     }
                 ]
@@ -32469,7 +32872,7 @@
                         "amount": "30"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "25"
                     }
                 ]
@@ -32537,11 +32940,11 @@
                         "amount": "40"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "30"
                     },
                     {
-                        "name": "Allagan Tomestone of Heliometry",
+                        "name": "Allagan Tomestone of Mathematics",
                         "amount": "10"
                     }
                 ]
@@ -33893,7 +34296,7 @@
                         "amount": "10"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "10"
                     }
                 ]
@@ -33933,7 +34336,7 @@
                         "amount": "20"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "15"
                     }
                 ]
@@ -33974,7 +34377,7 @@
                         "amount": "30"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "25"
                     }
                 ]
@@ -34037,11 +34440,11 @@
                         "amount": "40"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "30"
                     },
                     {
-                        "name": "Allagan Tomestone of Heliometry",
+                        "name": "Allagan Tomestone of Mathematics",
                         "amount": "10"
                     }
                 ]
@@ -34091,7 +34494,7 @@
                         "amount": "10"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "10"
                     }
                 ]
@@ -34131,7 +34534,7 @@
                         "amount": "20"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "15"
                     }
                 ]
@@ -34171,7 +34574,7 @@
                         "amount": "30"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "25"
                     }
                 ]
@@ -34235,11 +34638,11 @@
                         "amount": "40"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "30"
                     },
                     {
-                        "name": "Allagan Tomestone of Heliometry",
+                        "name": "Allagan Tomestone of Mathematics",
                         "amount": "10"
                     }
                 ]
@@ -34289,7 +34692,7 @@
                         "amount": "10"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "10"
                     }
                 ]
@@ -34329,7 +34732,7 @@
                         "amount": "20"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "20"
                     }
                 ]
@@ -34369,7 +34772,7 @@
                         "amount": "30"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "30"
                     }
                 ]
@@ -34441,11 +34844,11 @@
                         "amount": "40"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "40"
                     },
                     {
-                        "name": "Allagan Tomestone of Heliometry",
+                        "name": "Allagan Tomestone of Mathematics",
                         "amount": "12"
                     }
                 ]
@@ -35737,7 +36140,7 @@
                         "amount": "10"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "10"
                     }
                 ]
@@ -35777,7 +36180,7 @@
                         "amount": "20"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "20"
                     }
                 ]
@@ -35817,7 +36220,7 @@
                         "amount": "30"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "30"
                     }
                 ]
@@ -35880,11 +36283,11 @@
                         "amount": "40"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "40"
                     },
                     {
-                        "name": "Allagan Tomestone of Heliometry",
+                        "name": "Allagan Tomestone of Mathematics",
                         "amount": "12"
                     }
                 ]
@@ -35934,7 +36337,7 @@
                         "amount": "10"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "10"
                     }
                 ]
@@ -35982,7 +36385,7 @@
                         "amount": "20"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "20"
                     }
                 ]
@@ -36022,7 +36425,7 @@
                         "amount": "30"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "30"
                     }
                 ]
@@ -36083,11 +36486,11 @@
                         "amount": "40"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "40"
                     },
                     {
-                        "name": "Allagan Tomestone of Heliometry",
+                        "name": "Allagan Tomestone of Mathematics",
                         "amount": "12"
                     }
                 ]
@@ -36137,7 +36540,7 @@
                         "amount": "10"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "15"
                     }
                 ]
@@ -36181,7 +36584,7 @@
                         "amount": "20"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "25"
                     }
                 ]
@@ -36221,7 +36624,7 @@
                         "amount": "30"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "35"
                     }
                 ]
@@ -36292,11 +36695,11 @@
                         "amount": "40"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "45"
                     },
                     {
-                        "name": "Allagan Tomestone of Heliometry",
+                        "name": "Allagan Tomestone of Mathematics",
                         "amount": "15"
                     }
                 ]
@@ -37625,7 +38028,7 @@
                         "amount": "10"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "10"
                     }
                 ]
@@ -37665,7 +38068,7 @@
                         "amount": "20"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "20"
                     }
                 ]
@@ -37705,7 +38108,7 @@
                         "amount": "30"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "30"
                     }
                 ]
@@ -37769,11 +38172,11 @@
                         "amount": "40"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "40"
                     },
                     {
-                        "name": "Allagan Tomestone of Heliometry",
+                        "name": "Allagan Tomestone of Mathematics",
                         "amount": "12"
                     }
                 ]
@@ -37823,7 +38226,7 @@
                         "amount": "10"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "10"
                     }
                 ]
@@ -37867,7 +38270,7 @@
                         "amount": "20"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "20"
                     }
                 ]
@@ -37907,7 +38310,7 @@
                         "amount": "30"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "30"
                     }
                 ]
@@ -37971,11 +38374,11 @@
                         "amount": "40"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "40"
                     },
                     {
-                        "name": "Allagan Tomestone of Heliometry",
+                        "name": "Allagan Tomestone of Mathematics",
                         "amount": "12"
                     }
                 ]
@@ -38025,7 +38428,7 @@
                         "amount": "10"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "15"
                     }
                 ]
@@ -38065,7 +38468,7 @@
                         "amount": "20"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "25"
                     }
                 ]
@@ -38105,7 +38508,7 @@
                         "amount": "30"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "35"
                     }
                 ]
@@ -38175,11 +38578,11 @@
                         "amount": "40"
                     },
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
+                        "name": "Allagan Tomestone of Heliometry",
                         "amount": "45"
                     },
                     {
-                        "name": "Allagan Tomestone of Heliometry",
+                        "name": "Allagan Tomestone of Mathematics",
                         "amount": "15"
                     }
                 ]
@@ -39463,6 +39866,218 @@
     {
         "category": "raid",
         "version": "Dawntrail",
+        "name": "Jeuno: The First Walk",
+        "url": "/lodestone/playguide/db/duty/1318e475557/",
+        "lvl": "100",
+        "ilvl": "695",
+        "fights": [
+            {
+                "chest": "silver",
+                "boss": [
+                    {
+                        "url": "/lodestone/playguide/db/npc/enemy/dcd76b8afc0/",
+                        "name": "Prishe Of The Distant Chains"
+                    }
+                ],
+                "treasures": [
+                    {
+                        "name": "Treasure Coffer",
+                        "items": [
+                            "Ark Angel's Circlet of Fending",
+                            "Ark Angel's Face Guard of Maiming",
+                            "Ark Angel's Visor of Striking",
+                            "Ark Angel's Face Guard of Scouting",
+                            "Ark Angel's Circlet of Aiming",
+                            "Ark Angel's Petasos of Casting",
+                            "Ark Angel's Circlet of Healing",
+                            "Ark Angel's Thighboots of Fending",
+                            "Ark Angel's Thighboots of Maiming",
+                            "Ark Angel's Thighboots of Striking",
+                            "Ark Angel's Greaves of Scouting",
+                            "Ark Angel's Sabatons of Aiming",
+                            "Ark Angel's Boots of Casting",
+                            "Ark Angel's Thighboots of Healing"
+                        ]
+                    }
+                ],
+                "token": [
+                    {
+                        "name": "Allagan Tomestone of Heliometry",
+                        "amount": "20"
+                    }
+                ]
+            },
+            {
+                "chest": "silver",
+                "boss": [
+                    {
+                        "url": "/lodestone/playguide/db/npc/enemy/8a99fc93ca0/",
+                        "name": "Fafnir The Forgotten"
+                    }
+                ],
+                "treasures": [
+                    {
+                        "name": "Treasure Coffer",
+                        "items": [
+                            "Ark Angel's Armguards of Fending",
+                            "Ark Angel's Gauntlets of Maiming",
+                            "Ark Angel's Gauntlets of Striking",
+                            "Ark Angel's Vambraces of Scouting",
+                            "Ark Angel's Vambraces of Aiming",
+                            "Ark Angel's Gloves of Casting",
+                            "Ark Angel's Armguards of Healing",
+                            "Ark Angel's Breeches of Fending",
+                            "Ark Angel's Breeches of Maiming",
+                            "Ark Angel's Breeches of Striking",
+                            "Ark Angel's Breeches of Scouting",
+                            "Ark Angel's Poleyns of Aiming",
+                            "Ark Angel's Slops of Casting",
+                            "Ark Angel's Breeches of Healing",
+                            "Tattered Sheet Music"
+                        ]
+                    }
+                ],
+                "token": [
+                    {
+                        "name": "Allagan Tomestone of Heliometry",
+                        "amount": "30"
+                    }
+                ]
+            },
+            {
+                "chest": "silver",
+                "boss": [
+                    {
+                        "url": "/lodestone/playguide/db/npc/enemy/ddab8f24b88/",
+                        "name": "Ark Angel EV"
+                    },
+                    {
+                        "url": "/lodestone/playguide/db/npc/enemy/a016ae34de0/",
+                        "name": "Ark Angel GK"
+                    },
+                    {
+                        "url": "/lodestone/playguide/db/npc/enemy/dd749843090/",
+                        "name": "Ark Angel HM"
+                    },
+                    {
+                        "url": "/lodestone/playguide/db/npc/enemy/28de7fc9cb9/",
+                        "name": "Ark Angel MR"
+                    },
+                    {
+                        "url": "/lodestone/playguide/db/npc/enemy/1a96bbd309a/",
+                        "name": "Ark Angel TT"
+                    }
+                ],
+                "treasures": [
+                    {
+                        "name": "Treasure Coffer",
+                        "items": [
+                            "Ark Angel's Tunic of Fending",
+                            "Ark Angel's Cuirass of Maiming",
+                            "Ark Angel's Cuirass of Striking",
+                            "Ark Angel's Corselet of Scouting",
+                            "Ark Angel's Corselet of Aiming",
+                            "Ark Angel's Coat of Casting",
+                            "Ark Angel's Tunic of Healing",
+                            "Ark Angel's Thighboots of Fending",
+                            "Ark Angel's Thighboots of Maiming",
+                            "Ark Angel's Thighboots of Striking",
+                            "Ark Angel's Greaves of Scouting",
+                            "Ark Angel's Sabatons of Aiming",
+                            "Ark Angel's Boots of Casting",
+                            "Ark Angel's Thighboots of Healing",
+                            "Tattered Sheet Music"
+                        ]
+                    }
+                ],
+                "token": [
+                    {
+                        "name": "Allagan Tomestone of Heliometry",
+                        "amount": "40"
+                    }
+                ]
+            },
+            {
+                "chest": "gold",
+                "boss": [
+                    {
+                        "url": "/lodestone/playguide/db/npc/enemy/4f2bd9fa034/",
+                        "name": "Shadow Lord"
+                    }
+                ],
+                "drops": [
+                    {
+                        "name": "Ordelle Coin",
+                        "url": "/lodestone/playguide/db/item/cd8911bbe48/"
+                    },
+                    {
+                        "name": "Cracked Novacluster\u00a0(2)",
+                        "url": "/lodestone/playguide/db/item/0612d5f2b45/",
+                        "condition": [
+                            "* This item can only be obtained once per week."
+                        ]
+                    }
+                ],
+                "treasures": [
+                    {
+                        "name": "Treasure Coffer 1",
+                        "items": [
+                            "Royal Damask",
+                            "Nano Lord",
+                            "Shadow Lord Card"
+                        ]
+                    },
+                    {
+                        "name": "Treasure Coffer 2",
+                        "items": [
+                            "Ark Angel's Circlet of Fending",
+                            "Ark Angel's Face Guard of Maiming",
+                            "Ark Angel's Visor of Striking",
+                            "Ark Angel's Face Guard of Scouting",
+                            "Ark Angel's Circlet of Aiming",
+                            "Ark Angel's Petasos of Casting",
+                            "Ark Angel's Circlet of Healing",
+                            "Ark Angel's Tunic of Fending",
+                            "Ark Angel's Cuirass of Maiming",
+                            "Ark Angel's Cuirass of Striking",
+                            "Ark Angel's Corselet of Scouting",
+                            "Ark Angel's Corselet of Aiming",
+                            "Ark Angel's Coat of Casting",
+                            "Ark Angel's Tunic of Healing",
+                            "Ark Angel's Armguards of Fending",
+                            "Ark Angel's Gauntlets of Maiming",
+                            "Ark Angel's Gauntlets of Striking",
+                            "Ark Angel's Vambraces of Scouting",
+                            "Ark Angel's Vambraces of Aiming",
+                            "Ark Angel's Gloves of Casting",
+                            "Ark Angel's Armguards of Healing",
+                            "Ark Angel's Breeches of Fending",
+                            "Ark Angel's Breeches of Maiming",
+                            "Ark Angel's Breeches of Striking",
+                            "Ark Angel's Breeches of Scouting",
+                            "Ark Angel's Poleyns of Aiming",
+                            "Ark Angel's Slops of Casting",
+                            "Ark Angel's Breeches of Healing",
+                            "Tattered Sheet Music"
+                        ]
+                    }
+                ],
+                "token": [
+                    {
+                        "name": "Allagan Tomestone of Heliometry",
+                        "amount": "60"
+                    },
+                    {
+                        "name": "Allagan Tomestone of Mathematics",
+                        "amount": "20"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "category": "raid",
+        "version": "Dawntrail",
         "name": "AAC Light-heavyweight M1",
         "url": "/lodestone/playguide/db/duty/cc1de0a3c10/",
         "lvl": "100",
@@ -39514,12 +40129,12 @@
                 ],
                 "token": [
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
-                        "amount": "20"
-                    },
-                    {
                         "name": "Allagan Tomestone of Heliometry",
                         "amount": "10"
+                    },
+                    {
+                        "name": "Allagan Tomestone of Mathematics",
+                        "amount": "5"
                     }
                 ]
             }
@@ -39569,12 +40184,12 @@
                 ],
                 "token": [
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
-                        "amount": "20"
-                    },
-                    {
                         "name": "Allagan Tomestone of Heliometry",
                         "amount": "10"
+                    },
+                    {
+                        "name": "Allagan Tomestone of Mathematics",
+                        "amount": "5"
                     }
                 ]
             }
@@ -39624,12 +40239,12 @@
                 ],
                 "token": [
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
-                        "amount": "20"
-                    },
-                    {
                         "name": "Allagan Tomestone of Heliometry",
                         "amount": "10"
+                    },
+                    {
+                        "name": "Allagan Tomestone of Mathematics",
+                        "amount": "5"
                     }
                 ]
             }
@@ -39654,10 +40269,7 @@
                 "drops": [
                     {
                         "name": "Light-heavy Holoblade",
-                        "url": "/lodestone/playguide/db/item/822a0324ae5/",
-                        "condition": [
-                            "* This item can only be obtained once per week."
-                        ]
+                        "url": "/lodestone/playguide/db/item/822a0324ae5/"
                     }
                 ],
                 "treasures": [
@@ -39689,12 +40301,12 @@
                 ],
                 "token": [
                     {
-                        "name": "Allagan Tomestone of Aesthetics",
-                        "amount": "20"
-                    },
-                    {
                         "name": "Allagan Tomestone of Heliometry",
                         "amount": "10"
+                    },
+                    {
+                        "name": "Allagan Tomestone of Mathematics",
+                        "amount": "5"
                     }
                 ]
             }
@@ -39730,10 +40342,21 @@
                         ]
                     }
                 ],
+                "treasures": [
+                    {
+                        "name": "Treasure Coffer",
+                        "items": [
+                            "Dark Horse Champion's Earring Coffer (IL 730)",
+                            "Dark Horse Champion's Necklace Coffer (IL 730)",
+                            "Dark Horse Champion's Bracelet Coffer (IL 730)",
+                            "Dark Horse Champion's Ring Coffer (IL 730)"
+                        ]
+                    }
+                ],
                 "token": [
                     {
-                        "name": "Allagan Tomestone of Heliometry",
-                        "amount": "30"
+                        "name": "Allagan Tomestone of Mathematics",
+                        "amount": "15"
                     }
                 ]
             }
@@ -39761,10 +40384,22 @@
                         "url": "/lodestone/playguide/db/item/5861d3130b3/"
                     }
                 ],
+                "treasures": [
+                    {
+                        "name": "Treasure Coffer",
+                        "items": [
+                            "Universal Tomestone",
+                            "Surgelight Glaze",
+                            "Dark Horse Champion's Head Gear Coffer (IL 730)",
+                            "Dark Horse Champion's Hand Gear Coffer (IL 730)",
+                            "Dark Horse Champion's Foot Gear Coffer (IL 730)"
+                        ]
+                    }
+                ],
                 "token": [
                     {
-                        "name": "Allagan Tomestone of Heliometry",
-                        "amount": "30"
+                        "name": "Allagan Tomestone of Mathematics",
+                        "amount": "15"
                     }
                 ]
             }
@@ -39792,10 +40427,21 @@
                         "url": "/lodestone/playguide/db/item/3eea7834d9a/"
                     }
                 ],
+                "treasures": [
+                    {
+                        "name": "Treasure Coffer",
+                        "items": [
+                            "Surgelight Solvent",
+                            "Surgelight Twine",
+                            "Dark Horse Champion's Chest Gear Coffer (IL 730)",
+                            "Dark Horse Champion's Leg Gear Coffer (IL 730)"
+                        ]
+                    }
+                ],
                 "token": [
                     {
-                        "name": "Allagan Tomestone of Heliometry",
-                        "amount": "30"
+                        "name": "Allagan Tomestone of Mathematics",
+                        "amount": "15"
                     }
                 ]
             }
@@ -39823,10 +40469,42 @@
                         "url": "/lodestone/playguide/db/item/30cd3d587d7/"
                     }
                 ],
+                "treasures": [
+                    {
+                        "name": "Treasure Coffer",
+                        "items": [
+                            "Dark Horse Champion's Labrys",
+                            "Dark Horse Champion's Greatsword",
+                            "Dark Horse Champion's Gunblade",
+                            "Dark Horse Champion's Spear",
+                            "Dark Horse Champion's War Scythe",
+                            "Dark Horse Champion's Jamadhars",
+                            "Dark Horse Champion's Samurai Blade",
+                            "Dark Horse Champion's Knives",
+                            "Dark Horse Champion's Twinfangs",
+                            "Dark Horse Champion's Longbow",
+                            "Dark Horse Champion's Musketoon",
+                            "Dark Horse Champion's Tathlums",
+                            "Dark Horse Champion's Rod",
+                            "Dark Horse Champion's Index",
+                            "Dark Horse Champion's Foil",
+                            "Dark Horse Champion's Round Brush",
+                            "Dark Horse Champion's Cane",
+                            "Dark Horse Champion's Codex",
+                            "Dark Horse Champion's Astrometer",
+                            "Dark Horse Champion's Milpreves",
+                            "Dark Horse Champion's Weapon Coffer (IL 735)",
+                            "Paladin's Dark Horse Champion's Arms (IL 735)",
+                            "Black Kitten",
+                            "Monowheel S1 Identification Key",
+                            "A Risky Bet Orchestrion Roll"
+                        ]
+                    }
+                ],
                 "token": [
                     {
-                        "name": "Allagan Tomestone of Heliometry",
-                        "amount": "30"
+                        "name": "Allagan Tomestone of Mathematics",
+                        "amount": "15"
                     }
                 ]
             }
@@ -39982,6 +40660,37 @@
                     {
                         "name": "Allagan Tomestone of Poetics",
                         "amount": "100"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "category": "ultimate",
+        "version": "Dawntrail",
+        "name": "Futures Rewritten (Ultimate)",
+        "url": "/lodestone/playguide/db/duty/d7ca52c7e6c/",
+        "lvl": "100",
+        "ilvl": "-",
+        "fights": [
+            {
+                "chest": "gold",
+                "boss": [
+                    {
+                        "url": "/lodestone/playguide/db/npc/enemy/87bbfdb9ffe/",
+                        "name": "Pandora"
+                    }
+                ],
+                "drops": [
+                    {
+                        "name": "Oracle Totem",
+                        "url": "/lodestone/playguide/db/item/6166810a768/"
+                    }
+                ],
+                "token": [
+                    {
+                        "name": "Allagan Tomestone of Mathematics",
+                        "amount": "30"
                     }
                 ]
             }

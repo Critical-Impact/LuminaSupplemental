@@ -10,3 +10,6 @@
 [submodule "src/FFXIVGachaSpreadsheet"]
 	path = src/FFXIVGachaSpreadsheet
 	url = https://github.com/Infiziert90/FFXIVGachaSpreadsheet.git
+[submodule "src/submersible-loot-db"]
+	path = src/submersible-loot-db
+	url = https://github.com/saerielle/submersible-loot-db.git

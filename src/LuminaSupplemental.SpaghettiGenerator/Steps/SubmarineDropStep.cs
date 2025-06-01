@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+using CSVFile;
+
 using Lumina;
 using Lumina.Excel;
 using Lumina.Excel.Sheets;
@@ -79,48 +81,27 @@ public partial class SubmarineDropStep : GeneratorStep
     {
         List<SubmarineDrop> submarineDrops = new();
 
-        var reader = CSVFile.CSVReader.FromFile(Path.Combine( "ManualData","SubmarineUnlocks.csv"));
+        var filePath = "../../../../submersible-loot-db/export-items.csv";
+        var reader = CSVFile.CSVReader.FromFile(filePath, new CSVSettings(){HeaderRowIncluded = true});
 
         foreach( var line in reader.Lines() )
         {
-            var sector = line[ 0 ];
-            var items = line[ 3 ] + "," + line[ 4 ] + "," + line[ 5 ];
-            items = items.ReplaceLineEndings(",");
+            var sectorId = line[ 0 ];
+            var itemId = line[ 1 ];
+            var lootTier = line[ 5 ].Replace("T", string.Empty);
+            var probability = line[ 10 ].Replace("%", string.Empty);
+            var min = line[ 14 ];
+            var max = line[ 16 ];
 
-            sector = sector.ToParseable();
-            if( submarinesByName.ContainsKey( sector ) )
+            submarineDrops.Add( new SubmarineDrop()
             {
-                var actualSector = this.submarineExplorationSheet.GetRow(submarinesByName[ sector ]);
-
-                var items1List = items.Split( "," );
-                foreach( var tempName in items1List )
-                {
-                    var itemName = tempName;
-                    if (MateriaNames.Any(c => itemName.Contains(c.Key + " ")))
-                    {
-                        var nameMap = MateriaNames.First(c => itemName.Contains(c.Key + " "));
-                        itemName = itemName.Replace(nameMap.Key, nameMap.Value + " Materia").Replace("Materia Materia", "Materia");//whyyyy
-                    }
-                    var parseableItemName = itemName.Trim().ToParseable();
-                    Item? outputItem = itemsByName.ContainsKey( parseableItemName ) ? this.itemSheet.GetRow(itemsByName[ parseableItemName ]) : null;
-                    if( outputItem != null )
-                    {
-                        submarineDrops.Add( new SubmarineDrop()
-                        {
-                            SubmarineExplorationId = actualSector.RowId,
-                            ItemId = outputItem.Value.RowId
-                        });
-                    }
-                    else
-                    {
-                        Console.WriteLine("Could not find item with name " + itemName.Trim() + " in the sector " + actualSector.Destination.ToString());
-                    }
-                }
-            }
-            else
-            {
-                Console.WriteLine("Could not find the submarine point with name " + sector);
-            }
+                SubmarineExplorationId = Convert.ToUInt32(sectorId),
+                ItemId = Convert.ToUInt32(itemId),
+                LootTier = Convert.ToByte(lootTier),
+                Probability = Convert.ToDecimal(probability),
+                Min = Convert.ToUInt32(min),
+                Max = Convert.ToUInt32(max),
+            });
         }
 
         return submarineDrops;

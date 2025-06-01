@@ -125,13 +125,14 @@ namespace LuminaSupplemental.SpaghettiGenerator.Model
 
     public enum Condition { DropsAtAFixedRate, MustFirstCompleteTheQuestTripleTriadTrial, ThisItemCanOnlyBeObtainedOncePerWeek };
 
-    public enum TokenName { 
+    public enum TokenName {
         AllaganTomestoneOfAphorism,
         AllaganTomestoneOfAstronomy,
         AllaganTomestoneOfPoetics,
         AllaganTomestoneofCausality,
         AllaganTomestoneofAesthetics,
-        AllaganTomestoneofHeliometry 
+        AllaganTomestoneofHeliometry,
+        AllaganTomestoneofMathematics,
     };
 
     public enum IlvlEnum { Empty };
@@ -440,6 +441,8 @@ namespace LuminaSupplemental.SpaghettiGenerator.Model
                     return TokenName.AllaganTomestoneofAesthetics;
                 case "Allagan Tomestone of Heliometry":
                     return TokenName.AllaganTomestoneofHeliometry;
+                case "Allagan Tomestone of Mathematics":
+                    return TokenName.AllaganTomestoneofMathematics;
             }
             throw new Exception("Cannot unmarshal type TokenName");
         }
@@ -471,6 +474,9 @@ namespace LuminaSupplemental.SpaghettiGenerator.Model
                     return;
                 case TokenName.AllaganTomestoneofHeliometry:
                     serializer.Serialize(writer, "Allagan Tomestone of Heliometry");
+                    return;
+                case TokenName.AllaganTomestoneofMathematics:
+                    serializer.Serialize(writer, "Allagan Tomestone of Mathematics");
                     return;
             }
             throw new Exception("Cannot marshal type TokenName");

@@ -106,7 +106,7 @@ public class StoreParser {
         {"Eastern Lord's Togi","Far Eastern Lord's Robe"},
         {"Eastern Lord's Trousers","Far Eastern Lord's Trousers"},
         {"Eastern Lord's Crakows","Far Eastern Lord's Crakows"},
-        {"Eastern Lady's Togi","Far Eastern Lady's Robe"},
+        {"Eastern Lady's Togi","Far Eastern Lady's Dress"},
         {"Eastern Lady's Loincloth","Far Eastern Lady's Loincloth"},
         {"Eastern Lady's Crakows","Far Eastern Lady's Crakows"},
     };
