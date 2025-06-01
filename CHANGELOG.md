@@ -13,6 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed+
 
+## [2.3.4] - 2025-06-01
+
+### Added
+
+- Added FieldOpCoffer sheet
+- ItemSupplement now contains a min, max and probability if available
+- ItemSupplement now has entries for Card Packs, Coffers, Deep Dungeons, Field Ops and Logograms
+
 ## [2.3.3] - 2025-05-27
 
 ### Added

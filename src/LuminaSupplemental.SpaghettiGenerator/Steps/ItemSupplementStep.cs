@@ -58,8 +58,28 @@ public partial class ItemSupplementStep : GeneratorStep
         items.AddRange(this.ProcessManualItems());
         items.AddRange(this.ProcessSkybuilderItems());
         items.AddRange(this.ProcessGubalData());
+
+        items.AddRange(this.ProcessCards());
+        items.AddRange(this.ProcessCoffers());
+        items.AddRange(this.ProcessLogograms());
+        items.AddRange(this.ProcessDesynth());
+        items.AddRange(this.ProcessDeepDungeons());
+        items.AddRange(this.ProcessLockboxes());
+
         items.AddRange(this.AutoMatchMissingCoffers(items));
         items = items.DistinctBy(c => (c.ItemId, c.SourceItemId, c.ItemSupplementSource)).OrderBy(c => c.ItemId).ThenBy(c => c.SourceItemId).ToList();
+
+        //If we detect that there is more detailed drop information about an item, remove the generic loot entry
+        HashSet<uint> removeLootItemIds = new HashSet<uint>();
+        foreach (var item in items.Where(c=> c.ItemSupplementSource == ItemSupplementSource.Loot))
+        {
+            if (items.Any(c => c.ItemId == item.ItemId && (int)c.ItemSupplementSource >= 6 && (int)c.ItemSupplementSource <= 15))
+            {
+                removeLootItemIds.Add(item.ItemId);
+            }
+        }
+
+        items = items.Where(c => (c.ItemSupplementSource == ItemSupplementSource.Loot && !removeLootItemIds.Contains(c.ItemId)) || c.ItemSupplementSource != ItemSupplementSource.Loot).ToList();
 
         return [..items.Select(c => c)];
     }

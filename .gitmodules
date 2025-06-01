@@ -7,3 +7,6 @@
 [submodule "src/ffxiv-datamining-patches"]
 	path = src/ffxiv-datamining-patches
 	url = https://github.com/xivapi/ffxiv-datamining-patches.git
+[submodule "src/FFXIVGachaSpreadsheet"]
+	path = src/FFXIVGachaSpreadsheet
+	url = https://github.com/Infiziert90/FFXIVGachaSpreadsheet.git

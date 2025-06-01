@@ -63,6 +63,54 @@ public class StoreParser {
         this.appConfig = appConfig;
     }
 
+    //Apparently SQ haven't updated their own naming
+    public Dictionary<string, string> replacements = new Dictionary<string, string>()
+    {
+        {"Far Eastern Performer's Dogi","Far Eastern Performer's Halfrobe"},
+        {"Far Eastern Performer's Kyakui","Far Eastern Performer's Trousers"},
+        {"Far Eastern Performer's Zori","Far Eastern Performer's Shoes"},
+        {"Eastern Lord Errant's Hat","Far Eastern Lord Errant's Hat"},
+        {"Eastern Lord Errant's Jacket","Far Eastern Lord Errant's Jacket"},
+        {"Eastern Lord Errant's Wristbands","Far Eastern Lord Errant's Wristbands"},
+        {"Eastern Lord Errant's Trousers","Far Eastern Lord Errant's Trousers"},
+        {"Eastern Lord Errant's Shoes","Far Eastern Lord Errant's Shoes"},
+        {"Eastern Lady Errant's Hat","Far Eastern Lady Errant's Hat"},
+        {"Eastern Lady Errant's Jacket","Far Eastern Lady Errant's Jacket"},
+        {"Eastern Lady Errant's Wristbands","Far Eastern Lady Errant's Wristbands"},
+        {"Eastern Lady Errant's Trousers","Far Eastern Lady Errant's Trousers"},
+        {"Eastern Lady Errant's Shoes","Far Eastern Lady Errant's Shoes"},
+        {"Shadow Wolf Whistle","Shadow Wolf Horn"},
+        {"Eastern Journey Attire Coffer","Far Eastern Journey Attire Coffer"},
+        {"Mun'gaek Hat","Far Eastern Enforcer's Hat"},
+        {"Mun'gaek Uibok","Far Eastern Enforcer's Robe"},
+        {"Mun'gaek Cuffs","Far Eastern Enforcer's Cuffs"},
+        {"Mun'gaek Trousers","Far Eastern Enforcer's Trousers"},
+        {"Mun'gaek Boots","Far Eastern Enforcer's Boots"},
+
+        {"Eastern Socialite's Hat","Far Eastern Socialite's Hat"},
+        {"Eastern Socialite's Cheongsam","Far Eastern Socialite's Dress"},
+        {"Eastern Socialite's Gloves","Far Eastern Socialite's Gloves"},
+        {"Eastern Socialite's Skirt","Far Eastern Socialite's Skirt"},
+        {"Eastern Socialite's Boots","Far Eastern Socialite's Boots"},
+
+        {"Eastern Lady Errant's Coat","Far Eastern Lady Errant's Coat"},
+        {"Eastern Lady Errant's Gloves","Far Eastern Lady Errant's Gloves"},
+        {"Eastern Lady Errant's Skirt","Far Eastern Lady Errant's Skirt"},
+        {"Eastern Lady Errant's Boots","Far Eastern Lady Errant's Boots"},
+
+        {"Nezha Lord's Togi","Nezha Lord's Jacket"},
+        {"Nezha Lady's Togi","Nezha Lord's Jacket"},
+
+        {"Far Eastern Gentleman's Haidate","Far Eastern Gentleman's Trousers"},
+        {"Far Eastern Beauty's Koshita","Far Eastern Beauty's Skirt"},
+        {"Eastern Lord's Togi","Far Eastern Lord's Robe"},
+        {"Eastern Lord's Trousers","Far Eastern Lord's Trousers"},
+        {"Eastern Lord's Crakows","Far Eastern Lord's Crakows"},
+        {"Eastern Lady's Togi","Far Eastern Lady's Robe"},
+        {"Eastern Lady's Loincloth","Far Eastern Lady's Loincloth"},
+        {"Eastern Lady's Crakows","Far Eastern Lady's Crakows"},
+    };
+
 
     public void UpdateItems() {
         UpdateStatus = "Fetching Product List";
@@ -109,14 +157,20 @@ public class StoreParser {
                     StoreProducts.Add(p.ID, productListing.Product);
 
                     foreach (var item in productListing.Product.Items) {
-                        var matchingItems = allItems.Where(i => i.Name.ExtractText() == item.Name).ToList();
+                        var originalName = item.Name;
+                        var name = item.Name;
+                        if (this.replacements.TryGetValue(originalName, out var replacement))
+                        {
+                            name = replacement;
+                        }
+                        var matchingItems = allItems.Where(i => i.Name.ExtractText() == name).ToList();
                         if (matchingItems.Count == 0) {
-                            Console.WriteLine($"Failed to find matching item for {item.Name}.");
+                            Console.WriteLine($"Failed to find matching item for {originalName}.");
                             continue;
                         }
 
                         if (matchingItems.Count > 1) {
-                            Console.WriteLine($"Found multiple matching items for {item.Name}.");
+                            Console.WriteLine($"Found multiple matching items for {originalName}.");
                         }
 
                         foreach (var matchedItem in matchingItems) {
