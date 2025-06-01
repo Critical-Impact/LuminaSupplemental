@@ -82,11 +82,7 @@
       <EmbeddedResource Include="Generated\FateItem.csv" />
       <EmbeddedResource Include="Generated\GardeningCrossbreed.csv" />
       <EmbeddedResource Include="Generated\FestivalName.csv" />
-      <None Remove="Generated\FieldOpCoffer.csv" />
-      <EmbeddedResource Include="Generated\FieldOpCoffer.csv">
-        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      </EmbeddedResource>
-      <None Remove="Generated\BNpcLink.csv" />
+      <EmbeddedResource Include="Generated\FieldOpCoffer.csv" />
       <EmbeddedResource Include="Generated\BNpcLink.csv" />
     </ItemGroup>
 </Project>
