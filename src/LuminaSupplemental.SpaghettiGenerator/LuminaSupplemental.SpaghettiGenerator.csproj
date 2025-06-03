@@ -74,6 +74,10 @@
       <Content Include="ManualData\FFXIV Data - Items.tsv">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <None Remove="ManualData\QuestRequiredItems.csv" />
+      <Content Include="ManualData\QuestRequiredItems.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>

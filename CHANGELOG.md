@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed+
 
+## [2.3.7] - 2025-06-03
+
+### Added
+
+- QuestRequiredItem sheet added, data is parsed from the game's lua files to fill in gaps in quest data
+
 ## [2.3.6] - 2025-06-01
 
 ### Changed
