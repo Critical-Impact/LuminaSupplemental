@@ -15,11 +15,35 @@ using LuminaSupplemental.SpaghettiGenerator.Steps.Parsers;
 
 namespace LuminaSupplemental.SpaghettiGenerator.Steps;
 
-public partial class BNpcLinkStep : GeneratorStep
+public class BNpcLinkNoGubalStep : BNpcLinkStep
+{
+    public BNpcLinkNoGubalStep(GubalApi gubalApi, GameData gameData) : base(gubalApi, gameData)
+    {
+
+    }
+
+    public override string Name => "BNPC Links (No Gubal)";
+
+    public override string FileName => "BNpcLinkNoGubal.csv";
+
+    public override List<ICsv> Run(Dictionary<Type, List<ICsv>> stepData)
+    {
+        List<BNpcLink> items = new ();
+        if (stepData.ContainsKey(typeof(MobSpawnStep)))
+        {
+            var mobSpawnPositions = stepData[typeof(MobSpawnStep)].Cast<MobSpawnPosition>().ToList();
+            items.AddRange(this.Process(mobSpawnPositions));
+        }
+
+        return [..items.Where(c => this.nameSheet.HasRow(c.BNpcNameId) && this.baseSheet.HasRow(c.BNpcBaseId)).DistinctBy(c => (c.BNpcBaseId, c.BNpcNameId)).OrderBy(c => c.BNpcNameId).ThenBy(c => c.BNpcBaseId).Select(c => c)];
+    }
+}
+
+public class BNpcLinkStep : GeneratorStep
 {
     private readonly GubalApi gubalApi;
-    private readonly ExcelSheet<BNpcName> nameSheet;
-    private readonly ExcelSheet<BNpcBase> baseSheet;
+    protected readonly ExcelSheet<BNpcName> nameSheet;
+    protected readonly ExcelSheet<BNpcBase> baseSheet;
 
     public BNpcLinkStep(GubalApi gubalApi, GameData gameData)
     {
@@ -49,12 +73,12 @@ public partial class BNpcLinkStep : GeneratorStep
         return [..items.Where(c => this.nameSheet.HasRow(c.BNpcNameId) && this.baseSheet.HasRow(c.BNpcBaseId)).DistinctBy(c => (c.BNpcBaseId, c.BNpcNameId)).OrderBy(c => c.BNpcNameId).ThenBy(c => c.BNpcBaseId).Select(c => c)];
     }
 
-    private List<BNpcLink> Process(List<MobSpawnPosition> positions)
+    protected List<BNpcLink> Process(List<MobSpawnPosition> positions)
     {
         return positions.Select(e => (e.BNpcBaseId, e.BNpcNameId)).Distinct().Where(c => c.BNpcBaseId != 0 && c.BNpcNameId != 0).Select(c => new BNpcLink(c.BNpcNameId, c.BNpcBaseId)).OrderBy(c => c.BNpcNameId).ThenBy(c => c.BNpcBaseId).ToList();
     }
 
-    private List<BNpcLink> ProcessGubalData()
+    protected List<BNpcLink> ProcessGubalData()
     {
         var drops = new List<BNpcLink>();
         var bNpcLinks = this.gubalApi.GetGubalBNpcLinks();

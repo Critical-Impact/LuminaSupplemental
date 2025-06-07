@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed+
 
+## [2.3.9] - 2025-06-07
+
+### Changed
+
+- BNpcLink now has 2 sheets, BNpcLink.csv and BNpcLinkNoGubal.csv as Gubal may return unreliable results
+
 ## [2.3.8] - 2025-06-07
 
 ### Changed
