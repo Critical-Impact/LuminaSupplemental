@@ -37,7 +37,7 @@ public partial class AirshipUnlockStep : GeneratorStep
     }
 
 
-    public override List<ICsv> Run()
+    public override List<ICsv> Run(Dictionary<Type, List<ICsv>> stepData)
     {
         List<AirshipUnlock> items = new ();
         items.AddRange(this.Process());

@@ -43,7 +43,7 @@ public partial class DungeonDropStep : GeneratorStep
     }
 
 
-    public override List<ICsv> Run()
+    public override List<ICsv> Run(Dictionary<Type, List<ICsv>> stepData)
     {
         List<DungeonDrop> items = new ();
         items.AddRange(this.Process());

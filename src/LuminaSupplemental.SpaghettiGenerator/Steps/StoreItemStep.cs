@@ -47,7 +47,7 @@ public partial class StoreItemStep : GeneratorStep
         return this.appConfig.Parsing.ParseOnlineSources;
     }
 
-    public override List<ICsv> Run()
+    public override List<ICsv> Run(Dictionary<Type, List<ICsv>> stepData)
     {
         List<StoreItem> items = new ();
         items.AddRange(this.Process());

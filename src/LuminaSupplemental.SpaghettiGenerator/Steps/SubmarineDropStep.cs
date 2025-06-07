@@ -50,7 +50,7 @@ public partial class SubmarineDropStep : GeneratorStep
     }
 
 
-    public override List<ICsv> Run()
+    public override List<ICsv> Run(Dictionary<Type, List<ICsv>> stepData)
     {
         List<SubmarineDrop> items = new ();
         items.AddRange(this.Process());

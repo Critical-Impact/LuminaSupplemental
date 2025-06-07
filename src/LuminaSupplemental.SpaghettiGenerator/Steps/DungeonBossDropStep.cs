@@ -29,7 +29,7 @@ public partial class DungeonBossDropStep : GeneratorStep
         this.dutiesByString = this.dataCacher.ByName<ContentFinderCondition>(item => item.Name.ToString().ToParseable());
     }
 
-    public override List<ICsv> Run()
+    public override List<ICsv> Run(Dictionary<Type, List<ICsv>> stepData)
     {
         List<DungeonBossDrop> items = new();
         this.gtParser.ProcessDutiesJson();

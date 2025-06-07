@@ -39,7 +39,7 @@ public partial class SubmarineUnlockStep : GeneratorStep
 
 
 
-    public override List<ICsv> Run()
+    public override List<ICsv> Run(Dictionary<Type, List<ICsv>> stepData)
     {
         List<SubmarineUnlock> items = new ();
         items.AddRange(this.Process());

@@ -49,7 +49,7 @@ public partial class ItemSupplementStep : GeneratorStep
     }
 
 
-    public override List<ICsv> Run()
+    public override List<ICsv> Run(Dictionary<Type, List<ICsv>> stepData)
     {
         List<ItemSupplement> items = new List<ItemSupplement>();
         items.AddRange(this.ProcessLodestoneItems());

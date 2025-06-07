@@ -9,10 +9,12 @@ public interface IGeneratorStep
 {
     public Type OutputType { get; }
     public string FileName { get; }
-    
+
     public string Name { get; }
 
     public bool ShouldRun();
 
-    public List<ICsv> Run();
+    public List<ICsv> Run(Dictionary<Type, List<ICsv>> stepData);
+
+    public List<Type>? PrerequisiteSteps { get; }
 }

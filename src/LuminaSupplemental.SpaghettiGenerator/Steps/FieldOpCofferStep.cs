@@ -37,7 +37,7 @@ public class FieldOpCofferStep : GeneratorStep
         this.dataCacher = dataCacher;
     }
 
-    public override List<ICsv> Run()
+    public override List<ICsv> Run(Dictionary<Type, List<ICsv>> stepData)
     {
         var fieldOpCoffers = new List<FieldOpCoffer>();
         fieldOpCoffers.AddRange(this.ProcessData());
@@ -52,7 +52,7 @@ public class FieldOpCofferStep : GeneratorStep
 
         var drops = new List<FieldOpCoffer>();
         var json = File.ReadAllText(filePath);
-        var cofferDataList = JsonConvert.DeserializeObject<List<CofferData>>(json);
+        var cofferDataList = JsonConvert.DeserializeObject<List<CofferData>>(json)!;
 
         for (var index = 0; index < cofferDataList.Count; index++)
         {
@@ -114,7 +114,7 @@ public class FieldOpCofferStep : GeneratorStep
 
         var drops = new List<FieldOpCoffer>();
         var json = File.ReadAllText(filePath);
-        var cofferDataList = JsonConvert.DeserializeObject<List<CofferData>>(json);
+        var cofferDataList = JsonConvert.DeserializeObject<List<CofferData>>(json)!;
 
         for (var index = 0; index < cofferDataList.Count; index++)
         {

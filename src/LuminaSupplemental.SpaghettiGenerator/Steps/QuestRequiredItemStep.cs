@@ -17,7 +17,7 @@ public class QuestRequiredItemStep : GeneratorStep
 
     public override string Name { get; } = "Required Quest Items";
 
-    public override List<ICsv> Run()
+    public override List<ICsv> Run(Dictionary<Type, List<ICsv>> stepData)
     {
         var reader = CSVFile.CSVReader.FromFile(Path.Combine("ManualData", "QuestRequiredItems.csv"));
         var items = new List<QuestRequiredItem>();

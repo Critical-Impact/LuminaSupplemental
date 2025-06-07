@@ -32,7 +32,7 @@ public partial class DungeonChestItemStep : GeneratorStep
         this.itemsByName = this.dataCacher.ByName<Item>(item => item.Name.ToString().ToParseable(), item => !bannedItems.Contains(item.RowId));
     }
 
-    public override List<ICsv> Run()
+    public override List<ICsv> Run(Dictionary<Type, List<ICsv>> stepData)
     {
         List<DungeonChestItem> items = new();
         this.gtParser.ProcessDutiesJson();

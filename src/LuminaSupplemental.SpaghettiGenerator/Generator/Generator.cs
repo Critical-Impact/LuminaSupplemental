@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 
 using CsvHelper;
 
 using LuminaSupplemental.Excel.Model;
 using LuminaSupplemental.SpaghettiGenerator.Steps;
+
+using Medallion.Collections;
 
 using Serilog;
 
@@ -21,10 +24,21 @@ public class Generator
 
     public Generator(IEnumerable<IGeneratorStep> steps, IEnumerable<IDownloadStep> downloadSteps, GeneratorOptions generatorOptions, ILogger logger)
     {
-        this.steps = steps;
+        var generatorSteps = steps.ToList();
+        this.steps = generatorSteps.OrderTopologicallyBy(c => GetPrerequisiteSteps(generatorSteps, c.PrerequisiteSteps));
         this.downloadSteps = downloadSteps;
         this.generatorOptions = generatorOptions;
         this.logger = logger;
+    }
+
+    private IEnumerable<IGeneratorStep> GetPrerequisiteSteps(IEnumerable<IGeneratorStep> allSteps,  List<Type>? requiredSteps )
+    {
+        if (requiredSteps == null)
+        {
+            return [];
+        }
+
+        return allSteps.Where(c => requiredSteps.Contains(c.GetType()));
     }
 
     public void Run()
@@ -42,6 +56,8 @@ public class Generator
         }
         this.logger.Information("Deleted existing CSV files.");
 
+
+        var stepData = new Dictionary<Type, List<ICsv>>();
 
         this.logger.Information("Starting downloads.");
         foreach (var step in this.downloadSteps)
@@ -65,7 +81,8 @@ public class Generator
             }
 
             this.logger.Information($"[{step.Name}] Generating data");
-            var items = step.Run();
+            var items = step.Run(stepData);
+            stepData.Add(step.GetType(), items);
             this.logger.Information($"[{step.Name}] Finished generating data");
             var outputPath = Path.Combine(this.generatorOptions.OutputPath, step.FileName);
             this.logger.Information($"[{step.Name}] Writing to {outputPath}");

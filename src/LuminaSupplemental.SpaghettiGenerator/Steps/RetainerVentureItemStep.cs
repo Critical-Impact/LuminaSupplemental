@@ -41,7 +41,7 @@ public partial class RetainerVentureItemStep : GeneratorStep
     }
 
 
-    public override List<ICsv> Run()
+    public override List<ICsv> Run(Dictionary<Type, List<ICsv>> stepData)
     {
         List<RetainerVentureItem> items = new ();
         items.AddRange(this.Process());

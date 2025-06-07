@@ -43,7 +43,7 @@ public partial class ItemSupplementStep
 
         var drops = new List<ItemSupplement>();
         var json = File.ReadAllText(filePath);
-        var desynthData = JsonConvert.DeserializeObject<DesynthData>(json);
+        var desynthData = JsonConvert.DeserializeObject<DesynthData>(json)!;
         var supplementType = ItemSupplementSource.Desynth;
 
         foreach(var history in desynthData.Sources)
@@ -84,7 +84,7 @@ public partial class ItemSupplementStep
 
         var drops = new List<ItemSupplement>();
         var json = File.ReadAllText(filePath);
-        var cofferDataList = JsonConvert.DeserializeObject<List<CofferData>>(json);
+        var cofferDataList = JsonConvert.DeserializeObject<List<CofferData>>(json)!;
         for (var index = 0; index < cofferDataList.Count; index++)
         {
             ItemSupplementSource supplementType;
@@ -144,7 +144,7 @@ public partial class ItemSupplementStep
 
         var drops = new List<ItemSupplement>();
         var json = File.ReadAllText(filePath);
-        var cofferDataList = JsonConvert.DeserializeObject<List<CofferData>>(json);
+        var cofferDataList = JsonConvert.DeserializeObject<List<CofferData>>(json)!;
         for (var index = 0; index < cofferDataList.Count; index++)
         {
             ItemSupplementSource supplementType;

@@ -10,20 +10,15 @@ using LuminaSupplemental.SpaghettiGenerator.Generator;
 
 namespace LuminaSupplemental.SpaghettiGenerator.Steps;
 
-public class FestivalNameStep : IGeneratorStep
+public class FestivalNameStep : GeneratorStep
 {
-    public Type OutputType { get; set; } = typeof(FestivalName);
+    public override Type OutputType { get; } = typeof(FestivalName);
 
-    public string FileName { get; set; } = "FestivalName.csv";
+    public override string FileName => "FestivalName.csv";
 
-    public string Name { get; set; } = "Festival Names";
+    public override string Name => "Festival Names";
 
-    public bool ShouldRun()
-    {
-        return true;
-    }
-
-    public List<ICsv> Run()
+    public override List<ICsv> Run(Dictionary<Type, List<ICsv>> stepData)
     {
         //Kind of redundant but should reduce the change of manual transcription errors from slipping in
         List<FestivalName> festivalNames = new();

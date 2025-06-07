@@ -34,7 +34,7 @@ public partial class MobDropStep : GeneratorStep
         return appConfig.Parsing.ProcessMobSpawnHTML;
     }
 
-    public override List<ICsv> Run()
+    public override List<ICsv> Run(Dictionary<Type, List<ICsv>> stepData)
     {
         List<MobDrop> items = new List<MobDrop>();
         items.AddRange(this.ProcessLodestoneDrops());

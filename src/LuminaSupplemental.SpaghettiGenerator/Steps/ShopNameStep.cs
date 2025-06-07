@@ -30,7 +30,7 @@ public partial class ShopNameStep : GeneratorStep
     }
 
 
-    public override List<ICsv> Run()
+    public override List<ICsv> Run(Dictionary<Type, List<ICsv>> stepData)
     {
         List<ShopName> items = new ();
         items.AddRange(this.ProcessShopNames());

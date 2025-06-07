@@ -34,7 +34,7 @@ public partial class FateItemStep : GeneratorStep
     }
 
 
-    public override List<ICsv> Run()
+    public override List<ICsv> Run(Dictionary<Type, List<ICsv>> stepData)
     {
         List<FateItem> items = new List<FateItem>();
         items.AddRange(this.ProcessGubalData());

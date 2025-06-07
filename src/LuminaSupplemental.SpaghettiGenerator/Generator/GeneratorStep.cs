@@ -17,6 +17,8 @@ public abstract class GeneratorStep : IGeneratorStep
     {
         return true;
     }
-    
-    public abstract List<ICsv> Run();
+
+    public abstract List<ICsv> Run(Dictionary<Type, List<ICsv>> stepData);
+
+    public virtual List<Type>? PrerequisiteSteps => null;
 }

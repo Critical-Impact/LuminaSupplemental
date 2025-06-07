@@ -39,7 +39,7 @@ public partial class MobSpawnStep : GeneratorStep
     }
 
 
-    public override List<ICsv> Run()
+    public override List<ICsv> Run(Dictionary<Type, List<ICsv>> stepData)
     {
         List<MobSpawnPosition> items = new ();
         items.AddRange(this.Process());

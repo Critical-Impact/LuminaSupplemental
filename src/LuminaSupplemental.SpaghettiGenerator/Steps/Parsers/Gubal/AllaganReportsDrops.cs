@@ -6,6 +6,23 @@ using System.Text.Json.Serialization;
 namespace LuminaSupplemental.SpaghettiGenerator.Steps.Parsers;
 
 [Serializable]
+
+public class GubalBNpcLinkData
+{
+    [JsonPropertyName("bnpc")]
+    public List<GubalBNpcLink> BNpc { get; set; }
+}
+
+public class GubalBNpcLink
+{
+    [JsonPropertyName("bnpcBase")]
+    public uint BNpcBase { get; set; }
+
+    [JsonPropertyName("bnpcName")]
+    public uint BNpcName { get; set; }
+}
+
+[Serializable]
 public class AllaganReportsDropContainer
 {
     [JsonPropertyName("allagan_reports")]
@@ -17,7 +34,7 @@ public class AllaganReportsDropItem
 {
     [JsonPropertyName("itemId")]
     public uint ItemId { get; set; }
-        
+
     [JsonConverter(typeof(GubalDropsConverter))]
     [JsonPropertyName("data")]
     public AllaganReportsDropData Data { get; set; }
