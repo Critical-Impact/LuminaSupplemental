@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed+
 
+## [2.3.11] - 2025-06-08
+
+### Added
+
+- More MobSpawn data has been provided by a kind user(thanks Keagdo)
+
 ## [2.3.10] - 2025-06-08
 
 ### Added
