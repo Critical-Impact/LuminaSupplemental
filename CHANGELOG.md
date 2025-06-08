@@ -13,6 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed+
 
+## [2.3.12] - 2025-06-08
+
+### Added
+
+- StoreItem now contains the store ID for the item
+
+
 ## [2.3.11] - 2025-06-08
 
 ### Added

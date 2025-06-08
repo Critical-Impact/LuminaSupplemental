@@ -18,18 +18,22 @@ namespace LuminaSupplemental.Excel.Model
     {
         [Name("ItemId")] public uint ItemId { get; set; }
         [Name("FittingShopItemSetId")] public uint FittingShopItemSetId { get; set; }
-
         [Name("PriceCentsUSD")] public uint PriceCentsUSD { get; set; }
+
+        [Name("StoreId")] public uint StoreId { get; set; }
 
         public RowRef< Item > Item;
 
         public RowRef< FittingShopItemSet > FittingShopItemSet;
 
-        public StoreItem(uint itemId, uint fittingShopItemSetId, uint priceCentsUSD )
+        public string StoreUrl => $"https://store.finalfantasyxiv.com/ffxivstore/en-us/product/{StoreId}";
+
+        public StoreItem(uint itemId, uint fittingShopItemSetId, uint priceCentsUSD, uint storeId )
         {
             ItemId = itemId;
             FittingShopItemSetId = fittingShopItemSetId;
             PriceCentsUSD = priceCentsUSD;
+            this.StoreId = storeId;
         }
 
         public StoreItem()
@@ -39,9 +43,10 @@ namespace LuminaSupplemental.Excel.Model
 
         public void FromCsv(string[] lineData)
         {
-            ItemId = uint.Parse( lineData[ 0 ] );
-            FittingShopItemSetId = uint.Parse( lineData[ 1 ] );
-            PriceCentsUSD = uint.Parse( lineData[ 2 ] );
+            ItemId = uint.Parse( lineData[ 0 ], CultureInfo.InvariantCulture );
+            FittingShopItemSetId = uint.Parse( lineData[ 1 ], CultureInfo.InvariantCulture );
+            PriceCentsUSD = uint.Parse( lineData[ 2 ], CultureInfo.InvariantCulture );
+            StoreId = uint.Parse( lineData[ 3 ], CultureInfo.InvariantCulture );
         }
 
         public string[] ToCsv()

@@ -83,7 +83,8 @@ public partial class StoreItemStep : GeneratorStep
                     {
                         FittingShopItemSetId = fittingShopItemSet?.RowId ?? 0,
                         ItemId = outputItem.RowId,
-                        PriceCentsUSD = product.Value.PriceText.Contains(".") ? (uint)(float.Parse(product.Value.PriceText.Replace("$", "").Replace("USD", "")) * 100) : uint.Parse(product.Value.PriceText)
+                        PriceCentsUSD = product.Value.PriceText.Contains(".") ? (uint)(float.Parse(product.Value.PriceText.Replace("$", "").Replace("USD", "")) * 100) : uint.Parse(product.Value.PriceText),
+                        StoreId = product.Value.ID
                     });
                 }
                 else
