@@ -17,20 +17,20 @@
       <Content Include="../ffxiv-datamining-patches/patchdata/Item.json" CopyToOutputDirectory="Always" />
       <Content Include="../ffxiv-datamining-patches/patchlist.json" CopyToOutputDirectory="Always" />
       <Content Include="../ffxiv-lodestone-item-id/lodestone-item-id.txt" CopyToOutputDirectory="Always" />
-      <PackageReference Include="Autofac" Version="8.0.0" />
+      <PackageReference Include="Autofac" Version="8.4.0" />
       <PackageReference Include="CSVFile" Version="3.2.0" />
-      <PackageReference Include="CsvHelper" Version="33.0.1" />
+      <PackageReference Include="CsvHelper" Version="33.1.0" />
       <PackageReference Include="Fastenshtein" Version="1.0.10" />
-      <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
+      <PackageReference Include="HtmlAgilityPack" Version="1.12.2" />
       <PackageReference Include="MedallionTopologicalSort" Version="1.0.0" />
-      <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
-      <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.1" />
-      <PackageReference Include="Microsoft.Extensions.Configuration.Ini" Version="8.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.8" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.8" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Ini" Version="9.0.8" />
       <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
       <PackageReference Include="SocksSharp" Version="1.1.1" />
-      <PackageReference Include="System.Data.SQLite" Version="1.0.117" />
-      <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.117" />
-      <PackageReference Include="System.Data.SQLite.Linq" Version="1.0.117" />
+      <PackageReference Include="System.Data.SQLite" Version="1.0.119" />
+      <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.119" />
+      <PackageReference Include="System.Data.SQLite.Linq" Version="1.0.119" />
       <None Remove="ManualData\Items.csv" />
       <Content Include="ManualData\Items.csv">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
