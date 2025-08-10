@@ -13,6 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed+
 
+## [3.0.2] - 2025-08-10
+
+### Changed
+
+- Remove some invalid mob data
+
+
 ## [3.0.1] - 2025-08-09
 
 ### Changed
