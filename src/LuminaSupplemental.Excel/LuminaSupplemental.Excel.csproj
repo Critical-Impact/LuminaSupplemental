@@ -6,8 +6,8 @@
         <PackageProjectUrl>https://github.com/Critical-Impact/LuminaSupplemental</PackageProjectUrl>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <RepositoryUrl>https://github.com/Critical-Impact/LuminaSupplemental</RepositoryUrl>
-        <PackageVersion>3.0.5</PackageVersion>
-        <FileVersion>3.0.5</FileVersion>
+        <PackageVersion>3.0.6</PackageVersion>
+        <FileVersion>3.0.6</FileVersion>
         <Description>Supplemental data for lumina and dalamud plugins.</Description>
     </PropertyGroup>
 

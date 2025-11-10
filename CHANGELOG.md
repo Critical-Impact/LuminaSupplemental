@@ -13,6 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed+
 
+## [3.0.6] - 2025-11-10
+
+### Changed
+
+- General data update
+- Include user sourced mob spawn data
+- Parse additional data for QuestRequiredItem
+
 ## [3.0.5] - 2025-10-07
 
 ### Changed
