@@ -368,7 +368,7 @@ ItemId,Type,ChestType,Min,Max,Probability
 31397,OccultTreasure,Silver,1,2,0
 31402,OccultTreasure,Silver,1,2,0
 31403,OccultTreasure,Silver,1,2,0
-31407,OccultTreasure,Silver,1,1,0
+31407,OccultTreasure,Silver,1,2,0
 32828,OccultTreasure,Silver,1,2,0
 32835,OccultTreasure,Silver,1,2,0
 32846,OccultTreasure,Silver,1,1,0
@@ -400,7 +400,7 @@ ItemId,Type,ChestType,Min,Max,Probability
 41781,OccultTreasure,Silver,1,2,0
 41782,OccultTreasure,Silver,1,2,0
 44111,OccultTreasure,Silver,1,2,0
-44119,OccultTreasure,Silver,1,1,0
+44119,OccultTreasure,Silver,1,2,0
 44120,OccultTreasure,Silver,1,2,0
 44263,OccultTreasure,Silver,1,2,0
 44264,OccultTreasure,Silver,1,2,0
