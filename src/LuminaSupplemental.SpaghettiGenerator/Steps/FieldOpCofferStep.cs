@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using Serilog;
 
 using SupabaseExporter.Structures;
+using SupabaseExporter.Structures.Exports;
 
 namespace LuminaSupplemental.SpaghettiGenerator.Steps;
 
@@ -48,11 +49,11 @@ public class FieldOpCofferStep : GeneratorStep
 
     private List<FieldOpCoffer> ProcessOccult()
     {
-        var filePath = "../../../../FFXIVGachaSpreadsheet/Website/assets/data/Occult.json";
+        var filePath = "../../../../FFXIVGachaSpreadsheet/website/static/data/OccultTreasures.json";
 
         var drops = new List<FieldOpCoffer>();
         var json = File.ReadAllText(filePath);
-        var cofferDataList = JsonConvert.DeserializeObject<List<CofferData>>(json)!;
+        var cofferDataList = JsonConvert.DeserializeObject<List<Coffer>>(json)!;
 
         for (var index = 0; index < cofferDataList.Count; index++)
         {
@@ -73,11 +74,11 @@ public class FieldOpCofferStep : GeneratorStep
                     throw new ArgumentOutOfRangeException();
 
             }
-            foreach (var coffer in cofferData.Coffers)
+            foreach (var coffer in cofferData.Variants)
             {
-                if(!Enum.TryParse(coffer.CofferName, out FieldOpCofferType chest))
+                if(!Enum.TryParse(coffer.Name, out FieldOpCofferType chest))
                 {
-                    throw new Exception("Could not parse coffer: " + coffer.CofferName);
+                    throw new Exception("Could not parse coffer: " + coffer.Name);
                 }
                 var cofferContent = coffer.Patches["All"];
                 foreach (var item in cofferContent.Items)
@@ -89,7 +90,7 @@ public class FieldOpCofferStep : GeneratorStep
 
                     var min = item.Min;
                     var max = item.Max;
-                    var probability = Math.Round(item.Percentage * 100, 2);
+                    var probability = Math.Round(item.Pct * 100, 2);
 
                     drops.Add(
                         new FieldOpCoffer()
@@ -110,11 +111,11 @@ public class FieldOpCofferStep : GeneratorStep
 
     private List<FieldOpCoffer> ProcessData()
     {
-        var filePath = "../../../../FFXIVGachaSpreadsheet/Website/assets/data/BunnyData.json";
+        var filePath = "../../../../FFXIVGachaSpreadsheet/website/static/data/EurekaBunnies.json";
 
         var drops = new List<FieldOpCoffer>();
         var json = File.ReadAllText(filePath);
-        var cofferDataList = JsonConvert.DeserializeObject<List<CofferData>>(json)!;
+        var cofferDataList = JsonConvert.DeserializeObject<List<Coffer>>(json)!;
 
         for (var index = 0; index < cofferDataList.Count; index++)
         {
@@ -135,11 +136,11 @@ public class FieldOpCofferStep : GeneratorStep
                     throw new ArgumentOutOfRangeException();
 
             }
-            foreach (var coffer in cofferData.Coffers)
+            foreach (var coffer in cofferData.Variants)
             {
-                if(!Enum.TryParse(coffer.CofferName, out FieldOpCofferType chest))
+                if(!Enum.TryParse(coffer.Name, out FieldOpCofferType chest))
                 {
-                    throw new Exception("Could not parse coffer: " + coffer.CofferName);
+                    throw new Exception("Could not parse coffer: " + coffer.Name);
                 }
                 var cofferContent = coffer.Patches["All"];
                 foreach (var item in cofferContent.Items)
@@ -151,7 +152,7 @@ public class FieldOpCofferStep : GeneratorStep
 
                     var min = item.Min;
                     var max = item.Max;
-                    var probability = Math.Round(item.Percentage * 100, 2);
+                    var probability = Math.Round(item.Pct * 100, 2);
 
                     drops.Add(
                         new FieldOpCoffer()

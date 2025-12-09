@@ -13,6 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed+
 
+## [3.1.0] - 2025-12-09
+
+### Changed
+
+- DungeonChest and DungeonChestItem were updated to use the data from Trackys Gatcha Spreadsheet, this means a loss of position data but newer data and probabilities for items. This is a breaking change.
+- General data update
+
 ## [3.0.7] - 2025-11-16
 
 ### Changed

@@ -8,6 +8,7 @@ using LuminaSupplemental.Excel.Model;
 using Newtonsoft.Json;
 
 using SupabaseExporter.Structures;
+using SupabaseExporter.Structures.Exports;
 
 namespace LuminaSupplemental.SpaghettiGenerator.Steps;
 
@@ -16,7 +17,7 @@ public partial class ItemSupplementStep
     private List<ItemSupplement> ProcessCards()
     {
         var supplementType = ItemSupplementSource.CardPacks;
-        var filePath = "../../../../FFXIVGachaSpreadsheet/Website/assets/data/Cards.json";
+        var filePath = "../../../../FFXIVGachaSpreadsheet/website/static/data/TripleTriadPacks.json";
 
         return ProcessCofferJson(filePath, supplementType);
     }
@@ -24,7 +25,7 @@ public partial class ItemSupplementStep
     private List<ItemSupplement> ProcessCoffers()
     {
         var supplementType = ItemSupplementSource.Coffer;
-        var filePath = "../../../../FFXIVGachaSpreadsheet/Website/assets/data/CofferData.json";
+        var filePath = "../../../../FFXIVGachaSpreadsheet/website/static/data/RandomCoffers.json";
 
         return ProcessCofferJson(filePath, supplementType);
     }
@@ -32,24 +33,25 @@ public partial class ItemSupplementStep
     private List<ItemSupplement> ProcessLogograms()
     {
         var supplementType = ItemSupplementSource.Logogram;
-        var filePath = "../../../../FFXIVGachaSpreadsheet/Website/assets/data/LogoFrag.json";
+        var filePath = "../../../../FFXIVGachaSpreadsheet/website/static/data/FieldOpContainers.json";
+        //TODO: split into logograms and fragments
 
         return ProcessCofferJson(filePath, supplementType);
     }
 
     private List<ItemSupplement> ProcessDesynth()
     {
-        var filePath = "../../../../FFXIVGachaSpreadsheet/Website/assets/data/DesynthesisData.json";
+        var filePath = "../../../../FFXIVGachaSpreadsheet/website/static/data/Desynthesis.json";
 
         var drops = new List<ItemSupplement>();
         var json = File.ReadAllText(filePath);
-        var desynthData = JsonConvert.DeserializeObject<DesynthData>(json)!;
+        var desynthData = JsonConvert.DeserializeObject<Desynth>(json)!;
         var supplementType = ItemSupplementSource.Desynth;
 
         foreach(var history in desynthData.Sources)
         {
             var sourceItemId = history.Key;
-            foreach (var coffer in history.Value.Results)
+            foreach (var coffer in history.Value.Rewards)
             {
 
                 var itemId = coffer.Id;
@@ -60,7 +62,7 @@ public partial class ItemSupplementStep
 
                 var min = coffer.Min;
                 var max = coffer.Max;
-                var probability = Math.Round(coffer.Percentage * 100, 2);
+                var probability = Math.Round(coffer.Pct * 100, 2);
 
                 drops.Add(
                     new ItemSupplement()
@@ -80,35 +82,38 @@ public partial class ItemSupplementStep
 
     private List<ItemSupplement> ProcessDeepDungeons()
     {
-        var filePath = "../../../../FFXIVGachaSpreadsheet/Website/assets/data/DeepDungeonData.json";
+        var filePath = "../../../../FFXIVGachaSpreadsheet/website/static/data/DeepDungeonSacks.json";
 
         var drops = new List<ItemSupplement>();
         var json = File.ReadAllText(filePath);
-        var cofferDataList = JsonConvert.DeserializeObject<List<CofferData>>(json)!;
+        var cofferDataList = JsonConvert.DeserializeObject<List<Coffer>>(json)!;
         for (var index = 0; index < cofferDataList.Count; index++)
         {
             ItemSupplementSource supplementType;
 
             var cofferData = cofferDataList[index];
-            switch (index)
+            switch (cofferData.Name)
             {
-                case 0:
+                case "Palace of the Dead":
                     supplementType = ItemSupplementSource.PalaceOfTheDead;
                     break;
-                case 1:
+                case "Heaven-on-High":
                     supplementType = ItemSupplementSource.HeavenOnHigh;
                     break;
-                case 2:
+                case "Eureka Orthos":
                     supplementType = ItemSupplementSource.EurekaOrthos;
                     break;
+                case "Pilgrim's Traverse":
+                    supplementType = ItemSupplementSource.PilgrimsTraverse;
+                    break;
                 default:
-                    continue;
+                    throw new Exception("Unhandled supplement type");
             }
 
-            var coffers = cofferData.Coffers;
+            var coffers = cofferData.Variants;
             foreach (var coffer in coffers)
             {
-                var sourceItemId = coffer.CofferId;
+                var sourceItemId = coffer.Id;
                 foreach (var cofferItem in coffer.Patches["All"].Items)
                 {
                     var itemId = cofferItem.Id;
@@ -119,7 +124,7 @@ public partial class ItemSupplementStep
 
                     var min = cofferItem.Min;
                     var max = cofferItem.Max;
-                    var probability = Math.Round(cofferItem.Percentage * 100, 2);
+                    var probability = Math.Round(cofferItem.Pct * 100, 2);
 
                     drops.Add(
                         new ItemSupplement()
@@ -140,41 +145,41 @@ public partial class ItemSupplementStep
 
     private List<ItemSupplement> ProcessLockboxes()
     {
-        var filePath = "../../../../FFXIVGachaSpreadsheet/Website/assets/data/LockboxData.json";
+        var filePath = "../../../../FFXIVGachaSpreadsheet/website/static/data/FieldOpLockboxes.json";
 
         var drops = new List<ItemSupplement>();
         var json = File.ReadAllText(filePath);
-        var cofferDataList = JsonConvert.DeserializeObject<List<CofferData>>(json)!;
+        var cofferDataList = JsonConvert.DeserializeObject<List<Coffer>>(json)!;
         for (var index = 0; index < cofferDataList.Count; index++)
         {
             ItemSupplementSource supplementType;
 
             var cofferData = cofferDataList[index];
-            switch (index)
+            switch (cofferData.Name)
             {
-                case 0:
+                case "Anemos":
                     supplementType = ItemSupplementSource.Anemos;
                     break;
-                case 1:
+                case "Pagos":
                     supplementType = ItemSupplementSource.Pagos;
                     break;
-                case 2:
+                case "Pyros":
                     supplementType = ItemSupplementSource.Pyros;
                     break;
-                case 3:
+                case "Hydatos":
                     supplementType = ItemSupplementSource.Hydatos;
                     break;
-                case 4:
+                case "Bozja":
                     supplementType = ItemSupplementSource.Bozja;
                     break;
                 default:
-                    continue;
+                    throw new Exception("Unhandled supplement type");
             }
 
-            var coffers = cofferData.Coffers;
+            var coffers = cofferData.Variants;
             foreach (var coffer in coffers)
             {
-                var sourceItemId = coffer.CofferId;
+                var sourceItemId = coffer.Id;
                 foreach (var cofferItem in coffer.Patches["All"].Items)
                 {
                     var itemId = cofferItem.Id;
@@ -185,7 +190,7 @@ public partial class ItemSupplementStep
 
                     var min = cofferItem.Min;
                     var max = cofferItem.Max;
-                    var probability = Math.Round(cofferItem.Percentage * 100, 2);
+                    var probability = Math.Round(cofferItem.Pct * 100, 2);
 
                     drops.Add(
                         new ItemSupplement()
@@ -208,11 +213,11 @@ public partial class ItemSupplementStep
     {
         var drops = new List<ItemSupplement>();
         var cardJson = File.ReadAllText(filePath);
-        var cofferDataList = JsonConvert.DeserializeObject<List<CofferData>>(cardJson);
-        var coffers = cofferDataList.SelectMany(c => c.Coffers);
+        var cofferDataList = JsonConvert.DeserializeObject<List<Coffer>>(cardJson);
+        var coffers = cofferDataList.SelectMany(c => c.Variants);
         foreach (var coffer in coffers)
         {
-            var sourceItemId = coffer.CofferId;
+            var sourceItemId = coffer.Id;
             foreach (var cofferItem in coffer.Patches["All"].Items)
             {
                 var itemId = cofferItem.Id;
@@ -223,7 +228,7 @@ public partial class ItemSupplementStep
 
                 var min = cofferItem.Min;
                 var max = cofferItem.Max;
-                var probability = Math.Round(cofferItem.Percentage * 100, 2);
+                var probability = Math.Round(cofferItem.Pct * 100, 2);
 
                 drops.Add(
                     new ItemSupplement()

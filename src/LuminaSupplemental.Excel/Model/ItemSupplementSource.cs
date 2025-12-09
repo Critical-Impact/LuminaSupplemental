@@ -18,6 +18,7 @@ public enum ItemSupplementSource
     Hydatos = 14,
     Bozja = 15,
     Logogram = 16,
+    PilgrimsTraverse = 17,
     Unknown = 999
 
 }

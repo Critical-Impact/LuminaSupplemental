@@ -22,21 +22,27 @@ namespace LuminaSupplemental.Excel.Model
         [Name("RowId")] public uint RowId { get; set; }
         [Name("ChestNo")] public byte ChestNo { get; set; }
         [Name("ContentFinderConditionId")] public uint ContentFinderConditionId { get; set; }
-        [Name("Position"), TypeConverter(typeof(Vector2Converter))] public Vector2 Position { get; set; }
-        
-        public RowRef< ContentFinderCondition > ContentFinderCondition;
+        [Name("MapId")] public uint MapId { get; set; }
+        [Name("TerritoryTypeId")] public uint TerritoryTypeId { get; set; }
+        [Name("ChestId")] public uint ChestId { get; set; }
 
-        public DungeonChest(uint rowId, byte chestNo,uint contentFinderConditionId, Vector2 position )
+        public RowRef< ContentFinderCondition > ContentFinderCondition;
+        public RowRef< Map > Map;
+        public RowRef< TerritoryType > TerritoryType;
+
+        public DungeonChest(uint rowId, byte chestNo,uint contentFinderConditionId, uint mapId, uint territoryTypeId, uint chestId )
         {
             RowId = rowId;
             ChestNo = chestNo;
             ContentFinderConditionId = contentFinderConditionId;
-            Position = position;
+            MapId = mapId;
+            TerritoryTypeId = territoryTypeId;
+            ChestId = chestId;
         }
 
         public DungeonChest()
         {
-            
+
         }
 
         public void FromCsv(string[] lineData)
@@ -44,8 +50,9 @@ namespace LuminaSupplemental.Excel.Model
             RowId = uint.Parse( lineData[ 0 ] );
             ChestNo = byte.Parse( lineData[ 1 ] );
             ContentFinderConditionId = uint.Parse( lineData[ 2 ] );
-            var positionData = lineData[ 3 ].Split( ";" ).Select( c => float.Parse(c, CultureInfo.InvariantCulture)).ToList();
-            Position = new Vector2( positionData[ 0 ], positionData[ 1 ] );
+            MapId = uint.Parse( lineData[ 3 ] );
+            TerritoryTypeId = uint.Parse( lineData[ 4 ] );
+            this.ChestId = uint.Parse( lineData[ 5 ] );
         }
 
         public string[] ToCsv()
@@ -55,7 +62,9 @@ namespace LuminaSupplemental.Excel.Model
                 RowId.ToString(),
                 ChestNo.ToString(),
                 ContentFinderConditionId.ToString(),
-                Position.X + ";" + Position.Y
+                MapId.ToString(),
+                TerritoryTypeId.ToString(),
+                this.ChestId.ToString(),
             };
             return data.ToArray();
         }
@@ -68,6 +77,8 @@ namespace LuminaSupplemental.Excel.Model
         public virtual void PopulateData( ExcelModule module, Language language )
         {
             ContentFinderCondition = new RowRef< ContentFinderCondition >( module, ContentFinderConditionId);
+            Map = new RowRef< Map >( module, MapId);
+            TerritoryType = new RowRef< TerritoryType >( module, TerritoryTypeId);
         }
     }
 }

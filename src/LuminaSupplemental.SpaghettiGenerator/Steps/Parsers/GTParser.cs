@@ -130,28 +130,6 @@ public class GTParser
                         }
                     }
                 }
-
-                if (duty.Chests != null)
-                {
-                    for (var index = 0; index < duty.Chests.Length; index++)
-                    {
-                        var chest = duty.Chests[index];
-                        var xCoord = float.Parse(chest.Coords.X, CultureInfo.InvariantCulture);
-                        var yCoord = float.Parse(chest.Coords.Y, CultureInfo.InvariantCulture);
-                        var dungeonChest = new DungeonChest((uint)(this.DungeonChests.Count + 1), (byte)(index + 1), actualDuty.RowId, new Vector2(xCoord, yCoord));
-                        this.DungeonChests.Add(dungeonChest);
-                        foreach (var item in chest.Items)
-                        {
-                            var itemName = item.ToParseable();
-                            Item? actualItem = this.itemsByName.ContainsKey(itemName) ? this.itemSheet.GetRow(this.itemsByName[itemName]) : null;
-                            if (actualItem != null)
-                            {
-                                var chestItem = new DungeonChestItem((uint)(this.DungeonChestItems.Count + 1), actualItem.Value.RowId, dungeonChest.RowId);
-                                this.DungeonChestItems.Add(chestItem);
-                            }
-                        }
-                    }
-                }
             }
             else
             {
