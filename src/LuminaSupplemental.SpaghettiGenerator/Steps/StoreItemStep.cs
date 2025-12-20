@@ -39,7 +39,7 @@ public partial class StoreItemStep : GeneratorStep
             24225
         };
         this.itemsByName = this.dataCacher.ByName<Item>(item => item.Name.ToString().ToParseable(), item => !bannedItems.Contains(item.RowId));
-        this.fittingShopItemSetByName = this.dataCacher.ByName<FittingShopItemSet>(item => item.Unknown6.ToString().ToParseable(), item => !bannedItems.Contains(item.RowId));
+        this.fittingShopItemSetByName = this.dataCacher.ByName<FittingShopItemSet>(item => item.Name.ToString().ToParseable(), item => !bannedItems.Contains(item.RowId));
     }
 
     public override bool ShouldRun()
