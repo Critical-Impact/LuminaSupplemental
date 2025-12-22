@@ -39,6 +39,30 @@ public partial class ItemSupplementStep
         return ProcessCofferJson(filePath, supplementType);
     }
 
+    public List<Reward> CollectUniqueCoffersInReverse<TKey>(
+        IDictionary<TKey, Coffer.Content> contents)
+    {
+        var result = new List<Reward>();
+        var seenIds = new HashSet<uint>();
+
+        var values = contents.Values.ToList();
+
+        for (int i = values.Count - 1; i >= 0; i--)
+        {
+            var content = values[i];
+
+            foreach (var item in content.Items)
+            {
+                if (seenIds.Add(item.Id))
+                {
+                    result.Add(item);
+                }
+            }
+        }
+
+        return result;
+    }
+
     private List<ItemSupplement> ProcessDesynth()
     {
         var filePath = "../../../../FFXIVGachaSpreadsheet/website/static/data/Desynthesis.json";
@@ -114,7 +138,7 @@ public partial class ItemSupplementStep
             foreach (var coffer in coffers)
             {
                 var sourceItemId = coffer.Id;
-                foreach (var cofferItem in coffer.Patches["All"].Items)
+                foreach (var cofferItem in CollectUniqueCoffersInReverse(coffer.Patches))
                 {
                     var itemId = cofferItem.Id;
                     if (itemId == 0 || sourceItemId == 0)
@@ -180,7 +204,7 @@ public partial class ItemSupplementStep
             foreach (var coffer in coffers)
             {
                 var sourceItemId = coffer.Id;
-                foreach (var cofferItem in coffer.Patches["All"].Items)
+                foreach (var cofferItem in CollectUniqueCoffersInReverse(coffer.Patches))
                 {
                     var itemId = cofferItem.Id;
                     if (itemId == 0 || sourceItemId == 0)
@@ -218,7 +242,7 @@ public partial class ItemSupplementStep
         foreach (var coffer in coffers)
         {
             var sourceItemId = coffer.Id;
-            foreach (var cofferItem in coffer.Patches["All"].Items)
+            foreach (var cofferItem in CollectUniqueCoffersInReverse(coffer.Patches))
             {
                 var itemId = cofferItem.Id;
                 if (itemId == 0 || sourceItemId == 0)

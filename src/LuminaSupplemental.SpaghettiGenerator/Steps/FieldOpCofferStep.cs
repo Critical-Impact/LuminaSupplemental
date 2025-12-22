@@ -47,6 +47,30 @@ public class FieldOpCofferStep : GeneratorStep
         return fieldOpCoffers.OrderBy(c => c.Type).ThenBy(c => c.CofferType).ThenBy(c => c.ItemId).Cast<ICsv>().ToList();
     }
 
+    public List<Reward> CollectUniqueCoffersInReverse<TKey>(
+        IDictionary<TKey, Coffer.Content> contents)
+    {
+        var result = new List<Reward>();
+        var seenIds = new HashSet<uint>();
+
+        var values = contents.Values.ToList();
+
+        for (int i = values.Count - 1; i >= 0; i--)
+        {
+            var content = values[i];
+
+            foreach (var item in content.Items)
+            {
+                if (seenIds.Add(item.Id))
+                {
+                    result.Add(item);
+                }
+            }
+        }
+
+        return result;
+    }
+
     private List<FieldOpCoffer> ProcessOccult()
     {
         var filePath = "../../../../FFXIVGachaSpreadsheet/website/static/data/OccultTreasures.json";
@@ -80,8 +104,8 @@ public class FieldOpCofferStep : GeneratorStep
                 {
                     throw new Exception("Could not parse coffer: " + coffer.Name);
                 }
-                var cofferContent = coffer.Patches["All"];
-                foreach (var item in cofferContent.Items)
+                var cofferContent = CollectUniqueCoffersInReverse(coffer.Patches);
+                foreach (var item in cofferContent)
                 {
                     if (item.Id == 0)
                     {
@@ -142,8 +166,8 @@ public class FieldOpCofferStep : GeneratorStep
                 {
                     throw new Exception("Could not parse coffer: " + coffer.Name);
                 }
-                var cofferContent = coffer.Patches["All"];
-                foreach (var item in cofferContent.Items)
+                var cofferContent = CollectUniqueCoffersInReverse(coffer.Patches);
+                foreach (var item in cofferContent)
                 {
                     if (item.Id == 0)
                     {
