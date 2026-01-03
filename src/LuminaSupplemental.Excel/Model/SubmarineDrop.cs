@@ -18,23 +18,29 @@ namespace LuminaSupplemental.Excel.Model
         [Name("ItemId")] public uint ItemId { get; set; }
         [Name("SubmarineExplorationId")] public uint SubmarineExplorationId { get; set; }
         [Name("LootTier")] public byte LootTier { get; set; }
-        [Name("Min")] public uint Min { get; set; }
-        [Name("Max")] public uint Max { get; set; }
-        [Name("Probability")] public decimal Probability { get; set; }
+        [Name("NormalMin")] public uint NormalMin { get; set; }
+        [Name("NormalMax")] public uint NormalMax { get; set; }
+        [Name("PoorMin")] public uint PoorMin { get; set; }
+        [Name("PoorMax")] public uint PoorMax { get; set; }
+        [Name("OptimalMin")] public uint OptimalMin { get; set; }
+        [Name("OptimalMax")] public uint OptimalMax { get; set; }
 
 
         public RowRef< SubmarineExploration > SubmarineExploration;
 
         public RowRef< Item > Item;
 
-        public SubmarineDrop(uint itemId, uint submarineExplorationId, byte lootTier, uint min, uint max, decimal probability )
+        public SubmarineDrop(uint itemId, uint submarineExplorationId, byte lootTier, uint normalMin, uint normalMax,  uint poorMin, uint poorMax,  uint optimalMin, uint optimalMax)
         {
             ItemId = itemId;
             SubmarineExplorationId = submarineExplorationId;
             LootTier = lootTier;
-            Min = min;
-            Max = max;
-            Probability = probability;
+            NormalMin = normalMin;
+            NormalMax = normalMax;
+            PoorMin = poorMin;
+            PoorMax = poorMax;
+            OptimalMin = optimalMin;
+            OptimalMax = optimalMax;
         }
 
         public SubmarineDrop()
@@ -47,9 +53,12 @@ namespace LuminaSupplemental.Excel.Model
             ItemId = uint.Parse( lineData[ 0 ] );
             SubmarineExplorationId = uint.Parse( lineData[ 1 ] );
             LootTier = byte.Parse( lineData[ 2 ], CultureInfo.InvariantCulture );
-            Min = uint.Parse( lineData[ 3 ], CultureInfo.InvariantCulture );
-            Max = uint.Parse( lineData[ 4 ], CultureInfo.InvariantCulture );
-            Probability = decimal.Parse( lineData[ 5 ], CultureInfo.InvariantCulture );
+            NormalMin = uint.Parse( lineData[ 3 ], CultureInfo.InvariantCulture );
+            NormalMax = uint.Parse( lineData[ 4 ], CultureInfo.InvariantCulture );
+            PoorMin = uint.Parse( lineData[ 5 ], CultureInfo.InvariantCulture );
+            PoorMax = uint.Parse( lineData[ 6 ], CultureInfo.InvariantCulture );
+            OptimalMin = uint.Parse( lineData[ 7 ], CultureInfo.InvariantCulture );
+            OptimalMax = uint.Parse( lineData[ 8 ], CultureInfo.InvariantCulture );
         }
 
         public string[] ToCsv()

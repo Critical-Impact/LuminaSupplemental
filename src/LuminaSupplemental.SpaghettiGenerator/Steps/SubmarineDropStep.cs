@@ -13,6 +13,12 @@ using LuminaSupplemental.Excel.Model;
 using LuminaSupplemental.SpaghettiGenerator.Generator;
 using LuminaSupplemental.SpaghettiGenerator.Steps.Parsers;
 
+using Newtonsoft.Json;
+
+using SupabaseExporter;
+using SupabaseExporter.Processing.Submarines;
+using SupabaseExporter.Structures.Exports;
+
 using ILogger = Serilog.ILogger;
 
 namespace LuminaSupplemental.SpaghettiGenerator.Steps;
@@ -54,54 +60,44 @@ public partial class SubmarineDropStep : GeneratorStep
     {
         List<SubmarineDrop> items = new ();
         items.AddRange(this.Process());
-        //items.AddRange(this.ProcessGubalData()); // No longer needed as the data from the CSV is up to date
         items = items.DistinctBy(c => (c.ItemId, c.SubmarineExplorationId)).ToList();
 
         return [..items.Select(c => c).OrderBy(c => c.SubmarineExplorationId).ThenBy(c => c.ItemId)];
     }
 
-    private Dictionary<string, string> MateriaNames = new()
-    {
-        { "Direct Hit Rate", "Heavens' Eye Materia" },
-        { "Skill Speed", "Quickarm" },
-        { "Spell Speed", "Quicktongue" },
-        { "Tenacity", "Battledance" },
-        { "Control", "Craftsman's Command" },
-        { "Craftsmanship", "Craftsman's Competence" },
-        { "GP", "Gatherer's Grasp" },
-        { "Perception", "Gatherer's Guile" },
-        { "Determination", "Savage Might" },
-        { "Piety", "Piety" },
-        { "CP", "Craftsman's Cunning" },
-        { "Critical Hit", "Savage Aim" },
-        { "Gathering", "Gatherer's Guerdon" },
-    };
-
     private List<SubmarineDrop> Process()
     {
         List<SubmarineDrop> submarineDrops = new();
 
-        var filePath = "../../../../submersible-loot-db/export-items.csv";
-        var reader = CSVFile.CSVReader.FromFile(filePath, new CSVSettings(){HeaderRowIncluded = true});
+        var filePath = "../../../../FFXIVGachaSpreadsheet/website/static/data/Submarines.json";
+        var json = File.ReadAllText(filePath);
+        var subLoot = JsonConvert.DeserializeObject<SubLoot>(json)!;
 
-        foreach( var line in reader.Lines() )
+        foreach (var sector in subLoot.Sectors)
         {
-            var sectorId = line[ 0 ];
-            var itemId = line[ 1 ];
-            var lootTier = line[ 5 ].Replace("T", string.Empty);
-            var probability = line[ 10 ].Replace("%", string.Empty);
-            var min = line[ 14 ];
-            var max = line[ 16 ];
-
-            submarineDrops.Add( new SubmarineDrop()
+            foreach (var pool in sector.Value.Pools)
             {
-                SubmarineExplorationId = Convert.ToUInt32(sectorId),
-                ItemId = Convert.ToUInt32(itemId),
-                LootTier = Convert.ToByte(lootTier),
-                Probability = Convert.ToDecimal(probability),
-                Min = Convert.ToUInt32(min),
-                Max = Convert.ToUInt32(max),
-            });
+                foreach (var reward in pool.Value.Rewards)
+                {
+                    var sectorId = sector.Key;
+                    var itemId = reward.Value.Id;
+                    var lootTier = pool.Key;
+
+                    submarineDrops.Add(
+                        new SubmarineDrop()
+                        {
+                            SubmarineExplorationId = Convert.ToUInt32(sectorId),
+                            ItemId = Convert.ToUInt32(itemId),
+                            LootTier = Convert.ToByte(lootTier),
+                            PoorMin = (uint)reward.Value.MinMax[RetTier.Poor][0],
+                            PoorMax = (uint)reward.Value.MinMax[RetTier.Poor][1],
+                            NormalMin = (uint)reward.Value.MinMax[RetTier.Normal][0],
+                            NormalMax = (uint)reward.Value.MinMax[RetTier.Normal][1],
+                            OptimalMin = (uint)reward.Value.MinMax[RetTier.Optimal][0],
+                            OptimalMax = (uint)reward.Value.MinMax[RetTier.Optimal][1],
+                        });
+                }
+            }
         }
 
         return submarineDrops;

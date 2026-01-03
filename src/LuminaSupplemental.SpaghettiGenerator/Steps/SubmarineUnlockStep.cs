@@ -10,6 +10,10 @@ using Lumina.Excel.Sheets;
 using LuminaSupplemental.Excel.Model;
 using LuminaSupplemental.SpaghettiGenerator.Generator;
 
+using Newtonsoft.Json;
+
+using SupabaseExporter.Structures.Exports;
+
 namespace LuminaSupplemental.SpaghettiGenerator.Steps;
 
 public partial class SubmarineUnlockStep : GeneratorStep
@@ -50,37 +54,18 @@ public partial class SubmarineUnlockStep : GeneratorStep
     {
         List<SubmarineUnlock> submarineUnlocks = new();
 
+        var filePath = "../../../../FFXIVGachaSpreadsheet/website/static/data/Submarines.json";
+        var json = File.ReadAllText(filePath);
+        var subLoot = JsonConvert.DeserializeObject<SubLoot>(json)!;
 
-        var reader = CSVFile.CSVReader.FromFile(Path.Combine( "ManualData","SubmarineUnlocks.csv"));
-
-        foreach( var line in reader.Lines() )
+        foreach (var sector in subLoot.Sectors)
         {
-            var sector = line[ 0 ];
-            var unlockSector = line[ 1 ];
-            var rankRequired = uint.Parse(line[ 2 ]);
-
-            sector = sector.ToParseable();
-            unlockSector = unlockSector.ToParseable();
-            if( submarinesByName.ContainsKey( sector ) )
+            submarineUnlocks.Add(new SubmarineUnlock()
             {
-                var actualSector =  this.submarineExplorationSheet.GetRow(submarinesByName[ sector ]);
-                SubmarineExploration? actualUnlockSector = null;
-                if( submarinesByName.ContainsKey( unlockSector ) )
-                {
-                    actualUnlockSector = this.submarineExplorationSheet.GetRow(submarinesByName[ unlockSector ]);
-                }
-
-                submarineUnlocks.Add(new SubmarineUnlock()
-                {
-                    SubmarineExplorationId = actualSector.RowId,
-                    SubmarineExplorationUnlockId = actualUnlockSector?.RowId ?? 0,
-                    RankRequired = rankRequired
-                });
-            }
-            else
-            {
-                Console.WriteLine("Could not find the submarine point with name " + sector);
-            }
+                SubmarineExplorationId = sector.Value.Id,
+                SubmarineExplorationUnlockId = sector.Value.UnlockedFrom,
+                RankRequired = sector.Value.Rank
+            });
         }
 
         return submarineUnlocks;
