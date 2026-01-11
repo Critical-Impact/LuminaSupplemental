@@ -66,7 +66,7 @@ public class MappyParser
         {
             // Check the age of the cached file
             DateTime lastWriteTime = File.GetLastWriteTime(cacheFilePath);
-            DateTime oneMonthAgo = DateTime.Now.AddMonths(-1);
+            DateTime oneMonthAgo = DateTime.Now.AddDays(-5);
 
             if (lastWriteTime >= oneMonthAgo)
             {

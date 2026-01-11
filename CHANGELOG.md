@@ -13,6 +13,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed+
 
+## [4.1.1] - 2026-01-04
+
+### Changed
+
+- Include new BNpcLink and MobSpawn data from tracky
+
+### Fixed
+
+- Corrected certain store items that were not matched
+
 ## [4.1.0] - 2026-01-04
 
 ### Changed

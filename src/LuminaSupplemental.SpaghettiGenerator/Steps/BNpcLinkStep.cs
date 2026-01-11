@@ -15,7 +15,7 @@ using LuminaSupplemental.SpaghettiGenerator.Steps.Parsers;
 
 namespace LuminaSupplemental.SpaghettiGenerator.Steps;
 
-public class BNpcLinkNoGubalStep : BNpcLinkStep
+public partial class BNpcLinkNoGubalStep : BNpcLinkStep
 {
     public BNpcLinkNoGubalStep(GubalApi gubalApi, GameData gameData) : base(gubalApi, gameData)
     {
@@ -35,11 +35,13 @@ public class BNpcLinkNoGubalStep : BNpcLinkStep
             items.AddRange(this.Process(mobSpawnPositions));
         }
 
-        return [..items.Where(c => this.nameSheet.HasRow(c.BNpcNameId) && this.baseSheet.HasRow(c.BNpcBaseId)).DistinctBy(c => (c.BNpcBaseId, c.BNpcNameId)).OrderBy(c => c.BNpcNameId).ThenBy(c => c.BNpcBaseId).Select(c => c)];
+        items.AddRange(this.ProcessTrackyData());
+
+        return [..items.Where(c => this.nameSheet.HasRow(c.BNpcNameId) && this.baseSheet.HasRow(c.BNpcBaseId) && c.BNpcBaseId != 0 && c.BNpcNameId != 0).DistinctBy(c => (c.BNpcBaseId, c.BNpcNameId)).OrderBy(c => c.BNpcNameId).ThenBy(c => c.BNpcBaseId).Select(c => c)];
     }
 }
 
-public class BNpcLinkStep : GeneratorStep
+public partial class BNpcLinkStep : GeneratorStep
 {
     private readonly GubalApi gubalApi;
     protected readonly ExcelSheet<BNpcName> nameSheet;
@@ -69,6 +71,7 @@ public class BNpcLinkStep : GeneratorStep
         }
 
         items.AddRange(this.ProcessGubalData());
+        items.AddRange(this.ProcessTrackyData());
 
         return [..items.Where(c => this.nameSheet.HasRow(c.BNpcNameId) && this.baseSheet.HasRow(c.BNpcBaseId)).DistinctBy(c => (c.BNpcBaseId, c.BNpcNameId)).OrderBy(c => c.BNpcNameId).ThenBy(c => c.BNpcBaseId).Select(c => c)];
     }

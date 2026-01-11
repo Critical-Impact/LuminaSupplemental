@@ -1,16 +1,24 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Numerics;
 
+using Dalamud.Utility;
+
 using Lumina.Excel;
 using Lumina.Excel.Sheets;
 
 using LuminaSupplemental.Excel.Model;
+using LuminaSupplemental.SpaghettiGenerator.Converters;
 using LuminaSupplemental.SpaghettiGenerator.Generator;
 using LuminaSupplemental.SpaghettiGenerator.Steps.Parsers;
+
+using Newtonsoft.Json;
+
+using SupabaseExporter.Structures.Exports;
 
 namespace LuminaSupplemental.SpaghettiGenerator.Steps;
 
@@ -21,6 +29,7 @@ public partial class MobSpawnStep : GeneratorStep
     private readonly ExcelSheet<Pet> petSheet;
     private readonly ExcelSheet<Companion> companionSheet;
     private readonly ExcelSheet<TerritoryType> territoryTypeSheet;
+    private readonly ExcelSheet<Map> mapSheet;
     private readonly MappyParser mappyParser;
 
     public override Type OutputType => typeof(MobSpawnPosition);
@@ -30,13 +39,14 @@ public partial class MobSpawnStep : GeneratorStep
     public override string Name => "Mob Spawns";
 
 
-    public MobSpawnStep(ExcelSheet<BNpcName> bnpcNameSheet, ExcelSheet<BNpcName> bnpcBaseSheet, ExcelSheet<Pet> petSheet, ExcelSheet<Companion> companionSheet, ExcelSheet<TerritoryType> territoryTypeSheet, MappyParser mappyParser)
+    public MobSpawnStep(ExcelSheet<BNpcName> bnpcNameSheet, ExcelSheet<BNpcName> bnpcBaseSheet, ExcelSheet<Pet> petSheet, ExcelSheet<Companion> companionSheet, ExcelSheet<TerritoryType> territoryTypeSheet, ExcelSheet<Map> mapSheet, MappyParser mappyParser)
     {
         this.bnpcNameSheet = bnpcNameSheet;
         this.bnpcBaseSheet = bnpcBaseSheet;
         this.petSheet = petSheet;
         this.companionSheet = companionSheet;
         this.territoryTypeSheet = territoryTypeSheet;
+        this.mapSheet = mapSheet;
         this.mappyParser = mappyParser;
     }
 
@@ -46,7 +56,7 @@ public partial class MobSpawnStep : GeneratorStep
         List<MobSpawnPosition> items = new ();
         items.AddRange(this.Process());
 
-        return [..items.Where(c => this.bnpcNameSheet.HasRow(c.BNpcNameId) && this.bnpcBaseSheet.HasRow(c.BNpcBaseId)).Select(c => c)];
+        return [..items.Where(c => this.bnpcNameSheet.HasRow(c.BNpcNameId) && this.bnpcBaseSheet.HasRow(c.BNpcBaseId) && c.BNpcBaseId != 0 && c.BNpcNameId != 0).Select(c => c).OrderBy(c => c.BNpcBaseId).ThenBy(c => c.BNpcNameId)];
     }
 
     private List<MobSpawnPosition> Process()
@@ -65,11 +75,7 @@ public partial class MobSpawnStep : GeneratorStep
                 mobSpawnPosition.FromCsv(line);
                 AddEntry( mobSpawnPosition, positions );
             }
-
-
         }
-        var newPositions = positions.SelectMany(c => c.Value.SelectMany(d => d.Value.Select(e => e))).ToList();
-        mobSpawns.AddRange( newPositions );
 
         try
         {
@@ -80,7 +86,7 @@ public partial class MobSpawnStep : GeneratorStep
                if( mappyEntry.Type == "BNPC" )
                {
                    MobSpawnPosition mobSpawnPosition = new MobSpawnPosition();
-                   mobSpawnPosition.Position = new Vector3( (float)mappyEntry.CoordinateX, (float)mappyEntry.CoordinateY, (float)mappyEntry.CoordinateZ );
+                   mobSpawnPosition.Position = new Vector3( (float)mappyEntry.PosX, (float)mappyEntry.PosY, (float)mappyEntry.PosZ );
                    mobSpawnPosition.BNpcNameId = mappyEntry.BNpcNameID;
                    mobSpawnPosition.BNpcBaseId = mappyEntry.BNpcBaseID;
                    mobSpawnPosition.TerritoryTypeId = (uint)mappyEntry.MapTerritoryID;
@@ -101,6 +107,41 @@ public partial class MobSpawnStep : GeneratorStep
             Console.WriteLine( "Failed to parse mappy data because " + e.Message );
             throw;
         }
+
+        var filePath = "../../../../FFXIVGachaSpreadsheet/website/static/data/BnpcPairs.json";
+
+        var json = File.ReadAllText(filePath);
+
+        TypeDescriptor.AddAttributes(
+            typeof(Vector3),
+            new TypeConverterAttribute(typeof(Vector3TypeConverter)));
+
+
+        var pairingData = JsonConvert.DeserializeObject<BnpcPairing>(json)!;
+        foreach (var pairing in pairingData.BnpcPairings)
+        {
+            var baseId = pairing.Value.Base;
+            var nameId = pairing.Value.Base;
+            foreach (var location in pairing.Value.Locations)
+            {
+                var territory = location.Value.Territory;
+                var map = this.mapSheet.GetRowOrDefault(location.Value.Map);
+                if (map.HasValue)
+                {
+                    foreach (var position in location.Value.Positions)
+                    {
+                        var mapPosition = new Vector3(
+                            MapUtil.ConvertWorldCoordXZToMapCoord(position.Key.X, map.Value.SizeFactor, map.Value.OffsetX),
+                            MapUtil.ConvertWorldCoordXZToMapCoord(position.Key.Z, map.Value.SizeFactor, map.Value.OffsetY),
+                            MapUtil.ConvertWorldCoordYToMapCoord(position.Key.Y, map.Value.SizeFactor));
+                        AddEntry(new MobSpawnPosition(baseId, nameId, territory, mapPosition, 0), positions);
+                    }
+                }
+            }
+        }
+
+        var newPositions = positions.SelectMany(c => c.Value.SelectMany(d => d.Value.Select(e => e))).ToList();
+        mobSpawns.AddRange( newPositions );
 
         return mobSpawns;
     }

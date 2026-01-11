@@ -63,8 +63,29 @@ public class StoreParser {
         this.appConfig = appConfig;
     }
 
+    public static Dictionary<string, uint> idReplacements = new()
+    {
+        {"Ballroom Etiquette - Improper Praise #1",22378},
+        {"Ballroom Etiquette - Improper Praise #2",22379},
+        {"Ballroom Etiquette - Improper Praise #3",22380},
+        {"Ballroom Etiquette - Improper Praise #4",40359},
+        {"Ballroom Etiquette - Improper Praise #5",40360},
+        {"Ballroom Etiquette - Improper Praise #6",40361},
+        {"Authentic Valentione's Day Advertisement",21872},
+        {"Authentic Lovely Little Ladies' Day Advertisement",41153},
+        {"Authentic Little Ladies' Day Advertisement",21872},
+        {"Authentic Hippity-hoppity Hatching-tide Advertisement",41154},
+        {"Authentic Hatching-tide Advertisement", 32969},
+        {"Authentic Moonfire Faire Advertisement", 30429},
+        {"Second Edition Moonfire Faire", 23339},
+        {"Authentic All Saints' Wake Advertisement Faire", 21311},
+        {"Authentic Rising Advertisement", 44332},
+        {"Authentic Fantastical All Saints' Wake Advertisement", 31713},
+        {"Authentic Choir Concert Advertisement", 32961},
+    };
+
     //Apparently SQ haven't updated their own naming
-    public Dictionary<string, string> replacements = new Dictionary<string, string>()
+    public static Dictionary<string, string> replacements = new()
     {
         {"Far Eastern Performer's Dogi","Far Eastern Performer's Halfrobe"},
         {"Far Eastern Performer's Kyakui","Far Eastern Performer's Trousers"},
@@ -159,9 +180,22 @@ public class StoreParser {
                     foreach (var item in productListing.Product.Items) {
                         var originalName = item.Name;
                         var name = item.Name;
-                        if (this.replacements.TryGetValue(originalName, out var replacement))
+                        if (replacements.TryGetValue(originalName, out var replacement))
                         {
                             name = replacement;
+                        }
+
+                        if (idReplacements.TryGetValue(originalName, out var idReplacement))
+                        {
+                            if (!StoreItems.ContainsKey(idReplacement)) {
+                                StoreItems.Add(idReplacement, new Dictionary<uint, Product>());
+                            }
+
+                            if (!StoreItems[idReplacement].ContainsKey(p.ID)) {
+                                StoreItems[idReplacement][p.ID] = p;
+                            }
+
+                            continue;
                         }
                         var matchingItems = allItems.Where(i => i.Name.ExtractText() == name).ToList();
                         if (matchingItems.Count == 0) {

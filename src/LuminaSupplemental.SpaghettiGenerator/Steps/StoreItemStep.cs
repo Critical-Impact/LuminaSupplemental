@@ -75,22 +75,27 @@ public partial class StoreItemStep : GeneratorStep
             foreach( var item in product.Value.Items )
             {
                 var itemName = item.Name;
+                if (StoreParser.replacements.TryGetValue(itemName, out var replacement))
+                {
+                    itemName = replacement;
+                }
                 var parsedItemName = itemName.Trim().ToParseable();
-                if( itemsByName.ContainsKey( parsedItemName ) )
+                if(!this.itemsByName.TryGetValue(parsedItemName, out var value) )
                 {
-                    var outputItem = this.itemSheet.GetRow(itemsByName[ parsedItemName ]);
-                    storeItems.Add( new StoreItem()
+                    if (!StoreParser.idReplacements.TryGetValue(itemName, out value))
                     {
-                        FittingShopItemSetId = fittingShopItemSet?.RowId ?? 0,
-                        ItemId = outputItem.RowId,
-                        PriceCentsUSD = product.Value.PriceText.Contains(".") ? (uint)(float.Parse(product.Value.PriceText.Replace("$", "").Replace("USD", "")) * 100) : uint.Parse(product.Value.PriceText),
-                        StoreId = product.Value.ID
-                    });
+                        Console.WriteLine("Could not find an item with the name " + itemName + " while parsing store data.");
+                        continue;
+                    }
                 }
-                else
+                var outputItem = this.itemSheet.GetRow(value);
+                storeItems.Add( new StoreItem()
                 {
-                    Console.WriteLine("Could not find an item with the name " + itemName + " while parsing store data.");
-                }
+                    FittingShopItemSetId = fittingShopItemSet?.RowId ?? 0,
+                    ItemId = outputItem.RowId,
+                    PriceCentsUSD = product.Value.PriceText.Contains(".") ? (uint)(float.Parse(product.Value.PriceText.Replace("$", "").Replace("USD", "")) * 100) : uint.Parse(product.Value.PriceText),
+                    StoreId = product.Value.ID
+                });
             }
         }
 
