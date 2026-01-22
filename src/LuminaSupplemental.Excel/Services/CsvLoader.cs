@@ -59,6 +59,7 @@ public static class CsvLoader
     public const string DungeonBossDropResourceName = "LuminaSupplemental.Excel.Generated.DungeonBossDrop.csv";
     public const string DungeonChestItemResourceName = "LuminaSupplemental.Excel.Generated.DungeonChestItem.csv";
     public const string DungeonChestResourceName = "LuminaSupplemental.Excel.Generated.DungeonChest.csv";
+    public const string GearsetResourceName = "LuminaSupplemental.Excel.Generated.Gearset.csv";
     public const string DungeonDropItemResourceName = "LuminaSupplemental.Excel.Generated.DungeonDrop.csv";
     public const string ItemSupplementResourceName = "LuminaSupplemental.Excel.Generated.ItemSupplement.csv";
     public const string MobDropResourceName = "LuminaSupplemental.Excel.Generated.MobDrop.csv";

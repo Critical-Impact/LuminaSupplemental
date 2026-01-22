@@ -48,6 +48,11 @@ namespace LuminaSupplemental.Excel.Model
         public RowRef< Item > Item13;
         public RowRef< Item > Item14;
 
+        public List<RowRef<Item>> Items =>
+        [
+            Item1, Item2, Item3, Item4, Item5, Item6, Item7, Item8, Item9, Item10, Item11, Item12, Item13, Item14
+        ];
+
 
         public Gearset(string key, string name, uint itemId1, uint itemId2,  uint itemId3, uint itemId4, uint itemId5, uint itemId6, uint itemId7, uint itemId8, uint itemId9, uint itemId10, uint itemId11, uint itemId12, uint itemId13, uint itemId14 )
         {
