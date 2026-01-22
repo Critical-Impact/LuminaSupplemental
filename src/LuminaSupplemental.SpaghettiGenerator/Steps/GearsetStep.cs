@@ -68,7 +68,7 @@ public class GearsetStep : GeneratorStep
         List<Gearset> items = new List<Gearset>();
 
         items.AddRange(this.Parse());
-        items = items.DistinctBy(c => (c.ItemId1, c.ItemId2, c.ItemId3, c.ItemId4, c.ItemId5, c.ItemId6, c.ItemId7, c.ItemId8, c.ItemId9, c.ItemId10,
+        items = items.Where(c =>c.ItemId1 != 0).DistinctBy(c => (c.ItemId1, c.ItemId2, c.ItemId3, c.ItemId4, c.ItemId5, c.ItemId6, c.ItemId7, c.ItemId8, c.ItemId9, c.ItemId10,
                                           c.ItemId11, c.ItemId12, c.ItemId13, c.ItemId14))
                      .OrderBy(c => c.ItemId1)
                      .ThenBy(c => c.ItemId2)
@@ -100,9 +100,15 @@ public class GearsetStep : GeneratorStep
             var lodestoneItemId = lodestoneItemIds[index];
             if (lodestoneItemId != string.Empty)
             {
-                lodestoneToItemId[lodestoneItemId] = index;
+                lodestoneToItemId[lodestoneItemId] = index + 1;
             }
         }
+
+        //Extra mapping
+        this.lodestoneToItemId["08e54d3b37c"] = 40452;
+        this.lodestoneToItemId["88fab817ca0"] = 13328;
+        this.lodestoneToItemId["1a2a4866dba"] = 17470;
+        this.lodestoneToItemId["fbdb66b15f6"] = 17470;
 
         var itemSheet = gameData.GetExcelSheet<Item>();
 

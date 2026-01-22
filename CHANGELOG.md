@@ -13,10 +13,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed+
 
+## [4.1.4] - 2026-01-22
+
+### Fixed
+- Fix some more invalid data for gearset.
+
 ## [4.1.3] - 2026-01-22
 
 ### Fixed
-- Fix the missing embedded resource and resource name for Gearset.
+- Fix the missing embedded resource and resource name for gearset.
 
 ## [4.1.2] - 2026-01-22
 
