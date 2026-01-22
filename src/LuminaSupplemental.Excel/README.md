@@ -20,6 +20,7 @@ Lumina Supplemental is an additional library that provides additional data that 
 | FestivalName        | The names for festivals are not stored within the game, this associates a festival with a name |
 | FieldOpCoffer       | Items that drop from field op chests(pagos, etc)                                               |
 | GardeningCrossbreed | Items gained by crossbreeding seeds                                                            |
+| Gearset             | Armor/weapon/accessories that belong to sets                                                   |
 | HouseVendor         | A sheet that helps deduplicate housing vendors                                                 |
 | ItemPatch           | The patch in which an item was introduced                                                      |
 | ItemSupplement      | Contains general information about pairs of items(desynth, reduction, coffers, etc)            |
