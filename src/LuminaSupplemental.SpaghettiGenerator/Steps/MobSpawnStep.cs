@@ -112,12 +112,11 @@ public partial class MobSpawnStep : GeneratorStep
 
         var json = File.ReadAllText(filePath);
 
-        TypeDescriptor.AddAttributes(
-            typeof(Vector3),
-            new TypeConverterAttribute(typeof(Vector3TypeConverter)));
 
-
-        var pairingData = JsonConvert.DeserializeObject<BnpcPairing>(json)!;
+        var pairingData = JsonConvert.DeserializeObject<BnpcPairing>(json, new JsonSerializerSettings()
+        {
+            Converters = {new Vector3JsonConverter() }
+        })!;
         foreach (var pairing in pairingData.BnpcPairings)
         {
             var baseId = pairing.Value.Base;
@@ -131,9 +130,9 @@ public partial class MobSpawnStep : GeneratorStep
                     foreach (var position in location.Value.Positions)
                     {
                         var mapPosition = new Vector3(
-                            MapUtil.ConvertWorldCoordXZToMapCoord(position.Key.X, map.Value.SizeFactor, map.Value.OffsetX),
-                            MapUtil.ConvertWorldCoordXZToMapCoord(position.Key.Z, map.Value.SizeFactor, map.Value.OffsetY),
-                            MapUtil.ConvertWorldCoordYToMapCoord(position.Key.Y, map.Value.SizeFactor));
+                            MapUtil.ConvertWorldCoordXZToMapCoord(position.X, map.Value.SizeFactor, map.Value.OffsetX),
+                            MapUtil.ConvertWorldCoordXZToMapCoord(position.Z, map.Value.SizeFactor, map.Value.OffsetY),
+                            MapUtil.ConvertWorldCoordYToMapCoord(position.Y, map.Value.SizeFactor));
                         AddEntry(new MobSpawnPosition(baseId, nameId, territory, mapPosition, 0), positions);
                     }
                 }

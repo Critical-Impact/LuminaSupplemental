@@ -4,56 +4,41 @@ using System.Globalization;
 using System.Numerics;
 
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace LuminaSupplemental.SpaghettiGenerator.Converters;
 
 
-public sealed class Vector3TypeConverter : TypeConverter
+public sealed class Vector3JsonConverter : JsonConverter<Vector3>
 {
-    public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
-        => sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
-
-    public override object ConvertFrom(
-        ITypeDescriptorContext? context,
-        CultureInfo? culture,
-        object value)
+    public override Vector3 ReadJson(
+        JsonReader reader,
+        Type objectType,
+        Vector3 existingValue,
+        bool hasExistingValue,
+        JsonSerializer serializer)
     {
-        if (value is not string s)
-            return base.ConvertFrom(context, culture, value);
-
-        s = s.Trim();
-
-        if (s.StartsWith("<") && s.EndsWith(">"))
-            s = s.Substring(1, s.Length - 2);
-
-        var parts = s.Split(',');
-
-        if (parts.Length != 3)
-            throw new FormatException($"Invalid Vector3 format: '{value}'");
+        var obj = JObject.Load(reader);
 
         return new Vector3(
-            float.Parse(parts[0], CultureInfo.InvariantCulture),
-            float.Parse(parts[1], CultureInfo.InvariantCulture),
-            float.Parse(parts[2], CultureInfo.InvariantCulture)
+            obj["X"]!.Value<float>(),
+            obj["Y"]!.Value<float>(),
+            obj["Z"]!.Value<float>()
         );
     }
 
-    public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
-        => destinationType == typeof(string) || base.CanConvertTo(context, destinationType);
-
-    public override object ConvertTo(
-        ITypeDescriptorContext? context,
-        CultureInfo? culture,
-        object value,
-        Type destinationType)
+    public override void WriteJson(
+        JsonWriter writer,
+        Vector3 value,
+        JsonSerializer serializer)
     {
-        if (destinationType == typeof(string) && value is Vector3 v)
-        {
-            return $"<{v.X.ToString(CultureInfo.InvariantCulture)}, " +
-                   $"{v.Y.ToString(CultureInfo.InvariantCulture)}, " +
-                   $"{v.Z.ToString(CultureInfo.InvariantCulture)}>";
-        }
-
-        return base.ConvertTo(context, culture, value, destinationType);
+        writer.WriteStartObject();
+        writer.WritePropertyName("X");
+        writer.WriteValue(value.X);
+        writer.WritePropertyName("Y");
+        writer.WriteValue(value.Y);
+        writer.WritePropertyName("Z");
+        writer.WriteValue(value.Z);
+        writer.WriteEndObject();
     }
 }

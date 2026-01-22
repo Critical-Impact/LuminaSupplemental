@@ -13,6 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed+
 
+## [4.1.2] - 2026-01-22
+
+### Added
+- New gearset sheet that contains data from Eorzea collection(big thanks for their wonderful site). The sheet lists the name of the gearset and all items that relate to it.
+
+### Changed
+- General data update
+
 ## [4.1.1] - 2026-01-04
 
 ### Changed

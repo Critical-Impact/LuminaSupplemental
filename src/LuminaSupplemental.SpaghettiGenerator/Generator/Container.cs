@@ -9,6 +9,8 @@ using Autofac;
 using Lumina;
 using Lumina.Excel;
 
+using LuminaSupplemental.Excel.Model;
+using LuminaSupplemental.SpaghettiGenerator.Steps;
 using LuminaSupplemental.SpaghettiGenerator.Steps.Parsers;
 
 using Microsoft.Extensions.Configuration;
