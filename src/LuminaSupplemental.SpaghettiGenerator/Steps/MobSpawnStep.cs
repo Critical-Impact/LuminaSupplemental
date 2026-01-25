@@ -87,7 +87,7 @@ public partial class MobSpawnStep : GeneratorStep
         foreach (var pairing in pairingData.BnpcPairings)
         {
             var baseId = pairing.Value.Base;
-            var nameId = pairing.Value.Base;
+            var nameId = pairing.Value.Name;
             foreach (var location in pairing.Value.Locations)
             {
                 var territory = location.Value.Territory;

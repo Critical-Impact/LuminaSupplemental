@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed+
 
+## [4.1.6] - 2026-01-25
+
+### Fixed
+- Fixed invalid bnpc name IDs
+
 ## [4.1.5] - 2026-01-25
 
 ### Changed
