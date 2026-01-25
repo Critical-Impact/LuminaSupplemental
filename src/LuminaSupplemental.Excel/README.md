@@ -6,8 +6,8 @@ Lumina Supplemental is an additional library that provides additional data that 
 |---------------------|------------------------------------------------------------------------------------------------|
 | AirshipDrop         | Item's that drop on specific airship routes                                                    |
 | AirshipUnlock       | The route required to be run to unlock a route                                                 |
-| BNpcLink            | The association between BNpcName and BNpcBase, sourced from gubal, mappy and manual data       |
-| BNpcLinkNoGubal     | The association between BNpcName and BNpcBase, sourced from mappy and manual data              |
+| BNpcLink            | The association between BNpcName and BNpcBase, sourced from gubal, tracky and manual data      |
+| BNpcLinkNoGubal     | The association between BNpcName and BNpcBase, sourced from and manual data                    |
 | DungeonBoss         | A list of bosses, which duty they show up in and which fight                                   |
 | DungeonBossChest    | Items that drop from duty boss chests                                                          |
 | DungeonBossDrop     | Items that drop from a duty boss                                                               |

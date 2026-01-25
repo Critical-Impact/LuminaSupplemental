@@ -30,7 +30,6 @@ public partial class MobSpawnStep : GeneratorStep
     private readonly ExcelSheet<Companion> companionSheet;
     private readonly ExcelSheet<TerritoryType> territoryTypeSheet;
     private readonly ExcelSheet<Map> mapSheet;
-    private readonly MappyParser mappyParser;
 
     public override Type OutputType => typeof(MobSpawnPosition);
 
@@ -39,7 +38,7 @@ public partial class MobSpawnStep : GeneratorStep
     public override string Name => "Mob Spawns";
 
 
-    public MobSpawnStep(ExcelSheet<BNpcName> bnpcNameSheet, ExcelSheet<BNpcName> bnpcBaseSheet, ExcelSheet<Pet> petSheet, ExcelSheet<Companion> companionSheet, ExcelSheet<TerritoryType> territoryTypeSheet, ExcelSheet<Map> mapSheet, MappyParser mappyParser)
+    public MobSpawnStep(ExcelSheet<BNpcName> bnpcNameSheet, ExcelSheet<BNpcName> bnpcBaseSheet, ExcelSheet<Pet> petSheet, ExcelSheet<Companion> companionSheet, ExcelSheet<TerritoryType> territoryTypeSheet, ExcelSheet<Map> mapSheet)
     {
         this.bnpcNameSheet = bnpcNameSheet;
         this.bnpcBaseSheet = bnpcBaseSheet;
@@ -47,7 +46,6 @@ public partial class MobSpawnStep : GeneratorStep
         this.companionSheet = companionSheet;
         this.territoryTypeSheet = territoryTypeSheet;
         this.mapSheet = mapSheet;
-        this.mappyParser = mappyParser;
     }
 
 
@@ -75,37 +73,6 @@ public partial class MobSpawnStep : GeneratorStep
                 mobSpawnPosition.FromCsv(line);
                 AddEntry( mobSpawnPosition, positions );
             }
-        }
-
-        try
-        {
-           var mappyEntries = mappyParser.RetrieveMappyCache();
-
-           foreach( var mappyEntry in mappyEntries )
-           {
-               if( mappyEntry.Type == "BNPC" )
-               {
-                   MobSpawnPosition mobSpawnPosition = new MobSpawnPosition();
-                   mobSpawnPosition.Position = new Vector3( (float)mappyEntry.PosX, (float)mappyEntry.PosY, (float)mappyEntry.PosZ );
-                   mobSpawnPosition.BNpcNameId = mappyEntry.BNpcNameID;
-                   mobSpawnPosition.BNpcBaseId = mappyEntry.BNpcBaseID;
-                   mobSpawnPosition.TerritoryTypeId = (uint)mappyEntry.MapTerritoryID;
-                   mobSpawnPosition.Subtype = 0;
-                   if( bnpcNameSheet.GetRowOrDefault( mappyEntry.BNpcNameID ) != null )
-                   {
-                       AddEntry( mobSpawnPosition, positions );
-                   }
-                   else
-                   {
-                       Console.WriteLine( $"Failed to find bnpcname with ID {mappyEntry.BNpcNameID}");
-                   }
-               }
-           }
-        }
-        catch( Exception e )
-        {
-            Console.WriteLine( "Failed to parse mappy data because " + e.Message );
-            throw;
         }
 
         var filePath = "../../../../FFXIVGachaSpreadsheet/website/static/data/BnpcPairs.json";

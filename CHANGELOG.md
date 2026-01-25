@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed+
 
+## [4.1.5] - 2026-01-25
+
+### Changed
+- Removed mappy as a source for mob spawns as the data is definitely wrong
+- General data update
+
 ## [4.1.4] - 2026-01-22
 
 ### Fixed

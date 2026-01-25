@@ -44,7 +44,6 @@ public class Container
         builder.RegisterType<Generator>().SingleInstance();
         builder.RegisterType<GeneratorOptions>().SingleInstance();
         builder.RegisterType<GTParser>().SingleInstance();
-        builder.RegisterType<MappyParser>().SingleInstance();
         builder.RegisterType<LodestoneParser>().SingleInstance();
         builder.RegisterType<StoreParser>().SingleInstance();
         builder.RegisterType<GubalApi>().SingleInstance();
