@@ -19,6 +19,6 @@ public enum ItemSupplementSource
     Bozja = 15,
     Logogram = 16,
     PilgrimsTraverse = 17,
-    Unknown = 999
-
+    Oizys = 18,
+    Unknown = 999,
 }

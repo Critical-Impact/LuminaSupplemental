@@ -196,6 +196,9 @@ public partial class ItemSupplementStep
                 case "Bozja":
                     supplementType = ItemSupplementSource.Bozja;
                     break;
+                case "Oizys":
+                    supplementType = ItemSupplementSource.Oizys;
+                    break;
                 default:
                     throw new Exception("Unhandled supplement type");
             }
