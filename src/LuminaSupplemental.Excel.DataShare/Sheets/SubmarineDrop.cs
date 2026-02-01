@@ -10,9 +10,9 @@ using LuminaSupplemental.Excel.Model;
 
 namespace LuminaSupplemental.Excel.DataShare.Sheets;
 
-public struct SubmarineDrop : ISupplementalRow<Tuple<uint, uint, byte, List<uint>>>, ICsv
+public struct SubmarineDrop : ISupplementalRow<Tuple<uint, uint, byte, IReadOnlyList<uint>>>, ICsv
 {
-    private Tuple<uint, uint, byte, List<uint>> data;
+    private Tuple<uint, uint, byte, IReadOnlyList<uint>> data;
 
     public uint ItemId => this.data.Item1;
 
@@ -20,7 +20,7 @@ public struct SubmarineDrop : ISupplementalRow<Tuple<uint, uint, byte, List<uint
 
     public byte LootTier => this.data.Item3;
 
-    public List<uint> MinMaxValues => this.data.Item4;
+    public IReadOnlyList<uint> MinMaxValues => this.data.Item4;
 
     public uint NormalMin => this.MinMaxValues[0];
 
@@ -40,7 +40,7 @@ public struct SubmarineDrop : ISupplementalRow<Tuple<uint, uint, byte, List<uint
 
     public RowRef<Item> Item;
 
-    public SubmarineDrop(Tuple<uint, uint, byte, List<uint>> data, int rowId)
+    public SubmarineDrop(Tuple<uint, uint, byte, IReadOnlyList<uint>> data, int rowId)
     {
         this.data = data;
         this.RowId = rowId;
@@ -52,7 +52,7 @@ public struct SubmarineDrop : ISupplementalRow<Tuple<uint, uint, byte, List<uint
 
     public void FromCsv(string[] lineData)
     {
-        this.data = new Tuple<uint, uint, byte, List<uint>>(
+        this.data = new Tuple<uint, uint, byte, IReadOnlyList<uint>>(
             uint.Parse(lineData[0]),
             uint.Parse(lineData[1]),
             byte.Parse(lineData[2], CultureInfo.InvariantCulture),

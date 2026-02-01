@@ -5,7 +5,7 @@ using LuminaSupplemental.Excel.Services;
 
 namespace LuminaSupplemental.Excel.DataShare.Sheets;
 
-public class SubmarineDropSheet : SupplementalSheet<SubmarineDrop, Tuple<uint, uint, byte, List<uint>>>
+public class SubmarineDropSheet : SupplementalSheet<SubmarineDrop, Tuple<uint, uint, byte, IReadOnlyList<uint>>>
 {
     public override string SheetName => "SubmarineDrop";
 
@@ -13,9 +13,9 @@ public class SubmarineDropSheet : SupplementalSheet<SubmarineDrop, Tuple<uint, u
 
     public override string ResourceName => CsvLoader.SubmarineDropResourceName;
 
-    public override Tuple<uint, uint, byte, List<uint>> ToBackedData(SubmarineDrop row)
+    public override Tuple<uint, uint, byte, IReadOnlyList<uint>> ToBackedData(SubmarineDrop row)
     {
-        return new Tuple<uint, uint, byte, List<uint>>(
+        return new Tuple<uint, uint, byte, IReadOnlyList<uint>>(
             row.ItemId,
             row.SubmarineExplorationId,
             row.LootTier,
@@ -23,7 +23,7 @@ public class SubmarineDropSheet : SupplementalSheet<SubmarineDrop, Tuple<uint, u
         );
     }
 
-    public override SubmarineDrop FromBackedData(Tuple<uint, uint, byte, List<uint>> backedData, int rowIndex)
+    public override SubmarineDrop FromBackedData(Tuple<uint, uint, byte, IReadOnlyList<uint>> backedData, int rowIndex)
     {
         return new SubmarineDrop(backedData, rowIndex);
     }

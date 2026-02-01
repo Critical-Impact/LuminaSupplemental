@@ -9,46 +9,46 @@ using LuminaSupplemental.Excel.Model;
 
 namespace LuminaSupplemental.Excel.DataShare.Sheets;
 
-public struct Gearset : ISupplementalRow<Tuple<string, string, List<uint>>>, ICsv
+public struct Gearset : ISupplementalRow<Tuple<string, string, IReadOnlyList<uint>>>, ICsv
 {
-    private Tuple<string, string, List<uint>> data;
-    
+    private Tuple<string, string, IReadOnlyList<uint>> data;
+
     public string Key => this.data.Item1;
-    
+
     public string Name => this.data.Item2;
-    
-    public List<uint> ItemIds => this.data.Item3;
-    
+
+    public IReadOnlyList<uint> ItemIds => this.data.Item3;
+
     public uint ItemId1 => this.ItemIds[0];
-    
+
     public uint ItemId2 => this.ItemIds[1];
-    
+
     public uint ItemId3 => this.ItemIds[2];
-    
+
     public uint ItemId4 => this.ItemIds[3];
-    
+
     public uint ItemId5 => this.ItemIds[4];
-    
+
     public uint ItemId6 => this.ItemIds[5];
-    
+
     public uint ItemId7 => this.ItemIds[6];
-    
+
     public uint ItemId8 => this.ItemIds[7];
-    
+
     public uint ItemId9 => this.ItemIds[8];
-    
+
     public uint ItemId10 => this.ItemIds[9];
-    
+
     public uint ItemId11 => this.ItemIds[10];
-    
+
     public uint ItemId12 => this.ItemIds[11];
-    
+
     public uint ItemId13 => this.ItemIds[12];
-    
+
     public uint ItemId14 => this.ItemIds[13];
-    
+
     public int RowId { get; }
-    
+
     public RowRef<Item> Item1;
     public RowRef<Item> Item2;
     public RowRef<Item> Item3;
@@ -63,26 +63,26 @@ public struct Gearset : ISupplementalRow<Tuple<string, string, List<uint>>>, ICs
     public RowRef<Item> Item12;
     public RowRef<Item> Item13;
     public RowRef<Item> Item14;
-    
+
     public List<RowRef<Item>> Items =>
     [
         this.Item1, this.Item2, this.Item3, this.Item4, this.Item5, this.Item6, this.Item7, this.Item8, this.Item9, this.Item10, this.Item11, this.Item12,
         this.Item13, this.Item14
     ];
-    
-    public Gearset(Tuple<string, string, List<uint>> data, int rowId)
+
+    public Gearset(Tuple<string, string, IReadOnlyList<uint>> data, int rowId)
     {
         this.data = data;
         this.RowId = rowId;
     }
-    
+
     public Gearset()
     {
     }
-    
+
     public void FromCsv(string[] lineData)
     {
-        this.data = new Tuple<string, string, List<uint>>(
+        this.data = new Tuple<string, string, IReadOnlyList<uint>>(
             lineData[0],
             lineData[1],
             new List<uint>
@@ -104,17 +104,17 @@ public struct Gearset : ISupplementalRow<Tuple<string, string, List<uint>>>, ICs
             }
         );
     }
-    
+
     public string[] ToCsv()
     {
         return Array.Empty<string>();
     }
-    
+
     public bool IncludeInCsv()
     {
         return false;
     }
-    
+
     public void PopulateData(ExcelModule module, Language language)
     {
         this.Item1 = new RowRef<Item>(module, this.ItemId1);
