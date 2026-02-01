@@ -83,7 +83,7 @@ public static class CsvLoader
     public const string BNpcLinkResourceName = "LuminaSupplemental.Excel.Generated.BNpcLink.csv";
     public const string BNpcLinkNoGubalResourceName = "LuminaSupplemental.Excel.Generated.BNpcLinkNoGubal.csv";
 
-    public static List< T > LoadResource<T>(string resourceName, bool includesHeaders, out List<string> failedLines, out List<Exception> exceptions, GameData? gameData = null, Language? language = null) where T : ICsv, new()
+    public static List< T > LoadResource<T>(string resourceName, bool includesHeaders, out List<string> failedLines, out List<Exception> exceptions, ExcelModule? excelModule = null, Language? language = null) where T : ICsv, new()
     {
         var assembly = Assembly.GetExecutingAssembly();
         using( Stream? stream = assembly.GetManifestResourceStream( resourceName ) )
@@ -112,9 +112,9 @@ public static class CsvLoader
                     {
                         item.FromCsv( fields );
 
-                        if( gameData != null && language != null )
+                        if( excelModule != null && language != null )
                         {
-                            item.PopulateData( gameData.Excel, language.Value );
+                            item.PopulateData( excelModule, language.Value );
                         }
 
                         items.Add( item );

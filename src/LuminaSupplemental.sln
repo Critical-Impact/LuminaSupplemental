@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{C3DB5F15
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupabaseExporter", "FFXIVGachaSpreadsheet\Export\SupabaseExporter\SupabaseExporter\SupabaseExporter.csproj", "{B27F4C5E-BF1C-4C40-B598-B4189411A628}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuminaSupplemental.Excel.DataShare", "LuminaSupplemental.Excel.DataShare\LuminaSupplemental.Excel.DataShare.csproj", "{1C76D12E-4153-47EE-9287-DBCC7E9750B0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{B27F4C5E-BF1C-4C40-B598-B4189411A628}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B27F4C5E-BF1C-4C40-B598-B4189411A628}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B27F4C5E-BF1C-4C40-B598-B4189411A628}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C76D12E-4153-47EE-9287-DBCC7E9750B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C76D12E-4153-47EE-9287-DBCC7E9750B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C76D12E-4153-47EE-9287-DBCC7E9750B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C76D12E-4153-47EE-9287-DBCC7E9750B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
