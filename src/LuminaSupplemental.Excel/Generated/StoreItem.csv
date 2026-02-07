@@ -1304,6 +1304,7 @@ ItemId,FittingShopItemSetId,PriceCentsUSD,StoreId,StoreUrl
 44496,0,700,1124,https://store.finalfantasyxiv.com/ffxivstore/en-us/product/1124
 44498,0,2400,1098,https://store.finalfantasyxiv.com/ffxivstore/en-us/product/1098
 44512,0,700,1083,https://store.finalfantasyxiv.com/ffxivstore/en-us/product/1083
+44513,0,200,1135,https://store.finalfantasyxiv.com/ffxivstore/en-us/product/1135
 44661,1000464,2200,1071,https://store.finalfantasyxiv.com/ffxivstore/en-us/product/1071
 44662,1000464,2200,1071,https://store.finalfantasyxiv.com/ffxivstore/en-us/product/1071
 44664,1000464,2200,1071,https://store.finalfantasyxiv.com/ffxivstore/en-us/product/1071
@@ -1371,6 +1372,7 @@ ItemId,FittingShopItemSetId,PriceCentsUSD,StoreId,StoreUrl
 47309,1000487,1800,1109,https://store.finalfantasyxiv.com/ffxivstore/en-us/product/1109
 47310,1000487,1800,1109,https://store.finalfantasyxiv.com/ffxivstore/en-us/product/1109
 47311,1000487,1800,1109,https://store.finalfantasyxiv.com/ffxivstore/en-us/product/1109
+47350,0,500,1136,https://store.finalfantasyxiv.com/ffxivstore/en-us/product/1136
 47604,0,1500,1110,https://store.finalfantasyxiv.com/ffxivstore/en-us/product/1110
 47605,0,1500,1110,https://store.finalfantasyxiv.com/ffxivstore/en-us/product/1110
 47606,0,1500,1110,https://store.finalfantasyxiv.com/ffxivstore/en-us/product/1110
@@ -1410,6 +1412,11 @@ ItemId,FittingShopItemSetId,PriceCentsUSD,StoreId,StoreUrl
 50277,1000493,1200,1131,https://store.finalfantasyxiv.com/ffxivstore/en-us/product/1131
 50278,1000493,1200,1131,https://store.finalfantasyxiv.com/ffxivstore/en-us/product/1131
 50279,1000493,1200,1131,https://store.finalfantasyxiv.com/ffxivstore/en-us/product/1131
+50280,1000494,1200,1134,https://store.finalfantasyxiv.com/ffxivstore/en-us/product/1134
+50281,1000494,1200,1134,https://store.finalfantasyxiv.com/ffxivstore/en-us/product/1134
+50282,1000494,1200,1134,https://store.finalfantasyxiv.com/ffxivstore/en-us/product/1134
+50283,1000494,1200,1134,https://store.finalfantasyxiv.com/ffxivstore/en-us/product/1134
+50284,1000494,1200,1134,https://store.finalfantasyxiv.com/ffxivstore/en-us/product/1134
 50324,0,500,1121,https://store.finalfantasyxiv.com/ffxivstore/en-us/product/1121
 50325,0,500,1122,https://store.finalfantasyxiv.com/ffxivstore/en-us/product/1122
 50326,0,500,1123,https://store.finalfantasyxiv.com/ffxivstore/en-us/product/1123
