@@ -37,7 +37,7 @@ public partial class BNpcLinkNoGubalStep : BNpcLinkStep
 
         items.AddRange(this.ProcessTrackyData());
 
-        return [..items.Where(c => this.nameSheet.HasRow(c.BNpcNameId) && this.baseSheet.HasRow(c.BNpcBaseId) && c.BNpcBaseId != 0 && c.BNpcNameId != 0).DistinctBy(c => (c.BNpcBaseId, c.BNpcNameId)).OrderBy(c => c.BNpcNameId).ThenBy(c => c.BNpcBaseId).Select(c => c)];
+        return [..items.Where(c => this.nameSheet.HasRow(c.BNpcNameId) && this.baseSheet.HasRow(c.BNpcBaseId) && (c.BNpcBaseId != 0 && c.BNpcNameId != 0)).DistinctBy(c => (c.BNpcBaseId, c.BNpcNameId)).OrderBy(c => c.BNpcNameId).ThenBy(c => c.BNpcBaseId).Select(c => c)];
     }
 }
 
@@ -73,7 +73,7 @@ public partial class BNpcLinkStep : GeneratorStep
         items.AddRange(this.ProcessGubalData());
         items.AddRange(this.ProcessTrackyData());
 
-        return [..items.Where(c => this.nameSheet.HasRow(c.BNpcNameId) && this.baseSheet.HasRow(c.BNpcBaseId)).DistinctBy(c => (c.BNpcBaseId, c.BNpcNameId)).OrderBy(c => c.BNpcNameId).ThenBy(c => c.BNpcBaseId).Select(c => c)];
+        return [..items.Where(c => this.nameSheet.HasRow(c.BNpcNameId) && this.baseSheet.HasRow(c.BNpcBaseId) && c.BNpcBaseId != 0 && c.BNpcNameId != 0).DistinctBy(c => (c.BNpcBaseId, c.BNpcNameId)).OrderBy(c => c.BNpcNameId).ThenBy(c => c.BNpcBaseId).Select(c => c)];
     }
 
     protected List<BNpcLink> Process(List<MobSpawnPosition> positions)

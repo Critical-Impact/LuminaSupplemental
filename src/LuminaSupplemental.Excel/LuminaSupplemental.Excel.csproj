@@ -7,7 +7,7 @@
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <RepositoryUrl>https://github.com/Critical-Impact/LuminaSupplemental</RepositoryUrl>
         <PackageVersion>4.1.8</PackageVersion>
-        <FileVersion>4.1.8</FileVersion>
+        <FileVersion>4.1.9</FileVersion>
         <Description>Supplemental data for lumina and dalamud plugins.</Description>
     </PropertyGroup>
 
