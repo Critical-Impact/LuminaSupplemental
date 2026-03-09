@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed+
 
+## [4.2.1] - 2026-03-09
+
+### Changed
+- General data update
+- More festival names thanks to @Minmoose
+
 ## [4.2.0] - 2026-03-03
 
 ### Changed
