@@ -13,6 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed+
 
+## [4.2.2] - 2026-03-21
+
+### Added
+- Added BGMOrchestrion which maps BGM -> Orchestrion and provides a name when there is no matching Orchestrion entry. (Thanks to Orchestrion for the data)
+
+### Changed
+- General data update
+
 ## [4.2.1] - 2026-03-09
 
 ### Changed

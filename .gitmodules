@@ -13,3 +13,6 @@
 [submodule "src/submersible-loot-db"]
 	path = src/submersible-loot-db
 	url = https://github.com/saerielle/submersible-loot-db.git
+[submodule "src/lib/orchestrion"]
+	path = src/lib/orchestrion
+	url = https://github.com/perchbirdd/OrchestrionPlugin.git

@@ -82,6 +82,7 @@ public static class CsvLoader
     public const string QuestRequiredItemResourceName = "LuminaSupplemental.Excel.Generated.QuestRequiredItem.csv";
     public const string BNpcLinkResourceName = "LuminaSupplemental.Excel.Generated.BNpcLink.csv";
     public const string BNpcLinkNoGubalResourceName = "LuminaSupplemental.Excel.Generated.BNpcLinkNoGubal.csv";
+    public const string BGMOrchestrionResourceName = "LuminaSupplemental.Excel.Generated.BGMOrchestrion.csv";
 
     public static List< T > LoadResource<T>(string resourceName, bool includesHeaders, out List<string> failedLines, out List<Exception> exceptions, GameData? gameData = null, Language? language = null) where T : ICsv, new()
     {

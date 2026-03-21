@@ -6,8 +6,8 @@
         <PackageProjectUrl>https://github.com/Critical-Impact/LuminaSupplemental</PackageProjectUrl>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <RepositoryUrl>https://github.com/Critical-Impact/LuminaSupplemental</RepositoryUrl>
-        <PackageVersion>4.2.1</PackageVersion>
-        <FileVersion>4.2.1</FileVersion>
+        <PackageVersion>4.2.2</PackageVersion>
+        <FileVersion>4.2.2</FileVersion>
         <Description>Supplemental data for lumina and dalamud plugins.</Description>
     </PropertyGroup>
 
@@ -86,5 +86,6 @@
       <EmbeddedResource Include="Generated\BNpcLink.csv" />
       <EmbeddedResource Include="Generated\QuestRequiredItem.csv"/>
       <EmbeddedResource Include="Generated\Gearset.csv"/>
+      <EmbeddedResource Include="Generated\BGMOrchestrion.csv"/>
     </ItemGroup>
 </Project>
