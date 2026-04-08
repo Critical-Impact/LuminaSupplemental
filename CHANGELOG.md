@@ -13,6 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed+
 
+## [4.2.3] - 2026-04-08
+
+### Added
+- Added RelicWeapon and RelicTool which provide the stages of each weapon/tool, associated quests and class/job
+
+### Changed
+- General data update
+
 ## [4.2.2] - 2026-03-21
 
 ### Added
