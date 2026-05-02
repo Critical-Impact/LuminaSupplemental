@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed+
 
+## [4.3.1] - 2026-05-02
+
+### Changed
+- General data update
+- Added new 7.5 gearsets from Eorzea Collection
+
 ## [4.3.0] - 2026-04-30
 
 ### Changed

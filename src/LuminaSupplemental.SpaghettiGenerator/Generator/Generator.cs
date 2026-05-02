@@ -20,14 +20,16 @@ public class Generator
     private readonly IEnumerable<IGeneratorStep> steps;
     private readonly IEnumerable<IDownloadStep> downloadSteps;
     private readonly GeneratorOptions generatorOptions;
+    private readonly CommandLineArgs commandLineArgs;
     private readonly ILogger logger;
 
-    public Generator(IEnumerable<IGeneratorStep> steps, IEnumerable<IDownloadStep> downloadSteps, GeneratorOptions generatorOptions, ILogger logger)
+    public Generator(IEnumerable<IGeneratorStep> steps, IEnumerable<IDownloadStep> downloadSteps, GeneratorOptions generatorOptions, CommandLineArgs commandLineArgs, ILogger logger)
     {
         var generatorSteps = steps.ToList();
         this.steps = generatorSteps.OrderTopologicallyBy(c => GetPrerequisiteSteps(generatorSteps, c.PrerequisiteSteps));
         this.downloadSteps = downloadSteps;
         this.generatorOptions = generatorOptions;
+        this.commandLineArgs = commandLineArgs;
         this.logger = logger;
     }
 
@@ -39,6 +41,32 @@ public class Generator
         }
 
         return allSteps.Where(c => requiredSteps.Contains(c.GetType()));
+    }
+
+    private HashSet<Type> GetStepsToRun()
+    {
+        var allSteps = this.steps.ToList();
+        if (this.commandLineArgs.IsRunAll)
+            return allSteps.Select(s => s.GetType()).ToHashSet();
+
+        var result = new HashSet<Type>();
+        var target = allSteps.FirstOrDefault(s =>
+            string.Equals(s.GetType().Name, this.commandLineArgs.RunMode, StringComparison.OrdinalIgnoreCase));
+        if (target != null)
+            CollectWithPrerequisites(allSteps, target, result);
+        return result;
+    }
+
+    private void CollectWithPrerequisites(List<IGeneratorStep> allSteps, IGeneratorStep step, HashSet<Type> result)
+    {
+        if (!result.Add(step.GetType())) return;
+        if (step.PrerequisiteSteps == null) return;
+        foreach (var prereqType in step.PrerequisiteSteps)
+        {
+            var prereq = allSteps.FirstOrDefault(s => s.GetType() == prereqType);
+            if (prereq != null)
+                CollectWithPrerequisites(allSteps, prereq, result);
+        }
     }
 
     public void Run()
@@ -56,6 +84,7 @@ public class Generator
         }
         this.logger.Information("Deleted existing CSV files.");
 
+        var stepsToRun = GetStepsToRun();
 
         var stepData = new Dictionary<Type, List<ICsv>>();
 
@@ -74,6 +103,11 @@ public class Generator
         this.logger.Information("Starting generation.");
         foreach (var step in this.steps)
         {
+            if (!stepsToRun.Contains(step.GetType()))
+            {
+                this.logger.Information($"[{step.Name}] Skipping (not in run mode '{this.commandLineArgs.RunMode}').");
+                continue;
+            }
             if (!step.ShouldRun())
             {
                 this.logger.Information($"[{step.Name}] Skipping generation step as condition was not met.");

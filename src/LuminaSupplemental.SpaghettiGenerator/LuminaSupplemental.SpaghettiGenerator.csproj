@@ -19,6 +19,7 @@
       <Content Include="../ffxiv-lodestone-item-id/lodestone-item-id.txt" CopyToOutputDirectory="Always" />
       <Content Include="../lib/orchestrion/Orchestrion/Data/xiv_bgm_en.csv" CopyToOutputDirectory="Always" />
       <PackageReference Include="Autofac" Version="9.0.0" />
+      <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.25212.1" />
       <PackageReference Include="CSVFile" Version="3.2.1" />
       <PackageReference Include="CsvHelper" Version="33.1.0" />
       <PackageReference Include="Fastenshtein" Version="1.0.11" />

@@ -32,9 +32,10 @@ public class Container
 
     private ContainerBuilder containerBuilder;
 
-    public Container()
+    public Container(CommandLineArgs commandLineArgs)
     {
         var builder = new ContainerBuilder();
+        builder.RegisterInstance(commandLineArgs).SingleInstance();
         var seriLog = new LoggerConfiguration()
                       .WriteTo.Console(standardErrorFromLevel: LogEventLevel.Verbose)
                       .MinimumLevel.ControlledBy(new LoggingLevelSwitch(LogEventLevel.Verbose))

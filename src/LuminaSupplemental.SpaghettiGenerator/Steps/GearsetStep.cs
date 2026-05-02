@@ -109,6 +109,7 @@ public class GearsetStep : GeneratorStep
         this.lodestoneToItemId["88fab817ca0"] = 13328;
         this.lodestoneToItemId["1a2a4866dba"] = 17470;
         this.lodestoneToItemId["fbdb66b15f6"] = 17470;
+        this.lodestoneToItemId["c637fd851cc"] = 40453;
 
         var itemSheet = gameData.GetExcelSheet<Item>();
 
