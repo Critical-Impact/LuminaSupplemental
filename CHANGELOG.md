@@ -13,7 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed+
 
-## [4.3.2] - 2026-05-0+ 9
+## [4.3.3] - 2026-05-10
+
+### Changed
+- Made coffer auto-matching consider item level if applicable
+- Removed a misplaced item from the manual data list
+
+## [4.3.2] - 2026-05-09
 
 ### Changed
 - General data update
