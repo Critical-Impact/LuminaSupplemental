@@ -13,6 +13,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed+
 
+## [4.3.4] - 2026-05-24
+
+### Added
+- Certain gearsets were missing their corresponding augmented/unaugmented version
+- Added seed/grown item auto matching for gardening items
+- Added some dungeon drop items
+
+### Changed
+- General data update
+
 ## [4.3.3] - 2026-05-10
 
 ### Changed

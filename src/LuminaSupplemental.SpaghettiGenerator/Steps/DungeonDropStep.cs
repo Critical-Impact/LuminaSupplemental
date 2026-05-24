@@ -94,7 +94,55 @@ public partial class DungeonDropStep : GeneratorStep
 
         }
 
+        this.ProcessDungeonDropsCSV(dungeonDrops);
+
         return dungeonDrops;
+    }
+
+    private void ProcessDungeonDropsCSV(List<DungeonDrop> dungeonDrops)
+    {
+        var csvPath = Path.Join("ManualData", "DungeonDrops.csv");
+        if (!File.Exists(csvPath))
+        {
+            return;
+        }
+
+        var reader = CSVFile.CSVReader.FromFile(csvPath);
+        bool isFirstLine = true;
+
+        foreach (var line in reader.Lines())
+        {
+            if (isFirstLine)
+            {
+                isFirstLine = false;
+                continue;
+            }
+
+            if (line.Length < 2 || string.IsNullOrWhiteSpace(line[0]) || string.IsNullOrWhiteSpace(line[1]))
+            {
+                continue;
+            }
+
+            var itemName = line[0].ToParseable();
+            var dungeonName = line[1].ToParseable();
+
+            Item? outputItem = itemsByName.ContainsKey(itemName) ? this.itemSheet.GetRow(itemsByName[itemName]) : null;
+            ContentFinderCondition? duty = dutiesByName.ContainsKey(dungeonName) ? this.contentFinderConditionSheet.GetRow(dutiesByName[dungeonName]) : null;
+
+            if (outputItem == null)
+            {
+                Console.WriteLine($"DungeonDrops.csv: Could not find a match for item: {line[0]}");
+                continue;
+            }
+
+            if (duty == null)
+            {
+                Console.WriteLine($"DungeonDrops.csv: Could not find a match for dungeon: {line[1]} (item: {line[0]})");
+                continue;
+            }
+
+            dungeonDrops.Add(new DungeonDrop((uint)dungeonDrops.Count + 1, outputItem.Value.RowId, duty.Value.RowId));
+        }
     }
 
     private void GenerateDungeonDrops( string outputItemId, List< string > sources, List< DungeonDrop > dungeonDrops )

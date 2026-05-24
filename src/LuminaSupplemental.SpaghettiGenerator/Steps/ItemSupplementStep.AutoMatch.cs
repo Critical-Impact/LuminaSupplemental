@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
 using Dalamud.Utility;
+
+using Humanizer;
 
 using Lumina.Excel.Sheets;
 
@@ -15,6 +18,7 @@ public partial class ItemSupplementStep
     //Taken from https://github.com/RajahOmen/BisBuddy/blob/91112b805087401a99a8530e18953561c9b0fc98/BisBuddy/Items/ItemData.Generate.cs#L4 - thank you!
     private static readonly Regex ItemNameIlvlRegex = new(@"\(IL ([0-9]*)\)");
     private static readonly Regex AugmentedTomestoneGearNameRegex = new(@"\AAugmented");
+    private static readonly Regex GardeningSeedNameRegex = new(@"\ABag of (.+?) (?:Seeds|Pits|Sori|Bulbs|Leaves)\z", RegexOptions.IgnoreCase);
 
     private static readonly Dictionary<ushort, List<uint>> CofferIconToEquipSlotCategory = new()
     {
@@ -126,6 +130,51 @@ public partial class ItemSupplementStep
                     var newItemSupplement = new ItemSupplement(bestMatch.RowId, coffer.RowId, ItemSupplementSource.Loot);
                     newItems.Add(newItemSupplement);
                 }
+            }
+        }
+
+        return newItems;
+    }
+
+    private List<ItemSupplement> AutoMatchGardeningSeeds(List<ItemSupplement> existingGardeningSources)
+    {
+        List<ItemSupplement> newItems = new List<ItemSupplement>();
+
+        var knownSeedSources = existingGardeningSources
+            .Where(item => item.ItemSupplementSource == ItemSupplementSource.Gardening)
+            .Select(item => item.SourceItemId)
+            .ToHashSet();
+
+        foreach (var item in itemSheet)
+        {
+            if (knownSeedSources.Contains(item.RowId))
+                continue;
+
+            try
+            {
+                var itemName = item.Singular.ToDalamudString().TextValue;
+                var match = GardeningSeedNameRegex.Match(itemName);
+                if (!match.Success)
+                    continue;
+
+                var plantName = match.Groups[1].Value.ToParseable();
+                if (!itemsByName.TryGetValue(plantName, out var plantItemId))
+                {
+                    if (!itemsByName.TryGetValue(plantName.Pluralize(), out plantItemId))
+                    {
+                        if (!itemsByName.TryGetValue(plantName + "leaves", out plantItemId))
+                        {
+                            logger.Error("Gardening seed found but no matching item for: " + itemName);
+                            continue;
+                        }
+                    }
+                }
+
+                newItems.Add(new ItemSupplement(plantItemId, item.RowId, ItemSupplementSource.Gardening));
+            }
+            catch (Exception e)
+            {
+                logger.Error(e, "Error while processing item: " + item.Name.ToString());
             }
         }
 

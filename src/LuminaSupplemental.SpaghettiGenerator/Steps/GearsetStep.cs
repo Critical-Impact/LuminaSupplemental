@@ -33,6 +33,7 @@ public class GearsetStep : GeneratorStep
     private readonly Dictionary<string, uint> itemsByName;
     private Dictionary<string, uint> lodestoneToItemId;
     private Dictionary<string, uint> gameItems;
+    private Dictionary<uint, string> itemIdToParseableName;
 
     public override Type OutputType => typeof(Gearset);
 
@@ -86,6 +87,9 @@ public class GearsetStep : GeneratorStep
                      .ThenBy(c => c.ItemId14)
                      .ToList();
 
+        var augVariants = TryGenerateAugVariants(items);
+        items.AddRange(augVariants);
+
         return [..items.Select(c => c)];
     }
 
@@ -114,6 +118,7 @@ public class GearsetStep : GeneratorStep
         var itemSheet = gameData.GetExcelSheet<Item>();
 
         gameItems = itemSheet.Select(c => (c.Name.ToImGuiString().ToParseable(), c.RowId)).DistinctBy(c => c.Item1).ToDictionary(c => c.Item1, c => c.RowId);
+        itemIdToParseableName = itemSheet.Where(c => c.RowId != 0).ToDictionary(c => c.RowId, c => c.Name.ToImGuiString().ToParseable());
 
 
         var eorzeaCacheDir = Path.Combine(this.appConfig.Parsing.OnlineCacheDirectory,"Eorzea Cache");;
@@ -199,6 +204,97 @@ public class GearsetStep : GeneratorStep
         {
             gearset.ItemId14 = itemId ?? 0;
         }
+    }
+
+    private static uint[] GetGearsetItemIds(Gearset gearset) =>
+    [
+        gearset.ItemId1, gearset.ItemId2, gearset.ItemId3, gearset.ItemId4,
+        gearset.ItemId5, gearset.ItemId6, gearset.ItemId7, gearset.ItemId8,
+        gearset.ItemId9, gearset.ItemId10, gearset.ItemId11, gearset.ItemId12,
+        gearset.ItemId13, gearset.ItemId14
+    ];
+
+    /// <summary>
+    /// Match the augmented/unaugmented sets just in case eorzea doesn't have them
+    /// </summary>
+    private List<Gearset> TryGenerateAugVariants(List<Gearset> gearsets)
+    {
+        var variants = new List<Gearset>();
+
+        var existingFingerprints = gearsets
+                                   .Select(g => (g.ItemId1, g.ItemId2, g.ItemId3, g.ItemId4, g.ItemId5,
+                                                    g.ItemId6, g.ItemId7, g.ItemId8, g.ItemId9, g.ItemId10,
+                                                    g.ItemId11, g.ItemId12, g.ItemId13, g.ItemId14))
+                                   .ToHashSet();
+
+        foreach (var gearset in gearsets)
+        {
+            var allIds = GetGearsetItemIds(gearset);
+            var nonZeroIds = allIds.Where(id => id != 0).ToList();
+
+            if (nonZeroIds.Count == 0) continue;
+
+            var augMappings = new Dictionary<uint, uint>();
+            int matchedCount = 0;
+            int unmatchedCount = 0;
+
+            foreach (var itemId in nonZeroIds)
+            {
+                if (!itemIdToParseableName.TryGetValue(itemId, out var parsedName))
+                {
+                    unmatchedCount++;
+                    continue;
+                }
+
+                string altName = parsedName.StartsWith("augmented", StringComparison.Ordinal) ? parsedName["augmented".Length..] : "augmented" + parsedName;
+
+                if (gameItems.TryGetValue(altName, out var altId))
+                {
+                    augMappings[itemId] = altId;
+                    matchedCount++;
+                }
+                else
+                {
+                    unmatchedCount++;
+                }
+            }
+
+            if (matchedCount > 0 && unmatchedCount == 0)
+            {
+                var variant = new Gearset
+                {
+                    Key = gearset.Key,
+                    Name = gearset.Name,
+                };
+
+                for (uint i = 0; i < 14; i++)
+                {
+                    var origId = allIds[i];
+                    uint newId = origId != 0 && augMappings.TryGetValue(origId, out var mapped)
+                                     ? mapped
+                                     : origId;
+                    SetItemByIndex(variant, i, newId);
+                }
+
+                var fingerprint = (variant.ItemId1, variant.ItemId2, variant.ItemId3, variant.ItemId4,
+                                      variant.ItemId5, variant.ItemId6, variant.ItemId7, variant.ItemId8,
+                                      variant.ItemId9, variant.ItemId10, variant.ItemId11, variant.ItemId12,
+                                      variant.ItemId13, variant.ItemId14);
+
+                if (!existingFingerprints.Contains(fingerprint))
+                {
+                    logger.Debug(
+                        "Generated aug/non-aug variant for '{GearsetName}' (key: {GearsetKey}): all {Count} items mapped",
+                        gearset.Name,
+                        gearset.Key,
+                        matchedCount);
+                    variants.Add(variant);
+                    existingFingerprints.Add(fingerprint);
+                }
+            }
+        }
+
+        return variants;
     }
 
     /// <summary>

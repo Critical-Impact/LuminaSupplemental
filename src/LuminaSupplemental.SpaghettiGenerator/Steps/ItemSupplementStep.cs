@@ -32,6 +32,12 @@ public partial class ItemSupplementStep : GeneratorStep
 
     public HashSet<uint> bannedItems { get; set; }
 
+    //Some of our sources have old data so let's just remove them manually when they come up
+    private HashSet<(string, string, ItemSupplementSource)> bannedSources = new()
+    {
+        ("Almandine", "Dusklight Aethersand", ItemSupplementSource.Desynth)
+    };
+
     public ItemSupplementStep(DataCacher dataCacher, ILogger logger, ExcelSheet<Item> itemSheet, GubalApi gubalApi, GameData gameData, AppConfig appConfig)
     {
         this.dataCacher = dataCacher;
@@ -67,6 +73,7 @@ public partial class ItemSupplementStep : GeneratorStep
         items.AddRange(this.ProcessLockboxes());
 
         items.AddRange(this.AutoMatchMissingCoffers(items));
+        items.AddRange(this.AutoMatchGardeningSeeds(items));
         items = items.DistinctBy(c => (c.ItemId, c.SourceItemId, c.ItemSupplementSource)).OrderBy(c => c.ItemId).ThenBy(c => c.SourceItemId).ToList();
 
         //If we detect that there is more detailed drop information about an item, remove the generic loot entry
@@ -81,8 +88,36 @@ public partial class ItemSupplementStep : GeneratorStep
 
         items = items.Where(c => (c.ItemSupplementSource == ItemSupplementSource.Loot && !removeLootItemIds.Contains(c.ItemId)) || c.ItemSupplementSource != ItemSupplementSource.Loot).ToList();
 
+        HashSet<(uint, uint, ItemSupplementSource)> bannedSourceIds = new HashSet<(uint, uint, ItemSupplementSource)>();
+        foreach (var bannedSource in this.bannedSources)
+        {
+            var sourceName = bannedSource.Item1.ToParseable();
+            var outputName = bannedSource.Item2.ToParseable();
+            var sourceType = bannedSource.Item3;
+            Item? sourceItem = this.itemsByName.TryGetValue(sourceName, out var value) ? this.itemSheet.GetRow(value) : null;
+            if (sourceItem == null)
+            {
+                this.logger.Error("Could not find a match for input item: " + sourceName);
+            }
+            Item? outputItem = this.itemsByName.TryGetValue(outputName, out var value1) ? this.itemSheet.GetRow(value1) : null;
+            if (outputItem == null)
+            {
+                this.logger.Error("Could not find a match for output item: " + outputItem);
+            }
+
+            if (sourceItem != null && outputItem != null)
+            {
+                bannedSourceIds.Add((sourceItem.Value.RowId, outputItem.Value.RowId, sourceType));
+            }
+        }
+
+        items = items.Where(c => !bannedSourceIds.Contains((c.SourceItemId, c.ItemId, c.ItemSupplementSource))).ToList();
+
+
         return [..items.Select(c => c)];
     }
+
+
 
 
     private List<ItemSupplement> GenerateItemSupplement(ItemSupplementSource? source, string outputItemId, List<string> sources)
