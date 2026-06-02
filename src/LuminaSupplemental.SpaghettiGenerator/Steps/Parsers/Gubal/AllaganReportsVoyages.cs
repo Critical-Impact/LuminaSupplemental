@@ -20,14 +20,14 @@ public class AllaganReportsVoyageItem
         
     [JsonConverter(typeof(GubalVoyagesConverter))]
     [JsonPropertyName("data")]
-    public AllaganReportsVoyageData Data { get; set; }
+    public AllaganReportsVoyageData? Data { get; set; }
 }
 
 public class AllaganReportsVoyageData
 {
     [JsonPropertyName("voyageId")]
-    public uint VoyageId { get; set; }
-    
+    public uint? VoyageId { get; set; }
+
     [JsonPropertyName("voyageType")]
     public AllaganReportVoyageType VoyageType { get; set; }
 }
@@ -40,27 +40,25 @@ public enum AllaganReportVoyageType
 
 public class GubalVoyagesConverter : JsonConverter<AllaganReportsVoyageData>
 {
-    public override AllaganReportsVoyageData Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override AllaganReportsVoyageData? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        // Read the JSON string
-        try
+        AllaganReportsVoyageData? result;
+        if (reader.TokenType == JsonTokenType.StartObject)
         {
-            if (reader.TokenType == JsonTokenType.StartObject)
-            {
-                //The server returns both encoded json and non-encoded json?
-                return JsonSerializer.Deserialize<AllaganReportsVoyageData>(ref reader, options);
-            }
-            string jsonString = reader.GetString();
-
-            // Deserialize the JSON string into the Data object
-            return JsonSerializer.Deserialize<AllaganReportsVoyageData>(jsonString, options);
+            result = JsonSerializer.Deserialize<AllaganReportsVoyageData>(ref reader, options);
         }
-        catch (Exception e)
+        else if (reader.TokenType == JsonTokenType.Null)
         {
-            Console.WriteLine(e);
-            return new AllaganReportsVoyageData();
+            return null;
+        }
+        else
+        {
+            var jsonString = reader.GetString();
+            if (jsonString == null) return null;
+            result = JsonSerializer.Deserialize<AllaganReportsVoyageData>(jsonString, options);
         }
 
+        return result?.VoyageId == null ? null : result;
     }
 
     public override void Write(Utf8JsonWriter writer, AllaganReportsVoyageData value, JsonSerializerOptions options)

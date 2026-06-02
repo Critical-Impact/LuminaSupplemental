@@ -13,13 +13,13 @@ public partial class AirshipDropStep
         var gubalData = this.gubalApi.GetAllaganReportVoyageItems();
         foreach (var gubalItem in gubalData)
         {
-            if (gubalItem.ItemId == 0 || gubalItem.Data.VoyageId == 0)
+            if (gubalItem.Data == null || gubalItem.ItemId == 0 || gubalItem.Data.VoyageId == 0 || gubalItem.Data.VoyageId == null)
             {
                 continue;
             }
             if (gubalItem.Data.VoyageType == AllaganReportVoyageType.Airship)
             {
-                if (!this.airshipExplorationPointSheet.HasRow(gubalItem.Data.VoyageId))
+                if (!this.airshipExplorationPointSheet.HasRow(gubalItem.Data.VoyageId.Value))
                 {
                     this.logger.Error($"Airship Point {gubalItem.Data.VoyageId} retrieved from gubal api does not exist in game.");
                     continue;
@@ -29,12 +29,12 @@ public partial class AirshipDropStep
                     new AirshipDrop()
                     {
                         ItemId = gubalItem.ItemId,
-                        AirshipExplorationPointId = gubalItem.Data.VoyageId
+                        AirshipExplorationPointId = gubalItem.Data.VoyageId.Value
                     });
             }
         }
-        
+
 
         return drops;
-    }   
+    }
 }
