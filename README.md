@@ -34,6 +34,7 @@ Lumina Supplemental is an additional library that provides additional data that 
 | StoreItem           | Items that can be obtained through the SQ shop for $                                           |
 | SubmarineDrop       | Items that drop on specific submarine routes                                                   |
 | SubmarineUnlock     | The route required to be run to unlock a route                                                 |
+| UnobtainableItem    | Items that can no longer be obtained by any means                                              |
 
 To load a specific CSV (Dungeon Bosses as an example):
 
