@@ -85,6 +85,7 @@ public static class CsvLoader
     public const string BGMOrchestrionResourceName = "LuminaSupplemental.Excel.Generated.BGMOrchestrion.csv";
     public const string RelicWeaponResourceName = "LuminaSupplemental.Excel.Generated.RelicWeapon.csv";
     public const string RelicToolResourceName = "LuminaSupplemental.Excel.Generated.RelicTool.csv";
+    public const string UnobtainableItemResourceName = "LuminaSupplemental.Excel.Generated.UnobtainableItem.csv";
 
     public static List< T > LoadResource<T>(string resourceName, bool includesHeaders, out List<string> failedLines, out List<Exception> exceptions, GameData? gameData = null, Language? language = null) where T : ICsv, new()
     {

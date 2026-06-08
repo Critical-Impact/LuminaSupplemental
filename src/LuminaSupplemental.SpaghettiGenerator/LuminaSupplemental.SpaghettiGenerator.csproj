@@ -52,6 +52,9 @@
       <None Update="ManualData\RetainerVentures.csv">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="ManualData\Obsolete.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
       <None Update="ManualData\HouseVendors.csv">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>

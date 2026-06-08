@@ -199,8 +199,11 @@ public partial class ItemSupplementStep
                 case "Oizys":
                     supplementType = ItemSupplementSource.Oizys;
                     break;
+                case "Auxesia":
+                    supplementType = ItemSupplementSource.Auxesia;
+                    break;
                 default:
-                    throw new Exception("Unhandled supplement type");
+                    throw new Exception("Unhandled supplement type: " + cofferData.Name);
             }
 
             var coffers = cofferData.Variants;

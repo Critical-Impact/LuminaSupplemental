@@ -13,6 +13,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed+
 
+## [4.3.6] - 2026-06-08
+
+### Added
+- Added UnobtainableItem sheet
+
+### Changed
+- Added Auxesia coffers
+- General data update
+
 ## [4.3.5] - 2026-06-02
 
 ### Changed
