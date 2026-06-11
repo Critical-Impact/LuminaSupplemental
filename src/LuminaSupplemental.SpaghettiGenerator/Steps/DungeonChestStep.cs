@@ -25,6 +25,8 @@ public partial class DungeonChestStep : GeneratorStep
 
     public override string Name => "Dungeon Chests";
 
+    public override List<Type>? PrerequisiteSteps => [typeof(DungeonChestItemStep), typeof(DungeonBossChestStep), typeof(DungeonBossStep)];
+
     public DungeonChestStep(DataCacher dataCacher)
     {
         this.dataCacher = dataCacher;
@@ -32,9 +34,9 @@ public partial class DungeonChestStep : GeneratorStep
 
     public override List<ICsv> Run(Dictionary<Type, List<ICsv>> stepData)
     {
-        List<DungeonChest> items = new();
-        items.AddRange(this.ProcessChests());
-        return [..items.Select(c => c)];
+        var chests = this.ProcessChests();
+        this.AssignBossIds(chests, stepData);
+        return [..chests.Select(c => c)];
     }
 
     private List<DungeonChest> ProcessChests()
@@ -64,7 +66,7 @@ public partial class DungeonChestStep : GeneratorStep
                                     ContentFinderConditionId = duty.Id,
                                     MapId = chest.MapId,
                                     TerritoryTypeId = chest.TerritoryId,
-                                    ChestId = chest.Id
+                                    TreasureId = chest.Id
                                 });
                             chestId++;
                         }
@@ -74,5 +76,38 @@ public partial class DungeonChestStep : GeneratorStep
         }
 
         return chests;
+    }
+
+    private void AssignBossIds(List<DungeonChest> chests, Dictionary<Type, List<ICsv>> stepData)
+    {
+        var chestItemsByChestId = stepData[typeof(DungeonChestItemStep)]
+            .Cast<DungeonChestItem>()
+            .GroupBy(i => i.ChestId)
+            .ToDictionary(g => g.Key, g => g.Select(i => i.ItemId).ToHashSet());
+
+        var bossChestGroups = stepData[typeof(DungeonBossChestStep)]
+            .Cast<DungeonBossChest>()
+            .GroupBy(b => (b.ContentFinderConditionId, b.FightNo))
+            .ToDictionary(g => g.Key, g => g.Select(b => b.ItemId).ToHashSet());
+
+        var bossesByFight = stepData[typeof(DungeonBossStep)]
+            .Cast<DungeonBoss>()
+            .GroupBy(b => (b.ContentFinderConditionId, b.FightNo))
+            .ToDictionary(g => g.Key, g => g.Min(b => b.RowId));
+
+        foreach (var chest in chests)
+        {
+            if (!chestItemsByChestId.TryGetValue(chest.RowId, out var itemIds))
+                continue;
+
+            var matchedFight = bossChestGroups
+                .Where(kvp => kvp.Key.ContentFinderConditionId == chest.ContentFinderConditionId)
+                .Where(kvp => kvp.Value.SetEquals(itemIds))
+                .Select(kvp => kvp.Key)
+                .FirstOrDefault();
+
+            if (bossesByFight.TryGetValue(matchedFight, out var bossId))
+                chest.DungeonBossId = bossId;
+        }
     }
 }
