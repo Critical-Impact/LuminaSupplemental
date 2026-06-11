@@ -24,20 +24,22 @@ namespace LuminaSupplemental.Excel.Model
         [Name("ContentFinderConditionId")] public uint ContentFinderConditionId { get; set; }
         [Name("MapId")] public uint MapId { get; set; }
         [Name("TerritoryTypeId")] public uint TerritoryTypeId { get; set; }
-        [Name("ChestId")] public uint ChestId { get; set; }
+        [Name("TreasureId")] public uint TreasureId { get; set; }
+        [Name("DungeonBossId")] public uint DungeonBossId { get; set; }
 
         public RowRef< ContentFinderCondition > ContentFinderCondition;
         public RowRef< Map > Map;
         public RowRef< TerritoryType > TerritoryType;
 
-        public DungeonChest(uint rowId, byte chestNo,uint contentFinderConditionId, uint mapId, uint territoryTypeId, uint chestId )
+        public DungeonChest(uint rowId, byte chestNo,uint contentFinderConditionId, uint mapId, uint territoryTypeId, uint treasureId, uint dungeonBossId = 0 )
         {
             RowId = rowId;
             ChestNo = chestNo;
             ContentFinderConditionId = contentFinderConditionId;
             MapId = mapId;
             TerritoryTypeId = territoryTypeId;
-            ChestId = chestId;
+            TreasureId = treasureId;
+            DungeonBossId = dungeonBossId;
         }
 
         public DungeonChest()
@@ -52,7 +54,8 @@ namespace LuminaSupplemental.Excel.Model
             ContentFinderConditionId = uint.Parse( lineData[ 2 ] );
             MapId = uint.Parse( lineData[ 3 ] );
             TerritoryTypeId = uint.Parse( lineData[ 4 ] );
-            this.ChestId = uint.Parse( lineData[ 5 ] );
+            TreasureId = uint.Parse( lineData[ 5 ] );
+            DungeonBossId = uint.Parse( lineData[ 6 ] );
         }
 
         public string[] ToCsv()
@@ -64,7 +67,8 @@ namespace LuminaSupplemental.Excel.Model
                 ContentFinderConditionId.ToString(),
                 MapId.ToString(),
                 TerritoryTypeId.ToString(),
-                this.ChestId.ToString(),
+                TreasureId.ToString(),
+                DungeonBossId.ToString(),
             };
             return data.ToArray();
         }
