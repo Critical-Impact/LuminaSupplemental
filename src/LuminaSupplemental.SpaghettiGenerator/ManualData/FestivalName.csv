@@ -3,6 +3,8 @@ FestivalId,Name
 3,FFXIII Lightning Strikes
 6,Burgeoning Dread
 7,Breaking Brick Mountains
+17,Sanctum of the Twelve (Carpet)
+18,Sanctum of the Twelve (Flowers)
 26,New Year Machinations (Music) (2015)
 30,The Maiden's Rhapsody
 39,Yo+AC0-kai Watch
@@ -33,6 +35,8 @@ FestivalId,Name
 71,Moonfire Faire (2018)
 72,The Rising (2018)
 73,Fifth Anniversary Content (2018)
+74,Sanctum of the Twelve (Lighting)
+75,Sanctum of the Twelve (Drapes)
 76,All Saint's Wake (2018)
 77,Starlight Celebration (2018)
 78,Heavensturn (2019)
@@ -47,12 +51,14 @@ FestivalId,Name
 89,Moonfire Faire (2019)
 90,The Rising (2019)
 91,All Saint's Wake (2019)
+93,Ishgard Restoration
 95,Starlight Celebration (2019)
 96,Heavensturn (2020)
 97,New Year (2020)
 98,China New Year (2020)
 99,Korea New Year (2020)
 100,Valentione's Day (2020)
+101,Ocean Fishing
 103,Little Ladies' Day (2020)
 104,Hatching Tide (2020)
 105,Make It Rain (2020)
@@ -65,10 +71,11 @@ FestivalId,Name
 112,Korea New Year (2021)
 113,Little Ladies' Day +ACY- Valentione's Day (2021)
 114,Hatching Tide (2021)
-115,Hatching Tide (2021)
+115,Make It Rain (2021)
 116,Moonfire Faire (2021)
 117,The Rising (2021)
 118,All Saints' Wake (2021)
+120,Special Event Flag
 121,Starlight Celebration (2021)
 122,Valentione's Day (2022)
 123,Little Ladies' Day (2022)
@@ -79,9 +86,10 @@ FestivalId,Name
 128,Heavensturn (2023)
 129,New Year (2023)
 130,China New Year (2023)
-131,China New Year (2023)
+131,Korea New Year (2023)
 132,All Saint's Wake (2022)
 133,Starlight Celebration (2022)
+134,Heavensturn (2023)
 135,Valentione's Day (2023)
 136,Hatching Tide (2023)
 137,Special Event Flag
@@ -95,6 +103,7 @@ FestivalId,Name
 145,Hatching Tide (2024)
 146,Make It Rain (2024)
 148,Fall Guys Collab
+149,Heavensturn (2024)
 150,Moonfire Faire (2024)
 151,The Rising (2024)
 152,All Saint's Wake (2024)
@@ -116,3 +125,10 @@ FestivalId,Name
 173,Make It Rain (2026)
 174,Moonfire Faire (2026)
 175,The Rising (2026)
+176,All Saint's Wake (2026)
+257,Unknown
+258,Starlight Celebration (2026)
+259,Heavensturn (2027)
+260,Valentione's Day (2027)
+261,Unknown
+262,Unknown
