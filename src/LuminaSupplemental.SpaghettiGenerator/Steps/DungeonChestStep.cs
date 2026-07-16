@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-using Lumina.Excel.Sheets;
-
 using LuminaSupplemental.Excel.Model;
 using LuminaSupplemental.SpaghettiGenerator.Generator;
-using LuminaSupplemental.SpaghettiGenerator.Steps.Parsers;
 
 using Newtonsoft.Json;
 
@@ -66,7 +63,8 @@ public partial class DungeonChestStep : GeneratorStep
                                     ContentFinderConditionId = duty.Id,
                                     MapId = chest.MapId,
                                     TerritoryTypeId = chest.TerritoryId,
-                                    TreasureId = chest.Id
+                                    TreasureId = chest.Id,
+                                    Position = chest.Position
                                 });
                             chestId++;
                         }

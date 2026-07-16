@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Numerics;
-using System.Reflection;
-using CsvHelper;
 using CsvHelper.Configuration.Attributes;
-using Lumina;
+using CsvHelper.TypeConversion;
 using Lumina.Data;
 using Lumina.Excel;
 
@@ -26,13 +23,14 @@ namespace LuminaSupplemental.Excel.Model
         [Name("TerritoryTypeId")] public uint TerritoryTypeId { get; set; }
         [Name("TreasureId")] public uint TreasureId { get; set; }
         [Name("DungeonBossId")] public uint DungeonBossId { get; set; }
+        [Name("Position"), TypeConverter(typeof(Vector3Converter))] public Vector3 Position { get; set; }
 
         public RowRef< ContentFinderCondition > ContentFinderCondition;
         public RowRef< Map > Map;
         public RowRef< TerritoryType > TerritoryType;
         public RowRef< Treasure > Treasure;
 
-        public DungeonChest(uint rowId, byte chestNo,uint contentFinderConditionId, uint mapId, uint territoryTypeId, uint treasureId, uint dungeonBossId = 0 )
+        public DungeonChest(uint rowId, byte chestNo, uint contentFinderConditionId, uint mapId, uint territoryTypeId, uint treasureId, uint dungeonBossId = 0, Vector3 position = default )
         {
             RowId = rowId;
             ChestNo = chestNo;
@@ -41,6 +39,7 @@ namespace LuminaSupplemental.Excel.Model
             TerritoryTypeId = territoryTypeId;
             TreasureId = treasureId;
             DungeonBossId = dungeonBossId;
+            Position = position;
         }
 
         public DungeonChest()
@@ -57,6 +56,8 @@ namespace LuminaSupplemental.Excel.Model
             TerritoryTypeId = uint.Parse( lineData[ 4 ] );
             TreasureId = uint.Parse( lineData[ 5 ] );
             DungeonBossId = uint.Parse( lineData[ 6 ] );
+            var positionData = lineData[7].Split(";").Select(c => float.Parse(c, CultureInfo.InvariantCulture)).ToList();
+            Position = new Vector3(positionData[0], positionData[1], positionData[2]);
         }
 
         public string[] ToCsv()
@@ -70,6 +71,7 @@ namespace LuminaSupplemental.Excel.Model
                 TerritoryTypeId.ToString(),
                 TreasureId.ToString(),
                 DungeonBossId.ToString(),
+                $"{Position.X.ToString(CultureInfo.InvariantCulture)};{Position.Y.ToString(CultureInfo.InvariantCulture)};{Position.Z.ToString(CultureInfo.InvariantCulture)}",
             };
             return data.ToArray();
         }
