@@ -14,6 +14,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed+
 
 
+## [5.1.0] - 2026-07-11
+
+### Changed
+- DungeonChest now has a position column/field (thanks @Jaksuhn)
+- General data update
+
+
 ## [5.0.1] - 2026-07-11
 
 ### Changed
