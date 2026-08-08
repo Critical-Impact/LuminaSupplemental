@@ -89,6 +89,10 @@
       <None Update="ManualData\DungeonDrops.csv">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Remove="ManualData\FauxHollowsPattern.csv" />
+      <Content Include="ManualData\FauxHollowsPattern.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>
