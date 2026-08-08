@@ -140,9 +140,9 @@ miqote-female,Miqo'te Female Set,2990,3527,3303,3757,0,0,0,0,0,0,0,0,0,0
 roegadyn-male,Roegadyn Male Set,2991,3528,3304,3758,0,0,0,0,0,0,0,0,0,0
 roegadyn-female,Roegadyn Female Set,2992,3529,3305,3759,0,0,0,0,0,0,0,0,0,0
 chocobo,Chocobo Set,2994,10065,9460,0,0,0,0,0,0,0,0,0,0,0
-hempen-viera-male,Hempen Viera Male Set,2996,3307,0,0,0,0,0,0,0,0,0,0,0,0
+hempen-auri-male,Hempen Auri Male Set,2996,3307,0,0,0,0,0,0,0,0,0,0,0,0
 hempen-hrothgar-female,Hempen Hrothgar Female Set,2997,3307,0,0,0,0,0,0,0,0,0,0,0,0
-hempen-viera-female,Hempen Viera Female Set,2997,3308,0,0,0,0,0,0,0,0,0,0,0,0
+hempen-auri-female,Hempen Auri Female Set,2997,3308,0,0,0,0,0,0,0,0,0,0,0,0
 custom-made-shirt,Custom-made Shirt Set,3002,0,0,0,0,0,0,0,0,0,0,0,0,0
 custom-made-tunic,Custom-made Tunic Set,3003,0,0,0,0,0,0,0,0,0,0,0,0,0
 custom-made-robe-of-healing,Custom-made Robe of Healing Set,3004,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -2427,6 +2427,7 @@ story-lovers,Story-lover's Set,50291,50292,0,0,0,0,0,0,0,0,0,0,0,0
 story-spinners,Story-spinner's Set,50296,50297,0,0,0,0,0,0,0,0,0,0,0,0
 powersuit,Powersuit Set,50301,50302,0,0,0,0,0,0,0,0,0,0,0,0
 star-admirals,Star Admiral's Set,50303,50304,50305,50306,50307,0,0,0,0,0,0,0,0,0
+aunt-tiis-neotunic,Aunt Tii's Neotunic Set,50451,50453,50452,0,0,0,0,0,0,0,0,0,0,0
 alpha-wolf,Alpha Wolf Set,50811,50812,50813,50814,50815,50816,50817,50818,50819,0,0,0,0,0
 eagleclaw,Eagleclaw Set,50820,50821,0,0,0,0,0,0,0,0,0,0,0,0
 ulala-neotunic,Ulala Neotunic Set,50848,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -2447,10 +2448,24 @@ praemagitek-aiming,Praemagitek Aiming Set,50930,50931,50932,50933,50934,50952,50
 praemagitek-scouting,Praemagitek Scouting Set,50935,50936,50937,50938,50939,50952,50957,50962,50967,0,0,0,0,0
 praemagitek-healing,Praemagitek Healing Set,50940,50941,50942,50943,50944,50953,50958,50963,50968,0,0,0,0,0
 praemagitek-casting,Praemagitek Casting Set,50945,50946,50947,50948,50949,50954,50959,50964,50969,0,0,0,0,0
+phantom-vision-fending,Phantom Vision Fending Set,51811,51812,51813,51814,51815,0,0,0,0,0,0,0,0,0
+phantom-vision-maiming,Phantom Vision Maiming Set,51831,51832,51833,51834,51835,0,0,0,0,0,0,0,0,0
+phantom-vision-striking,Phantom Vision Striking Set,51851,51852,51853,51854,51855,0,0,0,0,0,0,0,0,0
+phantom-vision-aiming,Phantom Vision Aiming Set,51871,51872,51873,51874,51875,0,0,0,0,0,0,0,0,0
+phantom-vision-scouting,Phantom Vision Scouting Set,51891,51892,51893,51894,51895,0,0,0,0,0,0,0,0,0
+phantom-vision-healing,Phantom Vision Healing Set,51911,51912,51913,51914,51915,0,0,0,0,0,0,0,0,0
+phantom-vision-casting,Phantom Vision Casting Set,51931,51932,51933,51934,51935,0,0,0,0,0,0,0,0,0
+tule,Tule Set,51952,51953,51954,51955,0,0,0,0,0,0,0,0,0,0
+torna,Torna Set,51957,51958,51960,0,0,0,0,0,0,0,0,0,0,0
+carwen,Carwen Set,51961,51962,51963,51964,51965,0,0,0,0,0,0,0,0,0
 shadowhound,Shadowhound Set,52387,52388,52389,52390,52391,0,0,0,0,0,0,0,0,0
 black-shuck,Black Shuck Set,52392,52393,52394,52395,52396,0,0,0,0,0,0,0,0,0
 rule-breakers,Rule-breaker's Set,52397,52398,52399,52400,52401,0,0,0,0,0,0,0,0,0
 neo-queens,Neo Queen's Set,52404,52405,0,0,0,0,0,0,0,0,0,0,0,0
+neo-citizens,Neo Citizen's Set,52406,52407,52408,0,0,0,0,0,0,0,0,0,0,0
+cosmic-explorers,Cosmic Explorer's Set,52418,52419,52420,52423,52422,0,0,0,0,0,0,0,0,0
+cosmic-operators,Cosmic Operator's Set,52424,52425,52426,52427,0,0,0,0,0,0,0,0,0,0
+graffiti-neotunic,Graffiti Neotunic Set,52433,52435,52434,0,0,0,0,0,0,0,0,0,0,0
 plain-hooded,Plain Hooded Set,52612,52621,0,0,0,0,0,0,0,0,0,0,0,0
 oversized-plain-hooded,Oversized Plain Hooded Set,52613,52622,0,0,0,0,0,0,0,0,0,0,0,0
 form-fitting-plain-hooded,Form-fitting Plain Hooded Set,52614,52623,0,0,0,0,0,0,0,0,0,0,0,0

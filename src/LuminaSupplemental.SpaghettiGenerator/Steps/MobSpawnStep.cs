@@ -97,9 +97,9 @@ public partial class MobSpawnStep : GeneratorStep
                     foreach (var position in location.Value.Positions)
                     {
                         var mapPosition = new Vector3(
-                            MapUtil.ConvertWorldCoordXZToMapCoord(position.X, map.Value.SizeFactor, map.Value.OffsetX),
-                            MapUtil.ConvertWorldCoordXZToMapCoord(position.Z, map.Value.SizeFactor, map.Value.OffsetY),
-                            MapUtil.ConvertWorldCoordYToMapCoord(position.Y, map.Value.SizeFactor));
+                            MapUtil.ConvertWorldCoordXZToMapCoord(position.Pos.X, map.Value.SizeFactor, map.Value.OffsetX),
+                            MapUtil.ConvertWorldCoordXZToMapCoord(position.Pos.Z, map.Value.SizeFactor, map.Value.OffsetY),
+                            MapUtil.ConvertWorldCoordYToMapCoord(position.Pos.Y, map.Value.SizeFactor));
                         AddEntry(new MobSpawnPosition(baseId, nameId, territory, mapPosition, 0), positions);
                     }
                 }

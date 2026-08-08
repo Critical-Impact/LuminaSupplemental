@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed+
 
 
+## [5.1.1] - 2026-08-08
+
+### Changed
+- 7.55 update
+- General data update
+
 ## [5.1.0] - 2026-07-11
 
 ### Changed
@@ -30,7 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [5.0.0] - 2026-07-11
 
 ### Changed
-- Breaking Changes: 
+- Breaking Changes:
   - ChestId renamed to TreasureId in DungeonChest
   - DungeonBossId added to DungeonChest (thanks @Jaksuhn)
   - BNpcLinkNoGubal removed and BNpcLink no longer includes Gubal data due to it being inaccurate.
