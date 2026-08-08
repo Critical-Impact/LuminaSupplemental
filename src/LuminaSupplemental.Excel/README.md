@@ -16,6 +16,7 @@ Lumina Supplemental is an additional library that provides additional data that 
 | ENpcPlace           | Extra NPC locations that are not stored within the game's sheets                               | Manual                                       |
 | ENpcShop            | Extra shop mapping data that is not stored within the game's sheets                            | Manual                                       |
 | FateItem            | Items that can be earned from a fate                                                           | Gubal                                        |
+| FauxHollowsPattern  | Community-maintained Faux Hollows board layouts                                                | Manual                                       |
 | FestivalName        | The names for festivals are not stored within the game, this associates a festival with a name | Manual                                       |
 | FieldOpCoffer       | Items that drop from field op chests(pagos, etc)                                               | Tracky                                       |
 | GardeningCrossbreed | Items gained by crossbreeding seeds                                                            | Manual                                       |
@@ -44,6 +45,9 @@ Data sources referenced above:
 | Lodestone                 | Scraped from the Lodestone / Eorzea Database                                                           |
 | Square Enix Store         | The official Square Enix online store API                                                              |
 | xivapi datamining-patches | xivapi's [ffxiv-datamining-patches](https://github.com/xivapi/ffxiv-datamining-patches) dataset        |
+
+`FauxHollowsPattern` is sourced from u/Ylandah's community spreadsheet via the
+[ffxiv-faux-hollows](https://github.com/JoshuaEN/ffxiv-faux-hollows) project.
 
 To load a specific CSV (Dungeon Bosses as an example):
 
