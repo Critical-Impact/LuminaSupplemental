@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed+
 
 
+## [5.1.4] - 2026-08-10
+
+### Added
+- Added FauxHollowsPattern sheet, thanks to @MapleRecall for the PR
+
 ## [5.1.2] - 2026-08-08
 
 ### Changed
