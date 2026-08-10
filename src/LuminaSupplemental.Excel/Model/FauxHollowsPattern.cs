@@ -6,6 +6,7 @@ using CsvHelper.Configuration.Attributes;
 
 using Lumina.Data;
 using Lumina.Excel;
+using LuminaSupplemental.Excel.Converters;
 
 namespace LuminaSupplemental.Excel.Model;
 
@@ -15,8 +16,8 @@ public sealed class FauxHollowsPattern : ICsv
     [Name("Identifier")]
     public string Identifier { get; set; } = string.Empty;
 
-    [Name("BlockedTiles")]
-    public string BlockedTilesCsv { get; set; } = string.Empty;
+    [Name("BlockedTiles"), TypeConverter(typeof(SpaceSeparatedIntListConverter))]
+    public IReadOnlyList<int> BlockedTiles { get; set; } = Array.Empty<int>();
 
     [Name("Present")]
     public int Present { get; set; }
@@ -27,54 +28,39 @@ public sealed class FauxHollowsPattern : ICsv
     [Name("Sword3x2")]
     public bool Sword3x2 { get; set; }
 
-    [Name("ConfirmedFoxes")]
-    public string ConfirmedFoxesCsv { get; set; } = string.Empty;
-
-    [Ignore]
-    public IReadOnlyList<int> BlockedTiles => ParseTileList(BlockedTilesCsv);
-
-    [Ignore]
-    public IReadOnlyList<int> ConfirmedFoxes => ParseTileList(ConfirmedFoxesCsv);
+    [Name("ConfirmedFoxes"), TypeConverter(typeof(SpaceSeparatedIntListConverter))]
+    public IReadOnlyList<int> ConfirmedFoxes { get; set; } = Array.Empty<int>();
 
     public FauxHollowsPattern()
     {
     }
 
-    public FauxHollowsPattern(string identifier, string blockedTilesCsv, int present, int sword, bool sword3x2, string confirmedFoxesCsv)
+    public FauxHollowsPattern(string identifier, IReadOnlyList<int> blockedTiles, int present, int sword, bool sword3x2, IReadOnlyList<int> confirmedFoxes)
     {
         Identifier = identifier;
-        BlockedTilesCsv = blockedTilesCsv;
+        BlockedTiles = blockedTiles;
         Present = present;
         Sword = sword;
         Sword3x2 = sword3x2;
-        ConfirmedFoxesCsv = confirmedFoxesCsv;
+        ConfirmedFoxes = confirmedFoxes;
     }
 
     public void FromCsv(string[] lineData)
     {
         Identifier = lineData[0];
-        BlockedTilesCsv = lineData[1];
+        BlockedTiles = SpaceSeparatedIntListConverter.Parse(lineData[1]);
         Present = int.Parse(lineData[2], CultureInfo.InvariantCulture);
         Sword = int.Parse(lineData[3], CultureInfo.InvariantCulture);
         Sword3x2 = bool.Parse(lineData[4]);
-        ConfirmedFoxesCsv = lineData[5];
+        ConfirmedFoxes = SpaceSeparatedIntListConverter.Parse(lineData[5]);
     }
 
     public string[] ToCsv()
-        => [Identifier, BlockedTilesCsv, Present.ToString(CultureInfo.InvariantCulture), Sword.ToString(CultureInfo.InvariantCulture), Sword3x2.ToString(CultureInfo.InvariantCulture), ConfirmedFoxesCsv];
+        => [Identifier, SpaceSeparatedIntListConverter.Format(BlockedTiles), Present.ToString(CultureInfo.InvariantCulture), Sword.ToString(CultureInfo.InvariantCulture), Sword3x2.ToString(CultureInfo.InvariantCulture), SpaceSeparatedIntListConverter.Format(ConfirmedFoxes)];
 
     public bool IncludeInCsv() => true;
 
     public void PopulateData(ExcelModule module, Language language)
     {
-    }
-
-    private static IReadOnlyList<int> ParseTileList(string value)
-    {
-        var values = value.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-        var result = new int[values.Length];
-        for (var i = 0; i < values.Length; i++)
-            result[i] = int.Parse(values[i], CultureInfo.InvariantCulture);
-        return result;
     }
 }
