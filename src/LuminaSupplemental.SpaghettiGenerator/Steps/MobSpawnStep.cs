@@ -25,7 +25,7 @@ namespace LuminaSupplemental.SpaghettiGenerator.Steps;
 public partial class MobSpawnStep : GeneratorStep
 {
     private readonly ExcelSheet<BNpcName> bnpcNameSheet;
-    private readonly ExcelSheet<BNpcName> bnpcBaseSheet;
+    private readonly ExcelSheet<BNpcBase> bnpcBaseSheet;
     private readonly ExcelSheet<Pet> petSheet;
     private readonly ExcelSheet<Companion> companionSheet;
     private readonly ExcelSheet<TerritoryType> territoryTypeSheet;
@@ -38,7 +38,7 @@ public partial class MobSpawnStep : GeneratorStep
     public override string Name => "Mob Spawns";
 
 
-    public MobSpawnStep(ExcelSheet<BNpcName> bnpcNameSheet, ExcelSheet<BNpcName> bnpcBaseSheet, ExcelSheet<Pet> petSheet, ExcelSheet<Companion> companionSheet, ExcelSheet<TerritoryType> territoryTypeSheet, ExcelSheet<Map> mapSheet)
+    public MobSpawnStep(ExcelSheet<BNpcName> bnpcNameSheet, ExcelSheet<BNpcBase> bnpcBaseSheet, ExcelSheet<Pet> petSheet, ExcelSheet<Companion> companionSheet, ExcelSheet<TerritoryType> territoryTypeSheet, ExcelSheet<Map> mapSheet)
     {
         this.bnpcNameSheet = bnpcNameSheet;
         this.bnpcBaseSheet = bnpcBaseSheet;

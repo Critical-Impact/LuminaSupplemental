@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed+
 
 
+## [6.0.1] - 2026-10-26
+
+### Fixed
+- MobSpawn was missing spawns for BNpcBase IDs above 15000
+
 ## [6.0.0] - 2026-10-26
 
 ### Changed
