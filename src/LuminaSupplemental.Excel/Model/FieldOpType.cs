@@ -8,4 +8,7 @@ public enum FieldOpType
     OccultTreasure = 4,
     OccultPot = 5,
     OccultGoldenCoffer = 6,
+    OccultNorthHornTreasure = 7,
+    OccultNorthHornPot = 8,
+    OccultNorthHornGoldenCoffer = 9,
 }

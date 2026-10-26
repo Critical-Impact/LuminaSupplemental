@@ -14,6 +14,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed+
 
 
+## [6.0.0] - 2026-10-26
+
+### Changed
+- Breaking Changes:
+  - Min, Max and Probability added to FateItem
+  - FateItem no longer includes Gubal data due to it being inaccurate, it now comes from Tracky.
+  - FieldOpCoffer OccultTreasure, OccultPot and OccultGoldenCoffer now only cover the South Horn. The North Horn is added as OccultNorthHornTreasure, OccultNorthHornPot and OccultNorthHornGoldenCoffer
+- DungeonChest, DungeonChestItem, FieldOpCoffer and MobSpawn moved to the newer Tracky data files
+- General data update
+
 ## [5.1.5] - 2026-09-09
 
 ### Changed

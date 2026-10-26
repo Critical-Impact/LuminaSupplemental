@@ -17,15 +17,21 @@ namespace LuminaSupplemental.Excel.Model
     {
         [Name("ItemId")] public uint ItemId { get; set; }
         [Name("FateId")] public uint FateId { get; set; }
+        [Name("Min")] public uint? Min { get; set; }
+        [Name("Max")] public uint? Max { get; set; }
+        [Name("Probability")] public decimal? Probability { get; set; }
 
         public RowRef<Fate> Fate;
 
         public RowRef<Item> Item;
 
-        public FateItem(uint itemId, uint fateId )
+        public FateItem(uint itemId, uint fateId, uint? min = null, uint? max = null, decimal? probability = null )
         {
             ItemId = itemId;
             FateId = fateId;
+            Min = min;
+            Max = max;
+            Probability = probability;
         }
 
         public FateItem()
@@ -37,6 +43,21 @@ namespace LuminaSupplemental.Excel.Model
         {
             ItemId = uint.Parse( lineData[ 0 ] );
             FateId = uint.Parse( lineData[ 1 ] );
+
+            if (lineData[2] != string.Empty)
+            {
+                Min = uint.Parse( lineData[ 2 ], CultureInfo.InvariantCulture );
+            }
+
+            if (lineData[3] != string.Empty)
+            {
+                Max = uint.Parse( lineData[ 3 ], CultureInfo.InvariantCulture );
+            }
+
+            if (lineData[4] != string.Empty)
+            {
+                Probability = decimal.Parse( lineData[ 4 ], CultureInfo.InvariantCulture );
+            }
         }
 
         public string[] ToCsv()

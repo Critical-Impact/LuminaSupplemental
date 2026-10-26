@@ -93,6 +93,10 @@
       <Content Include="ManualData\FauxHollowsPattern.csv">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <None Remove="ManualData\FateManualItems.csv" />
+      <Content Include="ManualData\FateManualItems.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>

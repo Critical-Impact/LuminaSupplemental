@@ -75,7 +75,7 @@ public partial class MobSpawnStep : GeneratorStep
             }
         }
 
-        var filePath = "../../../../FFXIVGachaSpreadsheet/website/static/data/BnpcPairs.json";
+        var filePath = "../../../../FFXIVGachaSpreadsheet/website/static/data/BnpcPairsV2.json";
 
         var json = File.ReadAllText(filePath);
 

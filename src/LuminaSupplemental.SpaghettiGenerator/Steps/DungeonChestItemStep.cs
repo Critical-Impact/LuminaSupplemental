@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 using Lumina.Excel.Sheets;
@@ -8,10 +7,6 @@ using Lumina.Excel.Sheets;
 using LuminaSupplemental.Excel.Model;
 using LuminaSupplemental.SpaghettiGenerator.Generator;
 using LuminaSupplemental.SpaghettiGenerator.Steps.Parsers;
-
-using Newtonsoft.Json;
-
-using SupabaseExporter.Structures.Exports;
 
 namespace LuminaSupplemental.SpaghettiGenerator.Steps;
 
@@ -39,43 +34,29 @@ public partial class DungeonChestItemStep : GeneratorStep
 
     private List<DungeonChestItem> ProcessChestItems()
     {
-        var filePath = "../../../../FFXIVGachaSpreadsheet/website/static/data/ChestDrops.json";
-
         var chests = new List<DungeonChestItem>();
-        var json = File.ReadAllText(filePath);
-        var chestList = JsonConvert.DeserializeObject<List<ChestDrop>>(json)!;
         var itemId = 1u;
         var chestId = 1u;
-        foreach (var chestDrop in chestList)
+        foreach (var duty in ChestDropsV2Reader.Load())
         {
-            foreach (var expansion in chestDrop.Expansions)
+            foreach (var chest in duty.Chests)
             {
-                foreach (var header in expansion.Headers)
+                foreach (var reward in chest.Rewards)
                 {
-                    foreach (var duty in header.Duties)
-                    {
-                        for (var index = 0; index < duty.Chests.Count; index++)
+                    chests.Add(
+                        new DungeonChestItem()
                         {
-                            var chest = duty.Chests[index];
-                            foreach (var reward in chest.Rewards)
-                            {
-                                chests.Add(
-                                    new DungeonChestItem()
-                                    {
-                                        RowId = itemId,
-                                        ChestId = chestId,
-                                        ItemId = reward.Id,
-                                        Min = (uint?)reward.Min,
-                                        Max = (uint?)reward.Max,
-                                        Probability = (decimal?)Math.Round(reward.Pct * 100, 2)
-                                    });
-                                itemId++;
-                            }
-
-                            chestId++;
-                        }
-                    }
+                            RowId = itemId,
+                            ChestId = chestId,
+                            ItemId = reward.Id,
+                            Min = (uint?)reward.Min,
+                            Max = (uint?)reward.Max,
+                            Probability = (decimal?)Math.Round(reward.Pct * 100, 2)
+                        });
+                    itemId++;
                 }
+
+                chestId++;
             }
         }
 

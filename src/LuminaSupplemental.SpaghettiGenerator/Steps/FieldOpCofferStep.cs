@@ -71,36 +71,41 @@ public class FieldOpCofferStep : GeneratorStep
         return result;
     }
 
+    private static readonly Dictionary<uint, Dictionary<string, FieldOpType>> OccultTypes = new()
+    {
+        [1252] = new Dictionary<string, FieldOpType>
+        {
+            ["Treasure"] = FieldOpType.OccultTreasure,
+            ["Pot"] = FieldOpType.OccultPot,
+            ["Bunny"] = FieldOpType.OccultGoldenCoffer,
+        },
+        [1346] = new Dictionary<string, FieldOpType>
+        {
+            ["Treasure"] = FieldOpType.OccultNorthHornTreasure,
+            ["Pot"] = FieldOpType.OccultNorthHornPot,
+            ["Bunny"] = FieldOpType.OccultNorthHornGoldenCoffer,
+        },
+    };
+
     private List<FieldOpCoffer> ProcessOccult()
     {
-        var filePath = "../../../../FFXIVGachaSpreadsheet/website/static/data/OccultTreasures.json";
+        var filePath = "../../../../FFXIVGachaSpreadsheet/website/static/data/OccultTreasuresV2.json";
 
         var drops = new List<FieldOpCoffer>();
         var json = File.ReadAllText(filePath);
         var cofferDataList = JsonConvert.DeserializeObject<List<Coffer>>(json)!;
 
-        for (var index = 0; index < cofferDataList.Count; index++)
+        foreach (var cofferData in cofferDataList)
         {
-            FieldOpType fieldOpType;
-            var cofferData = cofferDataList[index];
-            switch (index)
+            if (!OccultTypes.TryGetValue(cofferData.TerritoryId, out var territoryTypes))
             {
-                case 0:
-                    fieldOpType = FieldOpType.OccultTreasure;
-                    break;
-                case 1:
-                    fieldOpType = FieldOpType.OccultPot;
-                    break;
-                case 2:
-                    fieldOpType = FieldOpType.OccultGoldenCoffer;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-
+                throw new Exception("Unknown occult territory: " + cofferData.TerritoryId + " " + cofferData.Name);
             }
+
             foreach (var coffer in cofferData.Variants)
             {
-                if(!Enum.TryParse(coffer.Name, out FieldOpCofferType chest))
+                var nameParts = coffer.Name.Split(' ');
+                if (nameParts.Length != 2 || !territoryTypes.TryGetValue(nameParts[0], out var fieldOpType) || !Enum.TryParse(nameParts[1], out FieldOpCofferType chest))
                 {
                     throw new Exception("Could not parse coffer: " + coffer.Name);
                 }

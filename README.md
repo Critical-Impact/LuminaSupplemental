@@ -18,7 +18,7 @@ Lumina Supplemental is an additional library that provides additional data that 
 | DungeonDrop         | Items which drop within a duty(generic)                                                        | Manual                                       |
 | ENpcPlace           | Extra NPC locations that are not stored within the game's sheets                               | Manual                                       |
 | ENpcShop            | Extra shop mapping data that is not stored within the game's sheets                            | Manual                                       |
-| FateItem            | Items that can be earned from a fate                                                           | Gubal                                        |
+| FateItem            | Items that can be earned from a fate, with drop rates                                          | Tracky + manual                              |
 | FestivalName        | The names for festivals are not stored within the game, this associates a festival with a name | Manual                                       |
 | FieldOpCoffer       | Items that drop from field op chests(pagos, etc)                                               | Tracky                                       |
 | GardeningCrossbreed | Items gained by crossbreeding seeds                                                            | Manual                                       |

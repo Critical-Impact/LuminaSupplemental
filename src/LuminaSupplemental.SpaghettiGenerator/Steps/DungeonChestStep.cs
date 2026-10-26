@@ -1,14 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 using LuminaSupplemental.Excel.Model;
 using LuminaSupplemental.SpaghettiGenerator.Generator;
-
-using Newtonsoft.Json;
-
-using SupabaseExporter.Structures.Exports;
+using LuminaSupplemental.SpaghettiGenerator.Steps.Parsers;
 
 namespace LuminaSupplemental.SpaghettiGenerator.Steps;
 
@@ -38,38 +34,25 @@ public partial class DungeonChestStep : GeneratorStep
 
     private List<DungeonChest> ProcessChests()
     {
-        var filePath = "../../../../FFXIVGachaSpreadsheet/website/static/data/ChestDrops.json";
-
         var chests = new List<DungeonChest>();
-        var json = File.ReadAllText(filePath);
-        var chestList = JsonConvert.DeserializeObject<List<ChestDrop>>(json)!;
         uint chestId = 1;
-        foreach (var chestDrop in chestList)
+        foreach (var duty in ChestDropsV2Reader.Load())
         {
-            foreach (var expansion in chestDrop.Expansions)
+            for (var index = 0; index < duty.Chests.Count; index++)
             {
-                foreach (var header in expansion.Headers)
-                {
-                    foreach (var duty in header.Duties)
+                var chest = duty.Chests[index];
+                chests.Add(
+                    new DungeonChest()
                     {
-                        for (var index = 0; index < duty.Chests.Count; index++)
-                        {
-                            var chest = duty.Chests[index];
-                            chests.Add(
-                                new DungeonChest()
-                                {
-                                    RowId = chestId,
-                                    ChestNo = (byte)(index + 1),
-                                    ContentFinderConditionId = duty.Id,
-                                    MapId = chest.MapId,
-                                    TerritoryTypeId = chest.TerritoryId,
-                                    TreasureId = chest.Id,
-                                    Position = chest.Position
-                                });
-                            chestId++;
-                        }
-                    }
-                }
+                        RowId = chestId,
+                        ChestNo = (byte)(index + 1),
+                        ContentFinderConditionId = duty.DutyId,
+                        MapId = chest.MapId,
+                        TerritoryTypeId = chest.TerritoryId,
+                        TreasureId = chest.Id,
+                        Position = chest.Position
+                    });
+                chestId++;
             }
         }
 
