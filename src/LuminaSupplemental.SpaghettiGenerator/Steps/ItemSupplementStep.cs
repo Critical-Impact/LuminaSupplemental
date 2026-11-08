@@ -58,6 +58,8 @@ public partial class ItemSupplementStep : GeneratorStep
     public override List<ICsv> Run(Dictionary<Type, List<ICsv>> stepData)
     {
         List<ItemSupplement> items = new List<ItemSupplement>();
+        // Tracky reduction comes first so it keeps its drop rates when an older source has the same entry
+        items.AddRange(this.ProcessReduction());
         items.AddRange(this.ProcessLodestoneItems());
         items.AddRange(this.ProcessItemsTSV());
         items.AddRange(this.ProcessItemSets());

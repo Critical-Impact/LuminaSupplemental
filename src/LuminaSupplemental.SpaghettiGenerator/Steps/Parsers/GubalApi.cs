@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 
 namespace LuminaSupplemental.SpaghettiGenerator.Steps.Parsers;
 
@@ -16,17 +17,40 @@ public class GubalApi
         this.httpClient = httpClient;
     }
 
+    private const int MaxAttempts = 3;
+
+    private string Query(string query)
+    {
+        for (var attempt = 1; ; attempt++)
+        {
+            var message = new HttpRequestMessage(HttpMethod.Post, "https://gubal.ffxivteamcraft.com/graphql");
+            message.Content = new StringContent(JsonSerializer.Serialize(new
+            {
+                query,
+            }));
+            message.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            var response = this.httpClient.Send(message);
+            var json     = response.Content.ReadAsStringAsync().Result;
+            if (response.IsSuccessStatusCode && json.TrimStart().StartsWith('{'))
+            {
+                return json;
+            }
+
+            if (attempt == MaxAttempts)
+            {
+                var body = json.Length > 200 ? json[..200] : json;
+                throw new HttpRequestException($"Gubal returned an invalid response after {MaxAttempts} attempts ({(int)response.StatusCode} {response.StatusCode}): {body}");
+            }
+
+            //Shit but good enough
+            Thread.Sleep(TimeSpan.FromSeconds(5 * attempt));
+        }
+    }
+
     public List<GubalBNpcLink> GetGubalBNpcLinks()
     {
-        var message = new HttpRequestMessage(HttpMethod.Post, "https://gubal.ffxivteamcraft.com/graphql");
-        message.Content = new StringContent(JsonSerializer.Serialize(new
-        {
-            query = "query{ bnpc  {bnpcBase   bnpcName  }}",
-        }));
-        message.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-        var response = this.httpClient.Send(message);
-        var json     = response.Content.ReadAsStringAsync().Result;
+        var json     = this.Query("query{ bnpc  {bnpcBase   bnpcName  }}");
         var result   = JsonSerializer.Deserialize<GraphqlContainer<GubalBNpcLinkData>>(json)!.data.BNpc;
 
         return result;
@@ -34,15 +58,7 @@ public class GubalApi
 
     public List<AllaganReportsDropItem> GetAllaganReportDrops()
     {
-        var message = new HttpRequestMessage(HttpMethod.Post, "https://gubal.ffxivteamcraft.com/graphql");
-        message.Content = new StringContent(JsonSerializer.Serialize(new
-        {
-            query = "{ allagan_reports( where: {applied: {_eq: true}, source: {_in: [\"DROP\"]}}) { itemId data }}",
-        }));
-        message.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-        var response = this.httpClient.Send(message);
-        var json     = response.Content.ReadAsStringAsync().Result;
+        var json     = this.Query("{ allagan_reports( where: {applied: {_eq: true}, source: {_in: [\"DROP\"]}}) { itemId data }}");
         var result   = JsonSerializer.Deserialize<GraphqlContainer<AllaganReportsDropContainer>>(json)!.data.AllaganReports;
 
         return result;
@@ -50,15 +66,7 @@ public class GubalApi
 
     public List<AllaganReportsLootItem> GetAllaganReportLoot()
     {
-        var message = new HttpRequestMessage(HttpMethod.Post, "https://gubal.ffxivteamcraft.com/graphql");
-        message.Content = new StringContent(JsonSerializer.Serialize(new
-        {
-            query = "{ allagan_reports( where: {applied: {_eq: true}, source: {_in: [\"LOOT\"]}}) { itemId data }}",
-        }));
-        message.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-        var response = this.httpClient.Send(message);
-        var json     = response.Content.ReadAsStringAsync().Result;
+        var json     = this.Query("{ allagan_reports( where: {applied: {_eq: true}, source: {_in: [\"LOOT\"]}}) { itemId data }}");
         var result   = JsonSerializer.Deserialize<GraphqlContainer<AllaganReportsLootContainer>>(json)!.data.AllaganReports;
 
         return result;
@@ -66,15 +74,7 @@ public class GubalApi
 
     public List<AllaganReportsLootItem> GetAllaganReportReductionItems()
     {
-        var message = new HttpRequestMessage(HttpMethod.Post, "https://gubal.ffxivteamcraft.com/graphql");
-        message.Content = new StringContent(JsonSerializer.Serialize(new
-        {
-            query = "{ allagan_reports( where: {applied: {_eq: true}, source: {_in: [\"REDUCTION\"]}}) { itemId data }}",
-        }));
-        message.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-        var response = this.httpClient.Send(message);
-        var json     = response.Content.ReadAsStringAsync().Result;
+        var json     = this.Query("{ allagan_reports( where: {applied: {_eq: true}, source: {_in: [\"REDUCTION\"]}}) { itemId data }}");
         var result   = JsonSerializer.Deserialize<GraphqlContainer<AllaganReportsLootContainer>>(json)!.data.AllaganReports;
 
         return result;
@@ -82,15 +82,7 @@ public class GubalApi
 
     public List<AllaganReportsLootItem> GetAllaganReportGardeningItems()
     {
-        var message = new HttpRequestMessage(HttpMethod.Post, "https://gubal.ffxivteamcraft.com/graphql");
-        message.Content = new StringContent(JsonSerializer.Serialize(new
-        {
-            query = "{ allagan_reports( where: {applied: {_eq: true}, source: {_in: [\"GARDENING\"]}}) { itemId data }}",
-        }));
-        message.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-        var response = this.httpClient.Send(message);
-        var json     = response.Content.ReadAsStringAsync().Result;
+        var json     = this.Query("{ allagan_reports( where: {applied: {_eq: true}, source: {_in: [\"GARDENING\"]}}) { itemId data }}");
         var result   = JsonSerializer.Deserialize<GraphqlContainer<AllaganReportsLootContainer>>(json)!.data.AllaganReports;
 
         return result;
@@ -98,15 +90,7 @@ public class GubalApi
 
     public List<AllaganReportsLootItem> GetAllaganReportDesynthItems()
     {
-        var message = new HttpRequestMessage(HttpMethod.Post, "https://gubal.ffxivteamcraft.com/graphql");
-        message.Content = new StringContent(JsonSerializer.Serialize(new
-        {
-            query = "{ allagan_reports( where: {applied: {_eq: true}, source: {_in: [\"DESYNTH\"]}}) { itemId data }}",
-        }));
-        message.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-        var response = this.httpClient.Send(message);
-        var json     = response.Content.ReadAsStringAsync().Result;
+        var json     = this.Query("{ allagan_reports( where: {applied: {_eq: true}, source: {_in: [\"DESYNTH\"]}}) { itemId data }}");
         var result   = JsonSerializer.Deserialize<GraphqlContainer<AllaganReportsLootContainer>>(json)!.data.AllaganReports;
 
         return result;
@@ -114,15 +98,7 @@ public class GubalApi
 
     public List<AllaganReportsVoyageItem> GetAllaganReportVoyageItems()
     {
-        var message = new HttpRequestMessage(HttpMethod.Post, "https://gubal.ffxivteamcraft.com/graphql");
-        message.Content = new StringContent(JsonSerializer.Serialize(new
-        {
-            query = "{ allagan_reports( where: {applied: {_eq: true}, source: {_in: [\"VOYAGE\"]}}) { itemId data }}",
-        }));
-        message.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-        var response = this.httpClient.Send(message);
-        var json     = response.Content.ReadAsStringAsync().Result;
+        var json     = this.Query("{ allagan_reports( where: {applied: {_eq: true}, source: {_in: [\"VOYAGE\"]}}) { itemId data }}");
         var result   = JsonSerializer.Deserialize<GraphqlContainer<AllaganReportsVoyageContainer>>(json)!.data.AllaganReports;
 
         return result;

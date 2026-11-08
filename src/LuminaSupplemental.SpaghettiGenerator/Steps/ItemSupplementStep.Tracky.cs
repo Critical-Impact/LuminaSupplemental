@@ -65,28 +65,107 @@ public partial class ItemSupplementStep
 
     private List<ItemSupplement> ProcessDesynth()
     {
-        var filePath = "../../../../FFXIVGachaSpreadsheet/website/static/data/Desynthesis.json";
+        var directoryPath = "../../../../FFXIVGachaSpreadsheet/website/static/data/desynthesis2";
+
+        // Each source is split into desynths done above and below the item level, these are merged into one rate per source and reward across all patches
+        var records = new Dictionary<uint, long>();
+        var rewards = new Dictionary<uint, Dictionary<uint, Reward>>();
+        foreach (var filePath in Directory.GetFiles(directoryPath, "??????.json"))
+        {
+            var json = File.ReadAllText(filePath);
+            var desynthData = JsonConvert.DeserializeObject<Desynth2>(json)!;
+            foreach (var patch in desynthData.Patches.Values)
+            {
+                foreach (var (sourceItemId, source) in patch.Sources)
+                {
+                    records[sourceItemId] = records.GetValueOrDefault(sourceItemId) + source.A + source.B;
+                    if (!rewards.TryGetValue(sourceItemId, out var sourceRewards))
+                    {
+                        sourceRewards = new Dictionary<uint, Reward>();
+                        rewards[sourceItemId] = sourceRewards;
+                    }
+
+                    foreach (var reward in source.Above.Concat(source.Below))
+                    {
+                        sourceRewards[reward.Id] = sourceRewards.TryGetValue(reward.Id, out var existing)
+                            ? existing with
+                            {
+                                Amount = existing.Amount + reward.Amount,
+                                Total = existing.Total + reward.Total,
+                                Min = Math.Min(existing.Min, reward.Min),
+                                Max = Math.Max(existing.Max, reward.Max)
+                            }
+                            : reward;
+                    }
+                }
+            }
+        }
 
         var drops = new List<ItemSupplement>();
-        var json = File.ReadAllText(filePath);
-        var desynthData = JsonConvert.DeserializeObject<Desynth>(json)!;
         var supplementType = ItemSupplementSource.Desynth;
 
-        foreach(var history in desynthData.Sources)
+        foreach (var (sourceItemId, sourceRewards) in rewards)
         {
-            var sourceItemId = history.Key;
-            foreach (var coffer in history.Value.Rewards)
+            foreach (var reward in sourceRewards.Values)
             {
-
-                var itemId = coffer.Id;
-                if (itemId == 0 || sourceItemId == 0)
+                var itemId = reward.Id;
+                if (itemId == 0 || sourceItemId == 0 || records[sourceItemId] == 0)
                 {
                     continue;
                 }
 
-                var min = coffer.Min;
-                var max = coffer.Max;
-                var probability = Math.Round(coffer.Pct * 100, 2);
+                var min = reward.Min;
+                var max = reward.Max;
+                var probability = Math.Round(reward.Amount / (double)records[sourceItemId] * 100, 2);
+
+                drops.Add(
+                    new ItemSupplement()
+                    {
+                        ItemId = itemId,
+                        SourceItemId = sourceItemId,
+                        ItemSupplementSource = supplementType,
+                        Min = (uint?)min,
+                        Max = (uint?)max,
+                        Probability = (decimal?)probability
+                    });
+            }
+        }
+
+        return drops;
+    }
+
+    private List<ItemSupplement> ProcessReduction()
+    {
+        var filePath = "../../../../FFXIVGachaSpreadsheet/website/static/data/Reduction.json";
+
+        var json = File.ReadAllText(filePath);
+        var reductionData = JsonConvert.DeserializeObject<Reduce>(json)!;
+
+        // Each source is split into collectability tiers and patches, these are merged into one rate per source and reward
+        var drops = new List<ItemSupplement>();
+        var supplementType = ItemSupplementSource.Reduction;
+        foreach (var source in reductionData.Jobs.SelectMany(c => c.Sources))
+        {
+            var sourceItemId = source.Id;
+            var patches = source.Tiers.SelectMany(c => c.Patches.Values).ToList();
+            var records = patches.Sum(c => c.NormalCount + c.BonusCount);
+            if (sourceItemId == 0 || records == 0)
+            {
+                continue;
+            }
+
+            var rewards = patches.SelectMany(c => c.Normal.Concat(c.Bonus)).GroupBy(c => c.Id);
+            foreach (var reward in rewards)
+            {
+                var itemId = reward.Key;
+                if (itemId == 0)
+                {
+                    continue;
+                }
+
+                var min = reward.Min(c => c.Min);
+                var max = reward.Max(c => c.Max);
+                var probability = Math.Round(reward.Sum(c => c.Amount) / (double)records * 100, 2);
 
                 drops.Add(
                     new ItemSupplement()

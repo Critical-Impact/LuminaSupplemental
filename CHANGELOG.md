@@ -14,6 +14,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed+
 
 
+## [7.0.0] - 2026-11-08
+
+### Added
+- Added FateReward sheet which provides the gil and grand company seals for each fate
+
+### Changed
+- Breaking Changes:
+  - Min, Max and Probability added to RetainerVentureItem, which now comes from Tracky. Items missing from Tracky are kept from the old manual data
+- FateItem now includes fate currency rewards (bicolor gemstones, Enlightenment silver, skybuilders' scrip, cosmocredits) from Tracky
+- ItemSupplement desynthesis entries moved to the newer Tracky data files
+- ItemSupplement reduction entries now come from Tracky with drop rates
+
+
 ## [6.0.1] - 2026-10-26
 
 ### Fixed

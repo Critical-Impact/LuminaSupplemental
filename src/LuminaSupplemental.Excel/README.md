@@ -16,6 +16,7 @@ Lumina Supplemental is an additional library that provides additional data that 
 | ENpcPlace           | Extra NPC locations that are not stored within the game's sheets                               | Manual                                       |
 | ENpcShop            | Extra shop mapping data that is not stored within the game's sheets                            | Manual                                       |
 | FateItem            | Items that can be earned from a fate, with drop rates                                          | Tracky + manual                              |
+| FateReward          | Gil and grand company seals per fate                                                           | Tracky                                       |
 | FauxHollowsPattern  | Community-maintained Faux Hollows board layouts                                                | Manual                                       |
 | FestivalName        | The names for festivals are not stored within the game, this associates a festival with a name | Manual                                       |
 | FieldOpCoffer       | Items that drop from field op chests(pagos, etc)                                               | Tracky                                       |
@@ -27,7 +28,7 @@ Lumina Supplemental is an additional library that provides additional data that 
 | MobDrop             | Items that can be sourced from monsters                                                        | Lodestone + Gubal                            |
 | MobSpawn            | Where monsters spawn                                                                           | Tracky + manual                              |
 | QuestRequiredItem   | The items required for quests are baked into the game's LUA, this is data extracted from that  | Manual (extracted from game LUA)             |
-| RetainerVentureItem | Items that can be gained from sending a retainer on a venture(exploration + quick)             | Manual                                       |
+| RetainerVentureItem | Items that can be gained from a retainer venture(exploration + quick), with drop rates         | Tracky + manual                              |
 | ShopName            | Extra shop names when the shop is blank in the sheets                                          | Game data + manual                           |
 | StoreItem           | Items that can be obtained through the SQ shop for $                                           | Square Enix Store                            |
 | SubmarineDrop       | Items that drop on specific submarine routes                                                   | Tracky                                       |

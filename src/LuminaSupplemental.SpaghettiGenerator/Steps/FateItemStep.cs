@@ -22,7 +22,7 @@ public class FateItemStep : GeneratorStep
     // FateReward.json fate type ids, 1 is critical engagements which use DynamicEvent ids instead of Fate ids
     private const byte FateTypeFate = 0;
 
-    // The exporter adds gil and grand company seals as fake rewards, these will move to their own sheet once fate token data is available
+    // The exporter adds gil and grand company seals as fake rewards, FateRewardStep handles these
     private static readonly HashSet<uint> CurrencyItemIds = [1, 20];
 
     private readonly ExcelSheet<Fate> fateSheet;
@@ -59,7 +59,7 @@ public class FateItemStep : GeneratorStep
 
         var drops = new List<FateItem>();
         var json = File.ReadAllText(filePath);
-        var fateReward = JsonConvert.DeserializeObject<FateReward>(json)!;
+        var fateReward = JsonConvert.DeserializeObject<SupabaseExporter.Structures.Exports.FateReward>(json)!;
 
         var fates = fateReward.Expansions
             .SelectMany(expansion => expansion.Territories)

@@ -76,6 +76,7 @@ public static class CsvLoader
     public const string StoreItemResourceName = "LuminaSupplemental.Excel.Generated.StoreItem.csv";
     public const string HouseVendorResourceName = "LuminaSupplemental.Excel.Generated.HouseVendor.csv";
     public const string FateItemResourceName = "LuminaSupplemental.Excel.Generated.FateItem.csv";
+    public const string FateRewardResourceName = "LuminaSupplemental.Excel.Generated.FateReward.csv";
     public const string GardeningCrossbreedResourceName = "LuminaSupplemental.Excel.Generated.GardeningCrossbreed.csv";
     public const string FestivalNameResourceName = "LuminaSupplemental.Excel.Generated.FestivalName.csv";
     public const string FieldOpCofferResourceName = "LuminaSupplemental.Excel.Generated.FieldOpCoffer.csv";

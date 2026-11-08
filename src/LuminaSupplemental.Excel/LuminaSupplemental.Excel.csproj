@@ -80,6 +80,7 @@
       <EmbeddedResource Include="Generated\StoreItem.csv" />
       <EmbeddedResource Include="Generated\HouseVendor.csv" />
       <EmbeddedResource Include="Generated\FateItem.csv" />
+      <EmbeddedResource Include="Generated\FateReward.csv" />
       <EmbeddedResource Include="Generated\GardeningCrossbreed.csv" />
       <EmbeddedResource Include="Generated\FestivalName.csv" />
       <EmbeddedResource Include="Generated\FieldOpCoffer.csv" />
